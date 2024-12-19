@@ -39853,29 +39853,26 @@ var actions = {
             data = _yield$axios$post2.data;
             console.log('Registration successful:', data);
 
-            // Retrieve the session ID from the sessionStorage (or other storage method)
-            console.log('Session ID:', session_id);
-
             // Auto-login after registration with session_id
             loginData = {
               email: userData.email,
               password: userData.password
             };
-            _context2.next = 11;
+            _context2.next = 10;
             return dispatch('login', loginData);
-          case 11:
-            _context2.next = 17;
+          case 10:
+            _context2.next = 16;
             break;
-          case 13:
-            _context2.prev = 13;
+          case 12:
+            _context2.prev = 12;
             _context2.t0 = _context2["catch"](1);
             console.error('Registration failed:', ((_error$response3 = _context2.t0.response) === null || _error$response3 === void 0 ? void 0 : _error$response3.data) || _context2.t0.message);
             throw ((_error$response4 = _context2.t0.response) === null || _error$response4 === void 0 ? void 0 : _error$response4.data) || _context2.t0.message;
-          case 17:
+          case 16:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[1, 13]]);
+      }, _callee2, null, [[1, 12]]);
     }))();
   },
   logout: function logout(_ref3) {

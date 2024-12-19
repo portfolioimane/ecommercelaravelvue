@@ -46,8 +46,6 @@ async register({ dispatch }, userData) {
     const { data } = await axios.post('/register', userData);
     console.log('Registration successful:', data);
 
-    // Retrieve the session ID from the sessionStorage (or other storage method)
-    console.log('Session ID:', session_id);
 
     // Auto-login after registration with session_id
     const loginData = {
