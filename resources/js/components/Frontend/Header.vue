@@ -82,7 +82,6 @@ export default {
       if (newVal) {
         // If logged in, fetch the cart
         this.$store.dispatch('auth/checkAuth');
-
         this.fetchCart();
       } else {
         // If logged out, clear the cart
@@ -92,11 +91,10 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch('auth/checkAuth');
+    this.$store.dispatch('auth/checkAuth');  // Check if the user is authenticated using the cookie
 
-      // Fetch cart if already authenticated
-      this.fetchCart();
-    
+    // Fetch cart if already authenticated
+    this.fetchCart();
   },
 
   methods: {
@@ -112,8 +110,8 @@ export default {
 
     async logout() {
       try {
-        await this.$store.dispatch('auth/logout');
-        this.$router.push('/');
+        await this.$store.dispatch('auth/logout');  // This will logout the user and clear the session
+        this.$router.push('/');  // Redirect to home after logout
       } catch (error) {
         console.error('Logout failed:', error);
       }

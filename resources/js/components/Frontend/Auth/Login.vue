@@ -45,8 +45,8 @@ export default {
         // Log the login attempt
         console.log('Attempting to login with email:', this.email);
 
-        // Retrieve session_id from storage (localStorage or sessionStorage)
-        const session_id = localStorage.getItem('session_id') || null;
+        // Retrieve session_id from storage (sessionStorage or sessionStorage)
+        const session_id = sessionStorage.getItem('session_id') || null;
         console.log('Session ID:', session_id);
 
         // Send login credentials along with session_id if it exists
@@ -55,8 +55,8 @@ export default {
         // Log successful login
         console.log('Login successful, redirecting to home.');
 
-        // After successful login, remove session_id from localStorage
-        localStorage.removeItem('session_id');
+        // After successful login, remove session_id from sessionStorage
+        sessionStorage.removeItem('session_id');
 
         this.$router.push('/'); // Redirect to home after successful login
       } catch (err) {

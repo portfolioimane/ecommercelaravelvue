@@ -31,8 +31,8 @@ const actions = {
 async fetchCart({ commit }) {
   try {
     // Check if the user is authenticated
-    const isAuthenticated = localStorage.getItem('user-token') !== null;
-    let sessionId = localStorage.getItem('session_id') || null;
+    const isAuthenticated = sessionStorage.getItem('user-token') !== null;
+    let sessionId = sessionStorage.getItem('session_id') || null;
 
     let response;
     if (isAuthenticated) {
@@ -56,8 +56,8 @@ async fetchCart({ commit }) {
 
   async addProductToCart({ commit }, { product, quantity }) {
     try {
-      const isAuthenticated = localStorage.getItem('user-token') !== null;
-      let sessionId = localStorage.getItem('session_id') || null;
+      const isAuthenticated = sessionStorage.getItem('user-token') !== null;
+      let sessionId = sessionStorage.getItem('session_id') || null;
 
       if (isAuthenticated) {
         // Authenticated user: no session_id required

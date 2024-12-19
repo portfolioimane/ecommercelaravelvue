@@ -2,7 +2,7 @@ import axios from '../../utils/axios.js';
 
 const state = {
   user: null,
-  token: localStorage.getItem('user-token') || '',  // Retrieve token from localStorage
+  token: sessionStorage.getItem('user-token') || '',  // Retrieve token from sessionStorage
   authChecked: false,
 };
 
@@ -30,8 +30,8 @@ async login({ commit }, credentials) {
     commit('SET_USER', user);
     commit('SET_TOKEN', token);
 
-    // Store token in localStorage for persistence
-    localStorage.setItem('user-token', token);
+    // Store token in sessionStorage for persistence
+    sessionStorage.setItem('user-token', token);
 
     console.log('Login successful, received data:', data);
   } catch (error) {
@@ -47,7 +47,7 @@ async register({ dispatch }, userData) {
     console.log('Registration successful:', data);
 
     // Retrieve the session ID from the sessionStorage (or other storage method)
-    const session_id = localStorage.getItem('session_id') || null; // Or use another method if you're storing it elsewhere
+    const session_id = sessionStorage.getItem('session_id') || null; // Or use another method if you're storing it elsewhere
     console.log('Session ID:', session_id);
 
     // Auto-login after registration with session_id
@@ -68,7 +68,7 @@ async register({ dispatch }, userData) {
   logout({ commit }) {
     commit('SET_TOKEN', null);
     commit('SET_USER', null);
-    localStorage.removeItem('user-token');
+    sessionStorage.removeItem('user-token');
 
     console.log('Logout successful');
   },
@@ -76,7 +76,7 @@ async register({ dispatch }, userData) {
   async checkAuth({ commit }) {
     commit('SET_AUTH_CHECKED', false);
 
-    const token = localStorage.getItem('user-token');
+    const token = sessionStorage.getItem('user-token');
     if (token) {
       commit('SET_TOKEN', token);
       try {
@@ -86,7 +86,7 @@ async register({ dispatch }, userData) {
         console.error('Failed to fetch user data:', error.response?.data || error.message);
         commit('SET_USER', null);
         commit('SET_TOKEN', '');
-        localStorage.removeItem('user-token');
+        sessionStorage.removeItem('user-token');
       }
     } else {
       commit('SET_USER', null);

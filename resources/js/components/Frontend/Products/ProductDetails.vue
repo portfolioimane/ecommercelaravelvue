@@ -67,13 +67,13 @@ export default {
     let sessionId = null;
 
     if (!isAuthenticated) {
-      // Check if session_id exists in localStorage for guest users
-      sessionId = localStorage.getItem('session_id');
+      // Check if session_id exists in sessionStorage for guest users
+      sessionId = sessionStorage.getItem('session_id');
 
       // If session_id does not exist, generate and store it
       if (!sessionId) {
         sessionId = this.generateSessionId();
-        localStorage.setItem('session_id', sessionId);
+        sessionStorage.setItem('session_id', sessionId);
       }
     }
 

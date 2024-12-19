@@ -23256,8 +23256,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               // Log the login attempt
               console.log('Attempting to login with email:', _this.email);
 
-              // Retrieve session_id from storage (localStorage or sessionStorage)
-              session_id = localStorage.getItem('session_id') || null;
+              // Retrieve session_id from storage (sessionStorage or sessionStorage)
+              session_id = sessionStorage.getItem('session_id') || null;
               console.log('Session ID:', session_id);
 
               // Send login credentials along with session_id if it exists
@@ -23271,8 +23271,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               // Log successful login
               console.log('Login successful, redirecting to home.');
 
-              // After successful login, remove session_id from localStorage
-              localStorage.removeItem('session_id');
+              // After successful login, remove session_id from sessionStorage
+              sessionStorage.removeItem('session_id');
               _this.$router.push('/'); // Redirect to home after successful login
               _context.next = 15;
               break;
@@ -23569,7 +23569,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     }
   },
   mounted: function mounted() {
-    this.$store.dispatch('auth/checkAuth');
+    this.$store.dispatch('auth/checkAuth'); // Check if the user is authenticated using the cookie
 
     // Fetch cart if already authenticated
     this.fetchCart();
@@ -23610,7 +23610,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               _context2.next = 3;
               return _this2.$store.dispatch('auth/logout');
             case 3:
-              _this2.$router.push('/');
+              // This will logout the user and clear the session
+              _this2.$router.push('/'); // Redirect to home after logout
               _context2.next = 9;
               break;
             case 6:
@@ -23760,13 +23761,13 @@ __webpack_require__.r(__webpack_exports__);
       // If the user is not authenticated (guest)
       var sessionId = null;
       if (!isAuthenticated) {
-        // Check if session_id exists in localStorage for guest users
-        sessionId = localStorage.getItem('session_id');
+        // Check if session_id exists in sessionStorage for guest users
+        sessionId = sessionStorage.getItem('session_id');
 
         // If session_id does not exist, generate and store it
         if (!sessionId) {
           sessionId = this.generateSessionId();
-          localStorage.setItem('session_id', sessionId);
+          sessionStorage.setItem('session_id', sessionId);
         }
       }
 
@@ -39787,8 +39788,8 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 
 var state = {
   user: null,
-  token: localStorage.getItem('user-token') || '',
-  // Retrieve token from localStorage
+  token: sessionStorage.getItem('user-token') || '',
+  // Retrieve token from sessionStorage
   authChecked: false
 };
 var mutations = {
@@ -39822,8 +39823,8 @@ var actions = {
             commit('SET_USER', user);
             commit('SET_TOKEN', token);
 
-            // Store token in localStorage for persistence
-            localStorage.setItem('user-token', token);
+            // Store token in sessionStorage for persistence
+            sessionStorage.setItem('user-token', token);
             console.log('Login successful, received data:', data);
             _context.next = 18;
             break;
@@ -39855,7 +39856,7 @@ var actions = {
             console.log('Registration successful:', data);
 
             // Retrieve the session ID from the sessionStorage (or other storage method)
-            session_id = localStorage.getItem('session_id') || null; // Or use another method if you're storing it elsewhere
+            session_id = sessionStorage.getItem('session_id') || null; // Or use another method if you're storing it elsewhere
             console.log('Session ID:', session_id);
 
             // Auto-login after registration with session_id
@@ -39885,7 +39886,7 @@ var actions = {
     var commit = _ref3.commit;
     commit('SET_TOKEN', null);
     commit('SET_USER', null);
-    localStorage.removeItem('user-token');
+    sessionStorage.removeItem('user-token');
     console.log('Logout successful');
   },
   checkAuth: function checkAuth(_ref4) {
@@ -39896,7 +39897,7 @@ var actions = {
           case 0:
             commit = _ref4.commit;
             commit('SET_AUTH_CHECKED', false);
-            token = localStorage.getItem('user-token');
+            token = sessionStorage.getItem('user-token');
             if (!token) {
               _context3.next = 21;
               break;
@@ -39917,7 +39918,7 @@ var actions = {
             console.error('Failed to fetch user data:', ((_error$response5 = _context3.t0.response) === null || _error$response5 === void 0 ? void 0 : _error$response5.data) || _context3.t0.message);
             commit('SET_USER', null);
             commit('SET_TOKEN', '');
-            localStorage.removeItem('user-token');
+            sessionStorage.removeItem('user-token');
           case 19:
             _context3.next = 23;
             break;
@@ -40051,8 +40052,8 @@ var actions = {
             commit = _ref2.commit;
             _context.prev = 1;
             // Check if the user is authenticated
-            isAuthenticated = localStorage.getItem('user-token') !== null;
-            sessionId = localStorage.getItem('session_id') || null;
+            isAuthenticated = sessionStorage.getItem('user-token') !== null;
+            sessionId = sessionStorage.getItem('session_id') || null;
             if (!isAuthenticated) {
               _context.next = 11;
               break;
@@ -40098,8 +40099,8 @@ var actions = {
             commit = _ref3.commit;
             product = _ref4.product, quantity = _ref4.quantity;
             _context2.prev = 2;
-            isAuthenticated = localStorage.getItem('user-token') !== null;
-            sessionId = localStorage.getItem('session_id') || null;
+            isAuthenticated = sessionStorage.getItem('user-token') !== null;
+            sessionId = sessionStorage.getItem('session_id') || null;
             if (!isAuthenticated) {
               _context2.next = 12;
               break;
@@ -40534,7 +40535,7 @@ var axiosInstance = axios__WEBPACK_IMPORTED_MODULE_0__["default"].create({
 // Add an interceptor to handle requests and responses
 axiosInstance.interceptors.request.use(function (config) {
   // Add Authorization header if user-token is available
-  var token = localStorage.getItem('user-token'); // Retrieve token from localStorage
+  var token = sessionStorage.getItem('user-token'); // Retrieve token from sessionStorage
   if (token) {
     config.headers['Authorization'] = "Bearer ".concat(token); // Add Bearer token
   }
