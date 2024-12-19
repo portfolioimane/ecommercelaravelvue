@@ -32,7 +32,6 @@ async fetchCart({ commit }) {
   try {
     // Check if the user is authenticated
     const isAuthenticated = sessionStorage.getItem('user-token') !== null;
-    let sessionId = sessionStorage.getItem('session_id') || null;
 
     let response;
     if (isAuthenticated) {
@@ -41,9 +40,7 @@ async fetchCart({ commit }) {
       commit('setCart', response.data.cart_items);
     } else {
       // Fetch cart for guest user
-      response = await axios.get('/cartguest', {
-        params: { session_id: sessionId }
-      });
+      response = await axios.get('/cartguest');
       commit('setCart', response.data.cart_items);
     }
 
@@ -57,7 +54,6 @@ async fetchCart({ commit }) {
   async addProductToCart({ commit }, { product, quantity }) {
     try {
       const isAuthenticated = sessionStorage.getItem('user-token') !== null;
-      let sessionId = sessionStorage.getItem('session_id') || null;
 
       if (isAuthenticated) {
         // Authenticated user: no session_id required
@@ -71,7 +67,6 @@ async fetchCart({ commit }) {
         const response = await axios.post('/cartguest/add', {
           product_id: product.id,
           quantity,
-          session_id: sessionId,
         });
         commit('setCart', response.data.cart_items);
       }

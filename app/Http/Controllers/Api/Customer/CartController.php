@@ -62,8 +62,8 @@ private function getCart(Request $request, $type)
         // If not authenticated, log that the user is not authenticated
         Log::info('User is not authenticated');
 
-        // Fetch the session_id for guest users
-        $sessionId = $request->input('session_id');
+        // Fetch the session_id for guest users from headers
+        $sessionId = $request->header('X-Session-ID'); // Get session_id from headers
 
         if ($sessionId) {
             // Retrieve the cart for the guest using session_id
@@ -91,6 +91,7 @@ private function getCart(Request $request, $type)
 }
 
 
+
 public function addToAuthenticatedCart(Request $request)
 {
     // Validate the input data
@@ -109,20 +110,32 @@ public function addToAuthenticatedCart(Request $request)
 
 public function addToGuestCart(Request $request)
 {
+    // Log the incoming headers to check what is being sent
+    \Log::debug('Incoming headers: ', $request->headers->all());
+
+    // Retrieve session_id from the request headers
+    $sessionId = $request->header('X-Session-ID');
+
     // Validate the input data
     $data = $request->validate([
         'product_id' => 'required|integer',
         'quantity' => 'required|integer|min:1',
-        'session_id' => 'required|string', // session_id is mandatory for guest users
     ]);
+
+    // Ensure session_id is provided, if not, return an error
+    if (!$sessionId) {
+        return response()->json(['error' => 'Session ID is required for guest users'], 400);
+    }
 
     // Retrieve the cart for the guest user using session_id
     $cart = Cart::firstOrCreate(
-        ['session_id' => $data['session_id']]
+        ['session_id' => $sessionId]
     );
 
+    // Add the product to the cart (custom logic in the addToCart method)
     return $this->addToCart($cart, $data);
 }
+
 
 private function addToCart($cart, $data)
 {

@@ -23264,8 +23264,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               _context.next = 6;
               return _this.login({
                 email: _this.email,
-                password: _this.password,
-                session_id: session_id
+                password: _this.password
               });
             case 6:
               // Log successful login
@@ -23774,8 +23773,7 @@ __webpack_require__.r(__webpack_exports__);
       // Now dispatch the action to add product to cart, passing the session_id (null for authenticated users)
       this.$store.dispatch('cart/addProductToCart', {
         product: this.product,
-        quantity: this.quantity,
-        session_id: sessionId // Send session_id as null if authenticated, or the generated one for guests
+        quantity: this.quantity
       }).then(function () {
         // Optionally redirect to cart page or show success message
         _this2.$router.push('/cart');
@@ -39842,7 +39840,7 @@ var actions = {
   },
   register: function register(_ref2, userData) {
     return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var dispatch, _yield$axios$post2, data, session_id, loginData, _error$response3, _error$response4;
+      var dispatch, _yield$axios$post2, data, loginData, _error$response3, _error$response4;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -39856,30 +39854,28 @@ var actions = {
             console.log('Registration successful:', data);
 
             // Retrieve the session ID from the sessionStorage (or other storage method)
-            session_id = sessionStorage.getItem('session_id') || null; // Or use another method if you're storing it elsewhere
             console.log('Session ID:', session_id);
 
             // Auto-login after registration with session_id
             loginData = {
               email: userData.email,
-              password: userData.password,
-              session_id: session_id // Send session_id as part of the login request
+              password: userData.password
             };
-            _context2.next = 12;
+            _context2.next = 11;
             return dispatch('login', loginData);
-          case 12:
-            _context2.next = 18;
+          case 11:
+            _context2.next = 17;
             break;
-          case 14:
-            _context2.prev = 14;
+          case 13:
+            _context2.prev = 13;
             _context2.t0 = _context2["catch"](1);
             console.error('Registration failed:', ((_error$response3 = _context2.t0.response) === null || _error$response3 === void 0 ? void 0 : _error$response3.data) || _context2.t0.message);
             throw ((_error$response4 = _context2.t0.response) === null || _error$response4 === void 0 ? void 0 : _error$response4.data) || _context2.t0.message;
-          case 18:
+          case 17:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[1, 14]]);
+      }, _callee2, null, [[1, 13]]);
     }))();
   },
   logout: function logout(_ref3) {
@@ -40045,7 +40041,7 @@ var mutations = {
 var actions = {
   fetchCart: function fetchCart(_ref2) {
     return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var commit, isAuthenticated, sessionId, response;
+      var commit, isAuthenticated, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -40053,46 +40049,41 @@ var actions = {
             _context.prev = 1;
             // Check if the user is authenticated
             isAuthenticated = sessionStorage.getItem('user-token') !== null;
-            sessionId = sessionStorage.getItem('session_id') || null;
             if (!isAuthenticated) {
-              _context.next = 11;
+              _context.next = 10;
               break;
             }
-            _context.next = 7;
+            _context.next = 6;
             return _utils_axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].get('/cart');
-          case 7:
+          case 6:
             response = _context.sent;
             commit('setCart', response.data.cart_items);
-            _context.next = 15;
+            _context.next = 14;
             break;
-          case 11:
-            _context.next = 13;
-            return _utils_axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].get('/cartguest', {
-              params: {
-                session_id: sessionId
-              }
-            });
-          case 13:
+          case 10:
+            _context.next = 12;
+            return _utils_axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].get('/cartguest');
+          case 12:
             response = _context.sent;
             commit('setCart', response.data.cart_items);
-          case 15:
+          case 14:
             console.log('Fetched cart data:', response.data.cart_items);
-            _context.next = 21;
+            _context.next = 20;
             break;
-          case 18:
-            _context.prev = 18;
+          case 17:
+            _context.prev = 17;
             _context.t0 = _context["catch"](1);
             console.error('Error fetching cart:', _context.t0);
-          case 21:
+          case 20:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[1, 18]]);
+      }, _callee, null, [[1, 17]]);
     }))();
   },
   addProductToCart: function addProductToCart(_ref3, _ref4) {
     return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-      var commit, product, quantity, isAuthenticated, sessionId, response, _response;
+      var commit, product, quantity, isAuthenticated, response, _response;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
@@ -40100,43 +40091,41 @@ var actions = {
             product = _ref4.product, quantity = _ref4.quantity;
             _context2.prev = 2;
             isAuthenticated = sessionStorage.getItem('user-token') !== null;
-            sessionId = sessionStorage.getItem('session_id') || null;
             if (!isAuthenticated) {
-              _context2.next = 12;
+              _context2.next = 11;
               break;
             }
-            _context2.next = 8;
+            _context2.next = 7;
             return _utils_axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].post('/cart/add', {
               product_id: product.id,
               quantity: quantity
             });
-          case 8:
+          case 7:
             response = _context2.sent;
             commit('setCart', response.data.cart_items);
-            _context2.next = 16;
+            _context2.next = 15;
             break;
-          case 12:
-            _context2.next = 14;
+          case 11:
+            _context2.next = 13;
             return _utils_axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].post('/cartguest/add', {
               product_id: product.id,
-              quantity: quantity,
-              session_id: sessionId
+              quantity: quantity
             });
-          case 14:
+          case 13:
             _response = _context2.sent;
             commit('setCart', _response.data.cart_items);
-          case 16:
-            _context2.next = 21;
+          case 15:
+            _context2.next = 20;
             break;
-          case 18:
-            _context2.prev = 18;
+          case 17:
+            _context2.prev = 17;
             _context2.t0 = _context2["catch"](2);
             console.error('Error adding product to cart:', _context2.t0);
-          case 21:
+          case 20:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[2, 18]]);
+      }, _callee2, null, [[2, 17]]);
     }))();
   },
   removeProductFromCart: function removeProductFromCart(_ref5, itemId) {
@@ -40529,7 +40518,7 @@ var axiosInstance = axios__WEBPACK_IMPORTED_MODULE_0__["default"].create({
   // Adjust baseURL as needed
   timeout: 20000,
   // Optional: Set a timeout for requests
-  withCredentials: false // Since we're not using cookies for authentication anymore
+  withCredentials: true // Since we're using cookies for authentication
 });
 
 // Add an interceptor to handle requests and responses
@@ -40538,6 +40527,12 @@ axiosInstance.interceptors.request.use(function (config) {
   var token = sessionStorage.getItem('user-token'); // Retrieve token from sessionStorage
   if (token) {
     config.headers['Authorization'] = "Bearer ".concat(token); // Add Bearer token
+  }
+
+  // Add session_id header from sessionStorage
+  var sessionId = sessionStorage.getItem('session_id');
+  if (sessionId) {
+    config.headers['X-Session-ID'] = sessionId; // Add session_id as a header
   }
   return config;
 }, function (error) {

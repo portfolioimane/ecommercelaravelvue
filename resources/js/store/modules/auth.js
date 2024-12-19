@@ -47,14 +47,12 @@ async register({ dispatch }, userData) {
     console.log('Registration successful:', data);
 
     // Retrieve the session ID from the sessionStorage (or other storage method)
-    const session_id = sessionStorage.getItem('session_id') || null; // Or use another method if you're storing it elsewhere
     console.log('Session ID:', session_id);
 
     // Auto-login after registration with session_id
     const loginData = {
       email: userData.email,
       password: userData.password,
-      session_id: session_id,  // Send session_id as part of the login request
     };
     
     await dispatch('login', loginData);

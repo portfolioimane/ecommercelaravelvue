@@ -81,7 +81,6 @@ export default {
     this.$store.dispatch('cart/addProductToCart', {
       product: this.product,
       quantity: this.quantity,
-      session_id: sessionId, // Send session_id as null if authenticated, or the generated one for guests
     })
       .then(() => {
         // Optionally redirect to cart page or show success message

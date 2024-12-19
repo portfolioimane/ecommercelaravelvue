@@ -64,7 +64,7 @@ class AuthController extends Controller
 public function login(Request $request)
 {
     // Log the incoming request for debugging
-    Log::info('Login attempt received', ['email' => $request->email, 'session_id' => $request->session_id]);
+    Log::info('Login attempt received', ['email' => $request->email]);
 
     // Validate user input
     $validator = Validator::make($request->all(), [
@@ -90,9 +90,9 @@ public function login(Request $request)
     $token = $user->createToken('API Token')->plainTextToken;
     Log::info('Generated token for user', ['user_id' => $user->id, 'token' => $token]);
 
-    // Check if session_id is provided
-    $session_id = $request->session_id;
-    Log::info('Session ID received', ['session_id' => $session_id]);
+    // Fetch session_id from headers instead of request body
+    $session_id = $request->header('X-Session-ID'); // Retrieve session_id from headers
+    Log::info('Session ID received from headers', ['session_id' => $session_id]);
 
     if ($session_id) {
         // Retrieve the session-based cart using session_id

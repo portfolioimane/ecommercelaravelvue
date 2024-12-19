@@ -50,7 +50,7 @@ export default {
         console.log('Session ID:', session_id);
 
         // Send login credentials along with session_id if it exists
-        await this.login({ email: this.email, password: this.password, session_id });
+        await this.login({ email: this.email, password: this.password });
 
         // Log successful login
         console.log('Login successful, redirecting to home.');
