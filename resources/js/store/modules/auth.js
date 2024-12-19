@@ -1,0 +1,125 @@
+import axios from '../../utils/axios.js';
+
+const state = {
+  user: null,
+  token: localStorage.getItem('user-token') || '',  // Retrieve token from localStorage
+  authChecked: false,
+};
+
+const mutations = {
+  SET_USER(state, user) {
+    state.user = user;
+  },
+  SET_TOKEN(state, token) {
+    state.token = token;
+  },
+  SET_AUTH_CHECKED(state, value) {
+    state.authChecked = value;
+  },
+};
+
+const actions = {
+async login({ commit }, credentials) {
+  try {
+    console.log('Sending login request with credentials:', credentials);
+    
+    const { data } = await axios.post('/login', credentials); // Send credentials in request body
+    const { user, token } = data;
+
+    // Commit user data to Vuex
+    commit('SET_USER', user);
+    commit('SET_TOKEN', token);
+
+    // Store token in localStorage for persistence
+    localStorage.setItem('user-token', token);
+
+    console.log('Login successful, received data:', data);
+  } catch (error) {
+    console.error('Login failed:', error.response?.data || error.message);
+    throw error.response?.data || error.message;
+  }
+},
+
+
+async register({ dispatch }, userData) {
+  try {
+    const { data } = await axios.post('/register', userData);
+    console.log('Registration successful:', data);
+
+    // Retrieve the session ID from the sessionStorage (or other storage method)
+    const session_id = localStorage.getItem('session_id') || null; // Or use another method if you're storing it elsewhere
+    console.log('Session ID:', session_id);
+
+    // Auto-login after registration with session_id
+    const loginData = {
+      email: userData.email,
+      password: userData.password,
+      session_id: session_id,  // Send session_id as part of the login request
+    };
+    
+    await dispatch('login', loginData);
+  } catch (error) {
+    console.error('Registration failed:', error.response?.data || error.message);
+    throw error.response?.data || error.message;
+  }
+},
+
+
+  logout({ commit }) {
+    commit('SET_TOKEN', null);
+    commit('SET_USER', null);
+    localStorage.removeItem('user-token');
+
+    console.log('Logout successful');
+  },
+
+  async checkAuth({ commit }) {
+    commit('SET_AUTH_CHECKED', false);
+
+    const token = localStorage.getItem('user-token');
+    if (token) {
+      commit('SET_TOKEN', token);
+      try {
+        const { data } = await axios.get('/user');
+        commit('SET_USER', data.user);
+      } catch (error) {
+        console.error('Failed to fetch user data:', error.response?.data || error.message);
+        commit('SET_USER', null);
+        commit('SET_TOKEN', '');
+        localStorage.removeItem('user-token');
+      }
+    } else {
+      commit('SET_USER', null);
+      commit('SET_TOKEN', '');
+    }
+
+    commit('SET_AUTH_CHECKED', true);
+  },
+
+  async updateUser({ commit }, userData) {
+    try {
+      const { data } = await axios.post('/user', userData);
+      const updatedUser = data.user;
+      commit('SET_USER', updatedUser);
+      console.log('Profile updated successfully:', updatedUser);
+      return updatedUser;
+    } catch (error) {
+      console.error('Failed to update profile:', error.response?.data || error.message);
+      throw error.response?.data || error.message;
+    }
+  },
+};
+
+const getters = {
+  isAuthenticated: (state) => !!state.token,
+  user: (state) => state.user,
+  authChecked: (state) => state.authChecked,
+};
+
+export default {
+  namespaced: true,
+  state,
+  mutations,
+  actions,
+  getters,
+};
