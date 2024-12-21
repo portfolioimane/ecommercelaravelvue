@@ -10,7 +10,13 @@ use App\Http\Controllers\Api\Customer\CartController;
 use App\Http\Controllers\Api\Customer\OrderController;
 
 
+use App\Http\Controllers\Api\Customer\ResetPasswordController;
 
+
+
+
+Route::post('/password/email', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::post('password/reset', [ResetPasswordController::class, 'reset']);
 // Authentication Routes
 
 Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getUser']);
@@ -50,5 +56,17 @@ Route::prefix('cart')->group(function () {
 Route::middleware('auth:sanctum')->prefix('orders')->group(function () {
     Route::get('/', [OrderController::class, 'index']);
     Route::post('/create', [OrderController::class, 'create']);
-    Route::get('/{order_id}', [OrderController::class, 'show']);
+    Route::get('/{id}', [OrderController::class, 'show']);
+
 });
+Route::middleware('auth:sanctum')->group(function () {
+    Route::put('/user', [AuthController::class, 'updateProfile']);
+    Route::get('/myorders', [OrderController::class, 'myorders']);
+
+});   
+
+
+
+
+
+

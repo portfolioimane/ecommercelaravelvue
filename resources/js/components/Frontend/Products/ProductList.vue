@@ -10,7 +10,7 @@
             <p class="card-text text-muted" style="font-size: 1rem;">{{ product.description }}</p>
             <p class="text-muted" style="font-size: 0.9rem;">Category: <span class="font-weight-bold">{{ product.category.name }}</span></p>
             <div class="d-flex justify-content-between align-items-center mt-3">
-              <p class="font-weight-bold text-primary" style="font-size: 1.25rem;">${{ product.price }}</p>
+              <p class="font-weight-bold text-golden" style="font-size: 1.25rem;">${{ product.price }}</p>
               <p class="font-weight-bold text-success" style="font-size: 1.1rem;">Stock: {{ product.stock }}</p>
             </div>
             <button @click="viewDetails(product.id)" class="btn btn-warning btn-block rounded-pill mt-3">View Details</button>
@@ -86,5 +86,9 @@ export default {
 .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+}
+.text-golden{
+  color:#D4AF37 !important;
+  font-weight:bold;
 }
 </style>

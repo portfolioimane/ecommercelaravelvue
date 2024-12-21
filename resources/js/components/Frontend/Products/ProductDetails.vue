@@ -12,7 +12,7 @@
             <p class="card-text text-muted" style="font-size: 1rem;">{{ product.description }}</p>
             
             <div class="mb-3">
-              <p class="font-weight-bold">Price: ${{ product.price }}</p>
+              <p class="font-weight-bold pricegolden">Price: ${{ product.price }}</p>
             </div>
 
             <div class="mb-3">
@@ -163,5 +163,9 @@ export default {
 .form-control {
   font-size: 1rem;
   padding: 0.75rem;
+}
+.pricegolden{
+  color:#D4AF37 !important;
+  font-weight:bold;
 }
 </style>

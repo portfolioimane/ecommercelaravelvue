@@ -92,16 +92,42 @@ async register({ dispatch }, userData) {
     commit('SET_AUTH_CHECKED', true);
   },
 
-  async updateUser({ commit }, userData) {
+
+  async resetPassword({ commit }, { email, password, token }) {
     try {
-      const { data } = await axios.post('/user', userData);
-      const updatedUser = data.user;
+      const response = await axios.post('/password/reset', {
+        email,
+        password,
+        password_confirmation: password,
+        token,
+      });
+      console.log('Password reset successful:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Password reset failed:', error.response.data);
+      throw error.response.data;
+    }
+  },
+
+  async sendPasswordResetLink({ commit }, { email }) {
+    try {
+      const response = await axios.post('/password/email', { email });
+      return response.data;
+    } catch (err) {
+      throw err;
+    }
+  },
+
+  async updateUser({ commit, state }, userData) {
+    try {
+      const response = await axios.post('/user', userData);
+      const updatedUser = response.data.user;
       commit('SET_USER', updatedUser);
       console.log('Profile updated successfully:', updatedUser);
       return updatedUser;
     } catch (error) {
-      console.error('Failed to update profile:', error.response?.data || error.message);
-      throw error.response?.data || error.message;
+      console.error('Failed to update profile:', error.response.data);
+      throw error.response.data;
     }
   },
 };

@@ -17,6 +17,8 @@ protected $fillable = [
         'email',
         'password',
         'role',
+        'avatar',
+        'phone',
     ];
 
     public function cart()

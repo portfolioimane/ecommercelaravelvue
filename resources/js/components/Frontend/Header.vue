@@ -24,7 +24,7 @@
           <router-link to="/cart" class="nav-link cart-icon d-flex align-items-center">
             <span class="material-icons cart-icon">shopping_cart</span>
             <!-- Display cartItemCount only when it's not loading -->
-            <span v-if="!loading" class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-circle p-1">
+            <span v-if="!loading" class="badge bg-badge position-absolute top-0 start-100 translate-middle rounded-circle p-1">
               {{ cartItemCount }}
             </span>
           </router-link>
@@ -49,8 +49,8 @@
             <span class="material-icons ms-1">arrow_drop_down</span>
           </a>
           <ul class="dropdown-menu" aria-labelledby="userDropdown">
-            <li><router-link to="/profile" class="dropdown-item">Profile</router-link></li>
-            <li><router-link to="/patientdashboard/myappointments" class="dropdown-item">PatientDashboard</router-link></li>
+            <li><router-link to="/customerdashboard/profile" class="dropdown-item">Profile</router-link></li>
+            <li><router-link to="/customerdashboard/myorders" class="dropdown-item">CustomerDashboard</router-link></li>
             <li><a @click="logout" class="dropdown-item">Logout</a></li>
           </ul>
         </li>
@@ -130,7 +130,7 @@ export default {
 .navbar-brand {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #007bff;
+  color:#d4af37;
 }
 
 .navbar-nav .nav-link {
@@ -142,14 +142,14 @@ export default {
 }
 
 .navbar-nav .nav-link:hover {
-  color: #007bff;
+  color:#d4af37;
   transition: color 0.3s ease;
 }
 
 /* Cart Badge Styling */
 .badge {
   font-size: 14px;
-  background-color: red;
+  background-color:#d4af37;
   color: white;
   border-radius: 50%;
   padding: 3px 7px;
@@ -182,8 +182,16 @@ export default {
 .material-icons {
   font-size: 1.5rem;
   vertical-align: middle;
+
+}
+.cart-icon{
+    color:#d4af37 !important;
 }
 
+.bg-badge{
+  background-color:#d4af37 !important;
+  color:#fff;
+}
 /* Add arrow icon to indicate dropdown */
 .material-icons.ms-1 {
   font-size: 1rem;

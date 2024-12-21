@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-5">
-    <h2 class="mb-4 text-center text-primary">Your Cart</h2>
+    <h2 class="mb-4 text-center text-golden">Your Cart</h2>
 
     <!-- Custom Loading Spinner -->
     <div v-if="loading" class="loading-container text-center">
@@ -64,12 +64,15 @@
         </tbody>
       </table>
 
-      <!-- Total Cart Value -->
-      <div class="total d-flex justify-content-between align-items-center mt-4">
-        <h4 class="text-end">Total: <span class="text-primary">${{ totalCartValue }}</span></h4>
-        <button class="btn btn-gold btn-lg">Proceed to Checkout</button>
-      </div>
-    </div>
+<!-- Total Cart Value -->
+<div class="total d-flex justify-content-between align-items-center mt-4">
+  <h4 class="text-end">
+    Total: <span class="text-golden">${{ totalCartValue }}</span>
+  </h4>
+  <button @click="proceedToCheckout" class="btn btn-gold btn-lg">Proceed to Checkout</button>
+</div>
+</div>
+
 
     <!-- Empty Cart Message -->
     <div v-else class="alert alert-info text-center mt-4">
@@ -119,6 +122,14 @@ export default {
         }
       }
     },
+    proceedToCheckout() {
+    if (this.$store.getters['auth/isAuthenticated']) {
+      this.$router.push({ name: 'Checkout' }); // Redirect to Checkout page
+    } else {
+      this.$router.push({ name: 'Login', query: { redirect: 'Checkout' } }); // Add redirect query    
+
+    }
+  },
   },
 };
 </script>
@@ -226,9 +237,33 @@ export default {
   height: 200px;
 }
 
+.text-golden{
+  color:#d4af37 !important;
+}
+
+.btn-outline-success{
+  color:#d4af37 !important;
+  border:1px solid #d4af37 !important;
+}
+.btn-outline-success:hover{
+  color:#fff !important;
+  border:1px solid #d4af37 !important;
+  background-color:#d4af37;
+}
+
+.btn-outline-warning{
+  color:#d4af37 !important;
+  border:1px solid #d4af37 !important;
+}
+.btn-outline-warning:hover{
+ color:#fff !important;
+  border:1px solid #d4af37 !important;
+  background-color:#d4af37; 
+}
+
 .spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #007bff;
+  border: 4px solid #d4af37;
+  border-top: 4px solid #d4af37;
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -239,4 +274,5 @@ export default {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
 </style>

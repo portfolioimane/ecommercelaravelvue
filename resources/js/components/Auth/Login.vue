@@ -57,8 +57,11 @@ export default {
 
         // After successful login, remove session_id from sessionStorage
         sessionStorage.removeItem('session_id');
+        const redirect = this.$route.query.redirect || 'ProductList'; // Default to 
 
-        this.$router.push('/'); // Redirect to home after successful login
+            // Navigate to the correct route
+             this.$router.push({ name: redirect }); 
+             
       } catch (err) {
         // Log error message for debugging
         console.error('Login failed with error:', err);
