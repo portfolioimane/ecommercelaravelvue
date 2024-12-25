@@ -56,6 +56,20 @@ const actions = {
       throw error;
     }
   },
+
+
+  // Create Stripe Payment Intent
+  async createStripePayment({ commit }, totalAmount) {
+    try {
+      const response = await axios.post('/orders/create-stripe-payment', { total: totalAmount });
+      return response.data; // Return clientSecret to be used in the component
+    } catch (error) {
+      console.error('Error creating Stripe payment:', error);
+      throw error;
+    }
+  },
+
+
 };
 
 // Getters - Derived state based on the store's state

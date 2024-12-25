@@ -165,7 +165,7 @@ export default {
   padding: 0.75rem;
 }
 .pricegolden{
-  color:#D4AF37 !important;
+  color:#000 !important;
   font-weight:bold;
 }
 </style>

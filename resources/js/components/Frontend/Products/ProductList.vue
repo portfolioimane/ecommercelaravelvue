@@ -88,7 +88,7 @@ export default {
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 }
 .text-golden{
-  color:#D4AF37 !important;
+  color:#000 !important;
   font-weight:bold;
 }
 </style>

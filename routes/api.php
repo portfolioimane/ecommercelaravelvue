@@ -57,6 +57,8 @@ Route::middleware('auth:sanctum')->prefix('orders')->group(function () {
     Route::get('/', [OrderController::class, 'index']);
     Route::post('/create', [OrderController::class, 'create']);
     Route::get('/{id}', [OrderController::class, 'show']);
+    Route::post('/create-stripe-payment', [OrderController::class, 'createStripePayment']);
+
 
 });
 Route::middleware('auth:sanctum')->group(function () {

@@ -3,123 +3,87 @@
     <h2 class="text-center mb-4">Checkout</h2>
 
     <div class="row">
-      <!-- Customer Information -->
       <div class="col-md-6">
         <h4 class="mb-4">Customer Information</h4>
         <form @submit.prevent="submitOrder">
+          <div v-if="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+          <div v-if="successMessage" class="alert alert-success">{{ successMessage }}</div>
+
           <div class="mb-3">
             <label for="name" class="form-label">Name</label>
-            <input
-              type="text"
-              id="name"
-              v-model="form.name"
-              class="form-control"
-              :placeholder="user ? user.name : 'Enter your name'"
-              required
-            />
+            <input type="text" id="name" v-model="form.name" class="form-control" required />
           </div>
           <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input
-              type="email"
-              id="email"
-              v-model="form.email"
-              class="form-control"
-              :placeholder="user ? user.email : 'Enter your email'"
-              required
-            />
+            <input type="email" id="email" v-model="form.email" class="form-control" required />
           </div>
           <div class="mb-3">
             <label for="phone" class="form-label">Phone</label>
-            <input
-              type="text"
-              id="phone"
-              v-model="form.phone"
-              class="form-control"
-              :placeholder="user ? user.phone : 'Enter your phone number'"
-              required
-            />
+            <input type="text" id="phone" v-model="form.phone" class="form-control" required />
           </div>
           <div class="mb-3">
             <label for="address" class="form-label">Address</label>
+            <input type="text" id="address" v-model="form.address" class="form-control" required />
+          </div>
+
+          <h4 class="mb-4">Select Payment Method</h4>
+          <div class="form-check">
             <input
-              type="text"
-              id="address"
-              v-model="form.address"
-              class="form-control"
-              :placeholder="user ? user.address : 'Enter your address'"
+              type="radio"
+              id="cod"
+              v-model="form.payment_method"
+              value="cash_on_delivery"
+              class="form-check-input"
               required
             />
+            <label class="form-check-label" for="cod">Cash on Delivery</label>
+          </div>
+          <div class="form-check">
+            <input type="radio" id="stripe" v-model="form.payment_method" value="stripe" class="form-check-input" />
+            <label class="form-check-label" for="stripe">
+              <i class="fas fa-credit-card"></i> Stripe (Credit Card)
+            </label>
+          </div>
+          <div v-if="form.payment_method === 'stripe'" class="mb-3">
+            <div id="cardElement" class="form-control"></div>
+          </div>
+          <div class="form-check">
+            <input
+              type="radio"
+              id="paypal"
+              v-model="form.payment_method"
+              value="paypal"
+              class="form-check-input"
+            />
+            <label class="form-check-label" for="paypal">PayPal</label>
           </div>
 
-          <!-- Payment Methods -->
-          <h4 class="mb-4">Select Payment Method</h4>
-          <div class="mb-3">
-            <div class="form-check">
-              <input
-                type="radio"
-                id="cod"
-                v-model="form.payment_method"
-                value="cash_on_delivery"
-                class="form-check-input"
-                required
-              />
-              <label class="form-check-label" for="cod">Cash on Delivery</label>
-            </div>
-            <div class="form-check">
-              <input
-                type="radio"
-                id="stripe"
-                v-model="form.payment_method"
-                value="stripe"
-                class="form-check-input"
-              />
-              <label class="form-check-label" for="stripe">Stripe</label>
-            </div>
-            <div class="form-check">
-              <input
-                type="radio"
-                id="paypal"
-                v-model="form.payment_method"
-                value="paypal"
-                class="form-check-input"
-              />
-              <label class="form-check-label" for="paypal">PayPal</label>
-            </div>
-          </div>
-
-          <button type="submit" class="btn btn-primary w-100">Place Order</button>
+          <!-- Submit button with loading state -->
+          <button type="submit" class="btn btn-primary w-100" :disabled="!isFormValid || loading">
+            <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Place Order
+          </button>
         </form>
       </div>
 
-      <!-- Order Summary -->
       <div class="col-md-6">
         <h4 class="mb-4 text-center">Order Summary</h4>
         <ul class="list-group">
-          <li
-            v-for="item in cartItems"
-            :key="item.id"
-            class="list-group-item d-flex justify-content-between align-items-center"
-          >
+          <li v-for="item in cartItems" :key="item.id" class="list-group-item d-flex justify-content-between align-items-center">
             <span>{{ item.product.name }} (x{{ item.quantity }})</span>
-            <span>{{ item.product.price }}</span>
+            <span>${{ item.product.price }}</span>
             <span class="text-golden">${{ (item.quantity * item.product.price).toFixed(2) }}</span>
           </li>
         </ul>
-        <h5 class="text-end mt-4">
-          Total: <span class="text-golden">${{ totalCartValue.toFixed(2) }}</span>
-        </h5>
+        <h5 class="text-end mt-4">Total: <span class="text-golden">${{ totalCartValue.toFixed(2) }}</span></h5>
       </div>
-    </div>
-
-    <!-- Empty Cart Message -->
-    <div v-if="cartItems.length === 0" class="alert alert-info text-center mt-4">
-      <p>Your cart is empty. Add items to the cart to proceed with checkout.</p>
     </div>
   </div>
 </template>
 
 <script>
+import { loadStripe } from "@stripe/stripe-js";
+
 export default {
   data() {
     return {
@@ -128,8 +92,14 @@ export default {
         email: '',
         phone: '',
         address: '',
-        payment_method: 'cash_on_delivery', // Default payment method
+        payment_method: 'cash_on_delivery',
       },
+      stripe: null,
+      elements: null,
+      cardElement: null,
+      errorMessage: null,
+      successMessage: null,
+      loading: false,
     };
   },
   computed: {
@@ -139,62 +109,83 @@ export default {
     totalCartValue() {
       return this.$store.getters['cart/totalCartValue'];
     },
+    isFormValid() {
+      return this.form.name && this.form.email && this.form.phone && this.form.address && this.cartItems.length > 0;
+    },
     user() {
       return this.$store.getters['auth/user']; // Get logged-in user data
     },
   },
   methods: {
-    // Method to submit the order
-async submitOrder() {
-  if (this.cartItems.length === 0) {
-    alert('Your cart is empty. Add items before placing an order.');
-    return;
-  }
+    async submitOrder() {
+      if (!this.isFormValid) {
+        this.errorMessage = "Please complete all fields and ensure your cart is not empty.";
+        return;
+      }
 
-  const orderData = {
-    name: this.form.name || this.user.name,
-    email: this.form.email || this.user.email,
-    phone: this.form.phone || this.user.phone,
-    address: this.form.address || this.user.address,
-    payment_method: this.form.payment_method,
-    items: this.cartItems,
-    total: this.totalCartValue,
-  };
+      // Set loading state to true
+      this.loading = true;
 
-  try {
-    // Send the order data to the server
-    const response = await this.$store.dispatch('orders/submitOrder', orderData);
+      const orderData = {
+        name: this.form.name || this.user.name,
+        email: this.form.email || this.user.email,
+        phone: this.form.phone || this.user.phone,
+        address: this.form.address || this.user.address,
+        payment_method: this.form.payment_method,
+        items: this.cartItems,
+        total: this.totalCartValue,
+      };
 
-    // Assuming the server returns the created order's ID
-    const orderId = response.id;
+      try {
+        if (this.form.payment_method === 'stripe') {
+          const { clientSecret } = await this.$store.dispatch('orders/createStripePayment', this.totalCartValue);
 
-    // Clear the cart and reset the form
-    this.$store.commit('cart/setCart', []);
-    this.form = {
-      name: '',
-      email: '',
-      phone: '',
-      address: '',
-      payment_method: 'cash_on_delivery',
-    };
+          if (!clientSecret) throw new Error("Payment initialization failed.");
 
+          const { error, paymentIntent } = await this.stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+              card: this.cardElement,
+              billing_details: {
+                name: this.form.name,
+                email: this.form.email,
+              },
+            },
+          });
 
-    // Redirect to the order details page
-    this.$router.push(`/customerdashboard/order/${orderId}`);
-  } catch (error) {
-    console.error('Error submitting order:', error);
-    alert('Failed to place the order. Please try again.');
-  }
-},
+          if (error) throw error;
 
+          if (paymentIntent.status === 'succeeded') {
+            try {
+              const response = await this.$store.dispatch('orders/submitOrder', orderData);
 
-    // Fetch cart data
+              const orderId = response.id;
+              this.$store.commit('cart/setCart', []);
+              this.form = {
+                name: '',
+                email: '',
+                phone: '',
+                address: '',
+                payment_method: 'cash_on_delivery',
+              };
+              this.$router.push(`/customerdashboard/order/${orderId}`);
+            } catch (error) {
+              console.error('Error submitting order:', error);
+              alert('Failed to place the order. Please try again.');
+            }
+          } else {
+            throw new Error("Payment not successful.");
+          }
+        }
+      } catch (error) {
+        this.errorMessage = error.message || "Failed to place order.";
+      } finally {
+        // Set loading state to false once the process is finished
+        this.loading = false;
+      }
+    },
     fetchCart() {
-      console.log('Fetching cart data...');
       this.$store.dispatch('cart/fetchCart');
     },
-
-    // Fetch user data and fill form
     fillUserData() {
       if (this.user) {
         this.form.name = this.user.name || '';
@@ -203,8 +194,33 @@ async submitOrder() {
         this.form.address = this.user.address || '';
       }
     },
+
+    async initializeStripe() {
+      // If a Stripe element already exists, destroy it before reinitializing
+      if (this.cardElement) {
+        this.cardElement.unmount();
+        this.cardElement = null;
+      }
+
+      const stripePromise = loadStripe(process.env.VUE_APP_STRIPE_KEY);
+      this.stripe = await stripePromise;
+      this.elements = this.stripe.elements();
+      this.cardElement = this.elements.create('card');
+      this.cardElement.mount('#cardElement');
+    },
+
+  },
+  watch: {
+    'form.payment_method': function (newValue) {
+      if (newValue === 'stripe') {
+        this.initializeStripe();
+      }
+    },
   },
   mounted() {
+    if (this.form.payment_method === 'stripe') {
+      this.initializeStripe();
+    }
     this.fetchCart();
     this.$store.dispatch('auth/checkAuth').then(() => {
       this.fillUserData();
@@ -260,7 +276,7 @@ h2, h4 {
 }
 
 .form-check-input:checked {
-  background-color: #E6C200 !important;
-  border-color: #E6C200 !important;
+  background-color: #E6B800;
+  border-color: #E6B800;
 }
 </style>

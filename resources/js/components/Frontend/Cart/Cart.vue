@@ -238,7 +238,7 @@ export default {
 }
 
 .text-golden{
-  color:#d4af37 !important;
+color:#000 !important;
 }
 
 .btn-outline-success{

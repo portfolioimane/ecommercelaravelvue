@@ -23493,10 +23493,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _stripe_stripe_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @stripe/stripe-js */ "./node_modules/@stripe/stripe-js/lib/index.mjs");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator["return"] && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, "catch": function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -23505,8 +23507,14 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         email: '',
         phone: '',
         address: '',
-        payment_method: 'cash_on_delivery' // Default payment method
-      }
+        payment_method: 'cash_on_delivery'
+      },
+      stripe: null,
+      elements: null,
+      cardElement: null,
+      errorMessage: null,
+      successMessage: null,
+      loading: false
     };
   },
   computed: {
@@ -23516,26 +23524,30 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     totalCartValue: function totalCartValue() {
       return this.$store.getters['cart/totalCartValue'];
     },
+    isFormValid: function isFormValid() {
+      return this.form.name && this.form.email && this.form.phone && this.form.address && this.cartItems.length > 0;
+    },
     user: function user() {
       return this.$store.getters['auth/user']; // Get logged-in user data
     }
   },
   methods: {
-    // Method to submit the order
     submitOrder: function submitOrder() {
       var _this = this;
       return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var orderData, response, orderId;
+        var orderData, _yield$_this$$store$d, clientSecret, _yield$_this$stripe$c, error, paymentIntent, response, orderId;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
-              if (!(_this.cartItems.length === 0)) {
+              if (_this.isFormValid) {
                 _context.next = 3;
                 break;
               }
-              alert('Your cart is empty. Add items before placing an order.');
+              _this.errorMessage = "Please complete all fields and ensure your cart is not empty.";
               return _context.abrupt("return");
             case 3:
+              // Set loading state to true
+              _this.loading = true;
               orderData = {
                 name: _this.form.name || _this.user.name,
                 email: _this.form.email || _this.user.email,
@@ -23545,13 +23557,52 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 items: _this.cartItems,
                 total: _this.totalCartValue
               };
-              _context.prev = 4;
-              _context.next = 7;
+              _context.prev = 5;
+              if (!(_this.form.payment_method === 'stripe')) {
+                _context.next = 38;
+                break;
+              }
+              _context.next = 9;
+              return _this.$store.dispatch('orders/createStripePayment', _this.totalCartValue);
+            case 9:
+              _yield$_this$$store$d = _context.sent;
+              clientSecret = _yield$_this$$store$d.clientSecret;
+              if (clientSecret) {
+                _context.next = 13;
+                break;
+              }
+              throw new Error("Payment initialization failed.");
+            case 13:
+              _context.next = 15;
+              return _this.stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                  card: _this.cardElement,
+                  billing_details: {
+                    name: _this.form.name,
+                    email: _this.form.email
+                  }
+                }
+              });
+            case 15:
+              _yield$_this$stripe$c = _context.sent;
+              error = _yield$_this$stripe$c.error;
+              paymentIntent = _yield$_this$stripe$c.paymentIntent;
+              if (!error) {
+                _context.next = 20;
+                break;
+              }
+              throw error;
+            case 20:
+              if (!(paymentIntent.status === 'succeeded')) {
+                _context.next = 37;
+                break;
+              }
+              _context.prev = 21;
+              _context.next = 24;
               return _this.$store.dispatch('orders/submitOrder', orderData);
-            case 7:
+            case 24:
               response = _context.sent;
-              // Assuming the server returns the created order's ID
-              orderId = response.id; // Clear the cart and reset the form
+              orderId = response.id;
               _this.$store.commit('cart/setCart', []);
               _this.form = {
                 name: '',
@@ -23560,29 +23611,41 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 address: '',
                 payment_method: 'cash_on_delivery'
               };
-
-              // Redirect to the order details page
               _this.$router.push("/customerdashboard/order/".concat(orderId));
-              _context.next = 18;
+              _context.next = 35;
               break;
-            case 14:
-              _context.prev = 14;
-              _context.t0 = _context["catch"](4);
+            case 31:
+              _context.prev = 31;
+              _context.t0 = _context["catch"](21);
               console.error('Error submitting order:', _context.t0);
               alert('Failed to place the order. Please try again.');
-            case 18:
+            case 35:
+              _context.next = 38;
+              break;
+            case 37:
+              throw new Error("Payment not successful.");
+            case 38:
+              _context.next = 43;
+              break;
+            case 40:
+              _context.prev = 40;
+              _context.t1 = _context["catch"](5);
+              _this.errorMessage = _context.t1.message || "Failed to place order.";
+            case 43:
+              _context.prev = 43;
+              // Set loading state to false once the process is finished
+              _this.loading = false;
+              return _context.finish(43);
+            case 46:
             case "end":
               return _context.stop();
           }
-        }, _callee, null, [[4, 14]]);
+        }, _callee, null, [[5, 40, 43, 46], [21, 31]]);
       }))();
     },
-    // Fetch cart data
     fetchCart: function fetchCart() {
-      console.log('Fetching cart data...');
       this.$store.dispatch('cart/fetchCart');
     },
-    // Fetch user data and fill form
     fillUserData: function fillUserData() {
       if (this.user) {
         this.form.name = this.user.name || '';
@@ -23590,13 +23653,50 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
         this.form.phone = this.user.phone || '';
         this.form.address = this.user.address || '';
       }
+    },
+    initializeStripe: function initializeStripe() {
+      var _this2 = this;
+      return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+        var stripePromise;
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              // If a Stripe element already exists, destroy it before reinitializing
+              if (_this2.cardElement) {
+                _this2.cardElement.unmount();
+                _this2.cardElement = null;
+              }
+              stripePromise = (0,_stripe_stripe_js__WEBPACK_IMPORTED_MODULE_0__.loadStripe)("pk_test_51Psjz4IoXz8untciFuv0t9BNpnPJP6SsR2UsrNkUk1FjlFDn9dcRiDbGuJpUXSTcE8TxkyN06bG1dIxhEOkZetV300apNZIpdj");
+              _context2.next = 4;
+              return stripePromise;
+            case 4:
+              _this2.stripe = _context2.sent;
+              _this2.elements = _this2.stripe.elements();
+              _this2.cardElement = _this2.elements.create('card');
+              _this2.cardElement.mount('#cardElement');
+            case 8:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2);
+      }))();
+    }
+  },
+  watch: {
+    'form.payment_method': function formPayment_method(newValue) {
+      if (newValue === 'stripe') {
+        this.initializeStripe();
+      }
     }
   },
   mounted: function mounted() {
-    var _this2 = this;
+    var _this3 = this;
+    if (this.form.payment_method === 'stripe') {
+      this.initializeStripe();
+    }
     this.fetchCart();
     this.$store.dispatch('auth/checkAuth').then(function () {
-      _this2.fillUserData();
+      _this3.fillUserData();
     });
   }
 });
@@ -24727,32 +24827,44 @@ var _hoisted_3 = {
   "class": "col-md-6"
 };
 var _hoisted_4 = {
-  "class": "mb-3"
+  key: 0,
+  "class": "alert alert-danger"
 };
-var _hoisted_5 = ["placeholder"];
+var _hoisted_5 = {
+  key: 1,
+  "class": "alert alert-success"
+};
 var _hoisted_6 = {
   "class": "mb-3"
 };
-var _hoisted_7 = ["placeholder"];
+var _hoisted_7 = {
+  "class": "mb-3"
+};
 var _hoisted_8 = {
   "class": "mb-3"
 };
-var _hoisted_9 = ["placeholder"];
-var _hoisted_10 = {
+var _hoisted_9 = {
   "class": "mb-3"
 };
-var _hoisted_11 = ["placeholder"];
+var _hoisted_10 = {
+  "class": "form-check"
+};
+var _hoisted_11 = {
+  "class": "form-check"
+};
 var _hoisted_12 = {
+  key: 2,
   "class": "mb-3"
 };
 var _hoisted_13 = {
   "class": "form-check"
 };
-var _hoisted_14 = {
-  "class": "form-check"
-};
+var _hoisted_14 = ["disabled"];
 var _hoisted_15 = {
-  "class": "form-check"
+  key: 0,
+  "class": "spinner-border spinner-border-sm",
+  role: "status",
+  "aria-hidden": "true"
 };
 var _hoisted_16 = {
   "class": "col-md-6"
@@ -24769,20 +24881,16 @@ var _hoisted_19 = {
 var _hoisted_20 = {
   "class": "text-golden"
 };
-var _hoisted_21 = {
-  key: 0,
-  "class": "alert alert-info text-center mt-4"
-};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_cache[21] || (_cache[21] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
     "class": "text-center mb-4"
-  }, "Checkout", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Customer Information "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_cache[17] || (_cache[17] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
+  }, "Checkout", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_cache[18] || (_cache[18] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
     "class": "mb-4"
   }, "Customer Information", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
     onSubmit: _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
       return $options.submitOrder && $options.submitOrder.apply($options, arguments);
     }, ["prevent"]))
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [_cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, [$data.errorMessage ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.errorMessage), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $data.successMessage ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.successMessage), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [_cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "name",
     "class": "form-label"
   }, "Name", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -24792,9 +24900,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.form.name = $event;
     }),
     "class": "form-control",
-    placeholder: $options.user ? $options.user.name : 'Enter your name',
     required: ""
-  }, null, 8 /* PROPS */, _hoisted_5), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.name]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.name]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [_cache[9] || (_cache[9] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "email",
     "class": "form-label"
   }, "Email", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -24804,9 +24911,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.form.email = $event;
     }),
     "class": "form-control",
-    placeholder: $options.user ? $options.user.email : 'Enter your email',
     required: ""
-  }, null, 8 /* PROPS */, _hoisted_7), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.email]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.email]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "phone",
     "class": "form-label"
   }, "Phone", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -24816,9 +24922,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.form.phone = $event;
     }),
     "class": "form-control",
-    placeholder: $options.user ? $options.user.phone : 'Enter your phone number',
     required: ""
-  }, null, 8 /* PROPS */, _hoisted_9), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.phone]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.phone]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "address",
     "class": "form-label"
   }, "Address", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
@@ -24828,11 +24933,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.form.address = $event;
     }),
     "class": "form-control",
-    placeholder: $options.user ? $options.user.address : 'Enter your address',
     required: ""
-  }, null, 8 /* PROPS */, _hoisted_11), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.address]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Payment Methods "), _cache[15] || (_cache[15] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.address]])]), _cache[17] || (_cache[17] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
     "class": "mb-4"
-  }, "Select Payment Method", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, "Select Payment Method", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "radio",
     id: "cod",
     "onUpdate:modelValue": _cache[4] || (_cache[4] = function ($event) {
@@ -24844,7 +24948,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelRadio, $data.form.payment_method]]), _cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-check-label",
     "for": "cod"
-  }, "Cash on Delivery", -1 /* HOISTED */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, "Cash on Delivery", -1 /* HOISTED */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "radio",
     id: "stripe",
     "onUpdate:modelValue": _cache[5] || (_cache[5] = function ($event) {
@@ -24855,7 +24959,12 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelRadio, $data.form.payment_method]]), _cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-check-label",
     "for": "stripe"
-  }, "Stripe", -1 /* HOISTED */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_15, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "fas fa-credit-card"
+  }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Stripe (Credit Card) ")], -1 /* HOISTED */))]), $data.form.payment_method === 'stripe' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, _cache[14] || (_cache[14] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    id: "cardElement",
+    "class": "form-control"
+  }, null, -1 /* HOISTED */)]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "radio",
     id: "paypal",
     "onUpdate:modelValue": _cache[6] || (_cache[6] = function ($event) {
@@ -24863,20 +24972,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     value: "paypal",
     "class": "form-check-input"
-  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelRadio, $data.form.payment_method]]), _cache[14] || (_cache[14] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelRadio, $data.form.payment_method]]), _cache[15] || (_cache[15] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-check-label",
     "for": "paypal"
-  }, "PayPal", -1 /* HOISTED */))])]), _cache[16] || (_cache[16] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  }, "PayPal", -1 /* HOISTED */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Submit button with loading state "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "submit",
-    "class": "btn btn-primary w-100"
-  }, "Place Order", -1 /* HOISTED */))], 32 /* NEED_HYDRATION */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Order Summary "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [_cache[19] || (_cache[19] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
+    "class": "btn btn-primary w-100",
+    disabled: !$options.isFormValid || $data.loading
+  }, [$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_15)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _cache[16] || (_cache[16] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Place Order "))], 8 /* PROPS */, _hoisted_14)], 32 /* NEED_HYDRATION */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_16, [_cache[20] || (_cache[20] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
     "class": "mb-4 text-center"
   }, "Order Summary", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_17, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.cartItems, function (item) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
       key: item.id,
       "class": "list-group-item d-flex justify-content-between align-items-center"
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.product.name) + " (x" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.quantity) + ")", 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.product.price), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_18, "$" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((item.quantity * item.product.price).toFixed(2)), 1 /* TEXT */)]);
-  }), 128 /* KEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_19, [_cache[18] || (_cache[18] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Total: ")), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_20, "$" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.totalCartValue.toFixed(2)), 1 /* TEXT */)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Empty Cart Message "), $options.cartItems.length === 0 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_21, _cache[20] || (_cache[20] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "Your cart is empty. Add items to the cart to proceed with checkout.", -1 /* HOISTED */)]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.product.name) + " (x" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.quantity) + ")", 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "$" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.product.price), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_18, "$" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((item.quantity * item.product.price).toFixed(2)), 1 /* TEXT */)]);
+  }), 128 /* KEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_19, [_cache[19] || (_cache[19] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Total: ")), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_20, "$" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.totalCartValue.toFixed(2)), 1 /* TEXT */)])])])]);
 }
 
 /***/ }),
@@ -32258,7 +32368,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.cart-items[data-v-eeb544c6] {\n  margin-top: 20px;\n}\n.table[data-v-eeb544c6] {\n  border-collapse: separate;\n  border-spacing: 0 10px;\n}\n.cart-item-image[data-v-eeb544c6] {\n  max-width: 60px;\n  height: 60px;\n  -o-object-fit: cover;\n     object-fit: cover;\n  border-radius: 5px;\n}\n.product-name[data-v-eeb544c6] {\n  font-size: 1.1rem;\n  font-weight: bold;\n}\n.quantity-container[data-v-eeb544c6] {\n  display: flex;\n  align-items: center;\n}\n.quantity-text[data-v-eeb544c6] {\n  margin: 0 15px;\n  font-size: 1rem;\n}\n.btn[data-v-eeb544c6] {\n  width: auto;\n  height: 35px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  padding: 15px;\n  font-size: 1rem;\n}\n.btn[data-v-eeb544c6]:hover {\n  transform: scale(1.05);\n}\n.total[data-v-eeb544c6] {\n  margin-top: 30px;\n  padding: 20px;\n  border-radius: 8px;\n  background-color: #f8f9fa;\n  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);\n}\n.total .btn[data-v-eeb544c6] {\n  padding: 0.7rem 1.5rem;\n  font-size: 1.2rem;\n}\n.alert-info[data-v-eeb544c6] {\n  font-size: 1.2rem;\n  color: #17a2b8;\n}\n.fas[data-v-eeb544c6] {\n  margin-right: 5px;\n}\n.btn-gold[data-v-eeb544c6] {\n  background-color: #ffd700 !important;\n  color: #000 !important;\n  border: none !important;\n}\n.btn-gold[data-v-eeb544c6]:hover {\n  background-color: #e6c100 !important;\n  color: #000 !important;\n  transform: scale(1.05);\n}\n@media (max-width: 768px) {\n.table td[data-v-eeb544c6], .table th[data-v-eeb544c6] {\n    padding: 10px;\n}\n.cart-item-image[data-v-eeb544c6] {\n    max-width: 50px;\n    height: 50px;\n}\n.quantity-container[data-v-eeb544c6] {\n    margin-top: 10px;\n}\n}\n\n/* Custom Loader */\n.loading-container[data-v-eeb544c6] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 200px;\n}\n.text-golden[data-v-eeb544c6]{\n  color:#d4af37 !important;\n}\n.btn-outline-success[data-v-eeb544c6]{\n  color:#d4af37 !important;\n  border:1px solid #d4af37 !important;\n}\n.btn-outline-success[data-v-eeb544c6]:hover{\n  color:#fff !important;\n  border:1px solid #d4af37 !important;\n  background-color:#d4af37;\n}\n.btn-outline-warning[data-v-eeb544c6]{\n  color:#d4af37 !important;\n  border:1px solid #d4af37 !important;\n}\n.btn-outline-warning[data-v-eeb544c6]:hover{\n color:#fff !important;\n  border:1px solid #d4af37 !important;\n  background-color:#d4af37;\n}\n.spinner[data-v-eeb544c6] {\n  border: 4px solid #d4af37;\n  border-top: 4px solid #d4af37;\n  border-radius: 50%;\n  width: 60px;\n  height: 60px;\n  animation: spin-eeb544c6 2s linear infinite;\n}\n@keyframes spin-eeb544c6 {\n0% { transform: rotate(0deg);\n}\n100% { transform: rotate(360deg);\n}\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.cart-items[data-v-eeb544c6] {\n  margin-top: 20px;\n}\n.table[data-v-eeb544c6] {\n  border-collapse: separate;\n  border-spacing: 0 10px;\n}\n.cart-item-image[data-v-eeb544c6] {\n  max-width: 60px;\n  height: 60px;\n  -o-object-fit: cover;\n     object-fit: cover;\n  border-radius: 5px;\n}\n.product-name[data-v-eeb544c6] {\n  font-size: 1.1rem;\n  font-weight: bold;\n}\n.quantity-container[data-v-eeb544c6] {\n  display: flex;\n  align-items: center;\n}\n.quantity-text[data-v-eeb544c6] {\n  margin: 0 15px;\n  font-size: 1rem;\n}\n.btn[data-v-eeb544c6] {\n  width: auto;\n  height: 35px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  padding: 15px;\n  font-size: 1rem;\n}\n.btn[data-v-eeb544c6]:hover {\n  transform: scale(1.05);\n}\n.total[data-v-eeb544c6] {\n  margin-top: 30px;\n  padding: 20px;\n  border-radius: 8px;\n  background-color: #f8f9fa;\n  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);\n}\n.total .btn[data-v-eeb544c6] {\n  padding: 0.7rem 1.5rem;\n  font-size: 1.2rem;\n}\n.alert-info[data-v-eeb544c6] {\n  font-size: 1.2rem;\n  color: #17a2b8;\n}\n.fas[data-v-eeb544c6] {\n  margin-right: 5px;\n}\n.btn-gold[data-v-eeb544c6] {\n  background-color: #ffd700 !important;\n  color: #000 !important;\n  border: none !important;\n}\n.btn-gold[data-v-eeb544c6]:hover {\n  background-color: #e6c100 !important;\n  color: #000 !important;\n  transform: scale(1.05);\n}\n@media (max-width: 768px) {\n.table td[data-v-eeb544c6], .table th[data-v-eeb544c6] {\n    padding: 10px;\n}\n.cart-item-image[data-v-eeb544c6] {\n    max-width: 50px;\n    height: 50px;\n}\n.quantity-container[data-v-eeb544c6] {\n    margin-top: 10px;\n}\n}\n\n/* Custom Loader */\n.loading-container[data-v-eeb544c6] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 200px;\n}\n.text-golden[data-v-eeb544c6]{\ncolor:#000 !important;\n}\n.btn-outline-success[data-v-eeb544c6]{\n  color:#d4af37 !important;\n  border:1px solid #d4af37 !important;\n}\n.btn-outline-success[data-v-eeb544c6]:hover{\n  color:#fff !important;\n  border:1px solid #d4af37 !important;\n  background-color:#d4af37;\n}\n.btn-outline-warning[data-v-eeb544c6]{\n  color:#d4af37 !important;\n  border:1px solid #d4af37 !important;\n}\n.btn-outline-warning[data-v-eeb544c6]:hover{\n color:#fff !important;\n  border:1px solid #d4af37 !important;\n  background-color:#d4af37;\n}\n.spinner[data-v-eeb544c6] {\n  border: 4px solid #d4af37;\n  border-top: 4px solid #d4af37;\n  border-radius: 50%;\n  width: 60px;\n  height: 60px;\n  animation: spin-eeb544c6 2s linear infinite;\n}\n@keyframes spin-eeb544c6 {\n0% { transform: rotate(0deg);\n}\n100% { transform: rotate(360deg);\n}\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -32282,7 +32392,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.checkout-container[data-v-12d79b7a] {\n  background-color: #f9f9f9;\n  padding: 20px;\n  border-radius: 8px;\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\n}\nh2[data-v-12d79b7a], h4[data-v-12d79b7a] {\n  color: #333;\n}\n.text-golden[data-v-12d79b7a] {\n  color: #d4af37; /* Golden color */\n}\n.btn-primary[data-v-12d79b7a] {\n  background-color: #d4af37 !important;\n  border: none !important;\n  color: #fff !important;\n}\n.btn-primary[data-v-12d79b7a]:hover {\n  background-color: #b6932f !important;\n}\n.list-group-item[data-v-12d79b7a] {\n  border: none;\n  background-color: #fff;\n  padding: 12px 20px;\n  font-size: 1rem;\n}\n.list-group-item + .list-group-item[data-v-12d79b7a] {\n  margin-top: 8px;\n}\n.list-group-item .text-golden[data-v-12d79b7a] {\n  font-weight: bold;\n}\n.form-check-label[data-v-12d79b7a] {\n  font-weight: normal;\n  font-size: 1rem;\n}\n.form-check-input[data-v-12d79b7a]:checked {\n  background-color: #E6C200 !important;\n  border-color: #E6C200 !important;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.checkout-container[data-v-12d79b7a] {\n  background-color: #f9f9f9;\n  padding: 20px;\n  border-radius: 8px;\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);\n}\nh2[data-v-12d79b7a], h4[data-v-12d79b7a] {\n  color: #333;\n}\n.text-golden[data-v-12d79b7a] {\n  color: #d4af37; /* Golden color */\n}\n.btn-primary[data-v-12d79b7a] {\n  background-color: #d4af37 !important;\n  border: none !important;\n  color: #fff !important;\n}\n.btn-primary[data-v-12d79b7a]:hover {\n  background-color: #b6932f !important;\n}\n.list-group-item[data-v-12d79b7a] {\n  border: none;\n  background-color: #fff;\n  padding: 12px 20px;\n  font-size: 1rem;\n}\n.list-group-item + .list-group-item[data-v-12d79b7a] {\n  margin-top: 8px;\n}\n.list-group-item .text-golden[data-v-12d79b7a] {\n  font-weight: bold;\n}\n.form-check-label[data-v-12d79b7a] {\n  font-weight: normal;\n  font-size: 1rem;\n}\n.form-check-input[data-v-12d79b7a]:checked {\n  background-color: #E6B800;\n  border-color: #E6B800;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -32474,7 +32584,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.card-img-top[data-v-2674294c] {\n  height: 350px;\n  -o-object-fit: cover;\n     object-fit: cover;\n  border-top-left-radius: 15px;\n  border-bottom-left-radius: 15px;\n}\n.card-body[data-v-2674294c] {\n  padding: 2rem;\n}\n.card-title[data-v-2674294c] {\n  font-size: 1.75rem;\n  font-weight: 700;\n  color: #333;\n}\n.card-text[data-v-2674294c] {\n  font-size: 1rem;\n  color: #666;\n}\n.text-primary[data-v-2674294c] {\n  color: #0066cc;\n}\n.btn-warning[data-v-2674294c] {\n  background-color: #FFD700 !important;\n  border-color: #FFD700 !important;\n  font-size: 1.1rem;\n  font-weight: 600;\n  padding: 12px 20px;\n}\n.btn-warning[data-v-2674294c]:hover {\n  background-color: #e6c200 !important;\n  border-color: #e6c200 !important;\n  transform: translateY(-3px);\n  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);\n}\n.card[data-v-2674294c] {\n  transition: transform 0.3s ease, box-shadow 0.3s ease;\n  border-radius: 15px;\n}\n.card[data-v-2674294c]:hover {\n  transform: translateY(-5px);\n  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);\n}\n.row.g-0[data-v-2674294c] {\n  margin: 0;\n}\n.form-label[data-v-2674294c] {\n  font-size: 1rem;\n}\n.form-control[data-v-2674294c] {\n  font-size: 1rem;\n  padding: 0.75rem;\n}\n.pricegolden[data-v-2674294c]{\n  color:#D4AF37 !important;\n  font-weight:bold;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.card-img-top[data-v-2674294c] {\n  height: 350px;\n  -o-object-fit: cover;\n     object-fit: cover;\n  border-top-left-radius: 15px;\n  border-bottom-left-radius: 15px;\n}\n.card-body[data-v-2674294c] {\n  padding: 2rem;\n}\n.card-title[data-v-2674294c] {\n  font-size: 1.75rem;\n  font-weight: 700;\n  color: #333;\n}\n.card-text[data-v-2674294c] {\n  font-size: 1rem;\n  color: #666;\n}\n.text-primary[data-v-2674294c] {\n  color: #0066cc;\n}\n.btn-warning[data-v-2674294c] {\n  background-color: #FFD700 !important;\n  border-color: #FFD700 !important;\n  font-size: 1.1rem;\n  font-weight: 600;\n  padding: 12px 20px;\n}\n.btn-warning[data-v-2674294c]:hover {\n  background-color: #e6c200 !important;\n  border-color: #e6c200 !important;\n  transform: translateY(-3px);\n  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);\n}\n.card[data-v-2674294c] {\n  transition: transform 0.3s ease, box-shadow 0.3s ease;\n  border-radius: 15px;\n}\n.card[data-v-2674294c]:hover {\n  transform: translateY(-5px);\n  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);\n}\n.row.g-0[data-v-2674294c] {\n  margin: 0;\n}\n.form-label[data-v-2674294c] {\n  font-size: 1rem;\n}\n.form-control[data-v-2674294c] {\n  font-size: 1rem;\n  padding: 0.75rem;\n}\n.pricegolden[data-v-2674294c]{\n  color:#000 !important;\n  font-weight:bold;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -32498,7 +32608,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.card-img-top[data-v-b9e097f8] {\n  height: 250px;\n  -o-object-fit: cover;\n     object-fit: cover;\n  border-top-left-radius: 15px;\n  border-top-right-radius: 15px;\n}\n.card-body[data-v-b9e097f8] {\n  padding: 1.5rem;\n}\n.card-title[data-v-b9e097f8] {\n  font-size: 1.35rem;\n  font-weight: 600;\n  color: #333;\n}\n.card-text[data-v-b9e097f8] {\n  font-size: 1rem;\n  color: #666;\n}\n.text-muted[data-v-b9e097f8] {\n  font-size: 0.9rem;\n}\n.text-primary[data-v-b9e097f8] {\n  color: #0066cc;\n}\n.text-success[data-v-b9e097f8] {\n  color: #28a745;\n}\n.btn-warning[data-v-b9e097f8] {\n  background-color: #FFD700 !important;\n  border-color: #FFD700 !important;\n  padding: 12px 20px;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.btn-warning[data-v-b9e097f8]:hover {\n  background-color: #e6c200 !important;\n  border-color: #e6c200 !important;\n  transform: translateY(-3px);\n  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);\n}\n.card[data-v-b9e097f8] {\n  transition: transform 0.3s ease, box-shadow 0.3s ease;\n}\n.card[data-v-b9e097f8]:hover {\n  transform: translateY(-5px);\n  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);\n}\n.text-golden[data-v-b9e097f8]{\n  color:#D4AF37 !important;\n  font-weight:bold;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.card-img-top[data-v-b9e097f8] {\n  height: 250px;\n  -o-object-fit: cover;\n     object-fit: cover;\n  border-top-left-radius: 15px;\n  border-top-right-radius: 15px;\n}\n.card-body[data-v-b9e097f8] {\n  padding: 1.5rem;\n}\n.card-title[data-v-b9e097f8] {\n  font-size: 1.35rem;\n  font-weight: 600;\n  color: #333;\n}\n.card-text[data-v-b9e097f8] {\n  font-size: 1rem;\n  color: #666;\n}\n.text-muted[data-v-b9e097f8] {\n  font-size: 0.9rem;\n}\n.text-primary[data-v-b9e097f8] {\n  color: #0066cc;\n}\n.text-success[data-v-b9e097f8] {\n  color: #28a745;\n}\n.btn-warning[data-v-b9e097f8] {\n  background-color: #FFD700 !important;\n  border-color: #FFD700 !important;\n  padding: 12px 20px;\n  font-size: 1rem;\n  font-weight: 600;\n}\n.btn-warning[data-v-b9e097f8]:hover {\n  background-color: #e6c200 !important;\n  border-color: #e6c200 !important;\n  transform: translateY(-3px);\n  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);\n}\n.card[data-v-b9e097f8] {\n  transition: transform 0.3s ease, box-shadow 0.3s ease;\n}\n.card[data-v-b9e097f8]:hover {\n  transform: translateY(-5px);\n  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);\n}\n.text-golden[data-v-b9e097f8]{\n  color:#000 !important;\n  font-weight:bold;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -36692,6 +36802,209 @@ var index = {
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (index);
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@stripe/stripe-js/dist/index.mjs":
+/*!*******************************************************!*\
+  !*** ./node_modules/@stripe/stripe-js/dist/index.mjs ***!
+  \*******************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   loadStripe: () => (/* binding */ loadStripe)
+/* harmony export */ });
+var V3_URL = 'https://js.stripe.com/v3';
+var V3_URL_REGEX = /^https:\/\/js\.stripe\.com\/v3\/?(\?.*)?$/;
+var EXISTING_SCRIPT_MESSAGE = 'loadStripe.setLoadParameters was called but an existing Stripe.js script already exists in the document; existing script parameters will be used';
+var findScript = function findScript() {
+  var scripts = document.querySelectorAll("script[src^=\"".concat(V3_URL, "\"]"));
+
+  for (var i = 0; i < scripts.length; i++) {
+    var script = scripts[i];
+
+    if (!V3_URL_REGEX.test(script.src)) {
+      continue;
+    }
+
+    return script;
+  }
+
+  return null;
+};
+
+var injectScript = function injectScript(params) {
+  var queryString = params && !params.advancedFraudSignals ? '?advancedFraudSignals=false' : '';
+  var script = document.createElement('script');
+  script.src = "".concat(V3_URL).concat(queryString);
+  var headOrBody = document.head || document.body;
+
+  if (!headOrBody) {
+    throw new Error('Expected document.body not to be null. Stripe.js requires a <body> element.');
+  }
+
+  headOrBody.appendChild(script);
+  return script;
+};
+
+var registerWrapper = function registerWrapper(stripe, startTime) {
+  if (!stripe || !stripe._registerWrapper) {
+    return;
+  }
+
+  stripe._registerWrapper({
+    name: 'stripe-js',
+    version: "5.4.0",
+    startTime: startTime
+  });
+};
+
+var stripePromise$1 = null;
+var onErrorListener = null;
+var onLoadListener = null;
+
+var onError = function onError(reject) {
+  return function () {
+    reject(new Error('Failed to load Stripe.js'));
+  };
+};
+
+var onLoad = function onLoad(resolve, reject) {
+  return function () {
+    if (window.Stripe) {
+      resolve(window.Stripe);
+    } else {
+      reject(new Error('Stripe.js not available'));
+    }
+  };
+};
+
+var loadScript = function loadScript(params) {
+  // Ensure that we only attempt to load Stripe.js at most once
+  if (stripePromise$1 !== null) {
+    return stripePromise$1;
+  }
+
+  stripePromise$1 = new Promise(function (resolve, reject) {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      // Resolve to null when imported server side. This makes the module
+      // safe to import in an isomorphic code base.
+      resolve(null);
+      return;
+    }
+
+    if (window.Stripe && params) {
+      console.warn(EXISTING_SCRIPT_MESSAGE);
+    }
+
+    if (window.Stripe) {
+      resolve(window.Stripe);
+      return;
+    }
+
+    try {
+      var script = findScript();
+
+      if (script && params) {
+        console.warn(EXISTING_SCRIPT_MESSAGE);
+      } else if (!script) {
+        script = injectScript(params);
+      } else if (script && onLoadListener !== null && onErrorListener !== null) {
+        var _script$parentNode;
+
+        // remove event listeners
+        script.removeEventListener('load', onLoadListener);
+        script.removeEventListener('error', onErrorListener); // if script exists, but we are reloading due to an error,
+        // reload script to trigger 'load' event
+
+        (_script$parentNode = script.parentNode) === null || _script$parentNode === void 0 ? void 0 : _script$parentNode.removeChild(script);
+        script = injectScript(params);
+      }
+
+      onLoadListener = onLoad(resolve, reject);
+      onErrorListener = onError(reject);
+      script.addEventListener('load', onLoadListener);
+      script.addEventListener('error', onErrorListener);
+    } catch (error) {
+      reject(error);
+      return;
+    }
+  }); // Resets stripePromise on error
+
+  return stripePromise$1["catch"](function (error) {
+    stripePromise$1 = null;
+    return Promise.reject(error);
+  });
+};
+var initStripe = function initStripe(maybeStripe, args, startTime) {
+  if (maybeStripe === null) {
+    return null;
+  }
+
+  var stripe = maybeStripe.apply(undefined, args);
+  registerWrapper(stripe, startTime);
+  return stripe;
+}; // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+
+var stripePromise;
+var loadCalled = false;
+
+var getStripePromise = function getStripePromise() {
+  if (stripePromise) {
+    return stripePromise;
+  }
+
+  stripePromise = loadScript(null)["catch"](function (error) {
+    // clear cache on error
+    stripePromise = null;
+    return Promise.reject(error);
+  });
+  return stripePromise;
+}; // Execute our own script injection after a tick to give users time to do their
+// own script injection.
+
+
+Promise.resolve().then(function () {
+  return getStripePromise();
+})["catch"](function (error) {
+  if (!loadCalled) {
+    console.warn(error);
+  }
+});
+var loadStripe = function loadStripe() {
+  for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
+  loadCalled = true;
+  var startTime = Date.now(); // if previous attempts are unsuccessful, will re-load script
+
+  return getStripePromise().then(function (maybeStripe) {
+    return initStripe(maybeStripe, args, startTime);
+  });
+};
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/@stripe/stripe-js/lib/index.mjs":
+/*!******************************************************!*\
+  !*** ./node_modules/@stripe/stripe-js/lib/index.mjs ***!
+  \******************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   loadStripe: () => (/* reexport safe */ _dist_index_mjs__WEBPACK_IMPORTED_MODULE_0__.loadStripe)
+/* harmony export */ });
+/* harmony import */ var _dist_index_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../dist/index.mjs */ "./node_modules/@stripe/stripe-js/dist/index.mjs");
 
 
 
@@ -42442,6 +42755,34 @@ var actions = {
         }
       }, _callee4, null, [[0, 7]]);
     }))();
+  },
+  // Create Stripe Payment Intent
+  createStripePayment: function createStripePayment(_ref4, totalAmount) {
+    return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      var commit, response;
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) switch (_context5.prev = _context5.next) {
+          case 0:
+            commit = _ref4.commit;
+            _context5.prev = 1;
+            _context5.next = 4;
+            return _utils_axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].post('/orders/create-stripe-payment', {
+              total: totalAmount
+            });
+          case 4:
+            response = _context5.sent;
+            return _context5.abrupt("return", response.data);
+          case 8:
+            _context5.prev = 8;
+            _context5.t0 = _context5["catch"](1);
+            console.error('Error creating Stripe payment:', _context5.t0);
+            throw _context5.t0;
+          case 12:
+          case "end":
+            return _context5.stop();
+        }
+      }, _callee5, null, [[1, 8]]);
+    }))();
   }
 };
 
@@ -42584,10 +42925,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
-/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 
 var axiosInstance = axios__WEBPACK_IMPORTED_MODULE_0__["default"].create({
-  baseURL: process.env.MIX_API_URL || 'http://localhost/api',
+  baseURL: ({"VUE_APP_STRIPE_KEY":"pk_test_51Psjz4IoXz8untciFuv0t9BNpnPJP6SsR2UsrNkUk1FjlFDn9dcRiDbGuJpUXSTcE8TxkyN06bG1dIxhEOkZetV300apNZIpdj"}).MIX_API_URL || 'http://localhost/api',
   // Adjust baseURL as needed
   timeout: 20000,
   // Optional: Set a timeout for requests
