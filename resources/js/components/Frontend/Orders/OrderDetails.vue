@@ -54,7 +54,7 @@
   </div>
 
   <div v-else class="loading">
-    <p>Loading order details...</p>
+    <div class="spinner"></div> <!-- Loader Spinner -->
   </div>
 </template>
 
@@ -120,12 +120,10 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
   align-items: center;
   border-bottom: 2px solid #ddd;
   margin-bottom: 30px;
- 
 }
 
 .order-title {
   font-size: 2em;
-
   font-weight: bold;
 }
 
@@ -145,8 +143,6 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
   color: #333;
 }
 
-
-
 .total .total-amount {
   font-size: 1.5em;
   font-weight: bold;
@@ -161,7 +157,6 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
 .order-items-title {
   font-size: 1.8em;
   margin-bottom: 15px;
- 
 }
 
 .order-items-table {
@@ -172,7 +167,6 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
 
 .order-items-table th,
 .order-items-table td {
-  
   text-align: left;
   border-bottom: 1px solid #ddd;
 }
@@ -215,5 +209,23 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
   text-align: center;
   font-size: 1.3em;
   color: #888;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #D4AF37; /* Golden color for the spinner */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
