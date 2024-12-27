@@ -61,9 +61,11 @@
           </div>
 
           <!-- PayPal Button -->
-         <div v-show="form.payment_method === 'paypal'" class="paypal-button-container">
-  <div id="paypal-button-container"></div>
+<div v-show="form.payment_method === 'paypal'" class="paypal-button-container">
+  <div id="paypal-button-container" v-if="isFormValid"></div>
+  <div v-else class="alert alert-warning">Please complete all fields before proceeding with PayPal.</div>
 </div>
+
 
 
           <!-- Submit button with loading state, but only show it if PayPal is NOT selected -->
@@ -131,6 +133,17 @@ export default {
     },
   },
   methods: {
+  getOrderData() {
+    return {
+      name: this.form.name || this.user.name,
+      email: this.form.email || this.user.email,
+      phone: this.form.phone || this.user.phone,
+      address: this.form.address || this.user.address,
+      payment_method: this.form.payment_method,
+      items: this.cartItems,
+      total: this.totalCartValue,
+    };
+  },
     async submitOrder() {
       if (!this.isFormValid) {
         this.errorMessage = "Please complete all fields and ensure your cart is not empty.";
@@ -139,16 +152,7 @@ export default {
 
       // Set loading state to true
       this.loading = true;
-
-      const orderData = {
-        name: this.form.name || this.user.name,
-        email: this.form.email || this.user.email,
-        phone: this.form.phone || this.user.phone,
-        address: this.form.address || this.user.address,
-        payment_method: this.form.payment_method,
-        items: this.cartItems,
-        total: this.totalCartValue,
-      };
+    const orderData = this.getOrderData(); // Use the new method
 
       try {
         if (this.form.payment_method === 'stripe') {
@@ -249,6 +253,9 @@ loadPayPalScript() {
 
 
 renderPayPalButton() {
+
+  
+  // If validation passes, render the PayPal button
   const interval = setInterval(() => {
     const container = document.getElementById('paypal-button-container');
     if (container) {
@@ -268,48 +275,29 @@ renderPayPalButton() {
           });
         },
         onApprove: (data, actions) => {
-          // Capture the order
           return actions.order.capture().then(async (details) => {
-            // Now that the order is captured, we can confirm the payment
-            const paypalOrderId = data.orderID; // PayPal order ID
+            const paypalOrderId = data.orderID;
             try {
               const response = await this.$store.dispatch('orders/confirmPayPalPayment', paypalOrderId);
-              // Check if payment is completed
               if (response.status === 'COMPLETED') {
-                // Prepare the order data
-                const orderData = {
-                  name: this.form.name || this.user.name,
-                  email: this.form.email || this.user.email,
-                  phone: this.form.phone || this.user.phone,
-                  address: this.form.address || this.user.address,
-                  payment_method: this.form.payment_method,
-                  items: this.cartItems,
-                  total: this.totalCartValue,
-                };
-
-                // Submit the order after payment confirmation
+                const orderData = this.getOrderData();
                 await this.submitOrderAfterPayment(orderData);
               } else {
                 this.errorMessage = 'Payment not completed.';
               }
             } catch (error) {
               this.errorMessage = 'Failed to confirm PayPal payment.';
-              console.error(error);
             }
-          }).catch((error) => {
-            // Handle errors in capturing the order
-            this.errorMessage = 'Failed to capture PayPal order.';
-            console.error(error);
           });
         },
         onError: (err) => {
           this.errorMessage = 'An error occurred with PayPal.';
-          console.error(err);
         },
       }).render('#paypal-button-container');
     }
-  }, 100); // Check every 100ms for the container's existence
+  }, 100);
 },
+
 
 
   },
@@ -321,6 +309,12 @@ watch: {
       this.loadPayPalScript();
     }
   },
+   isFormValid(newValue) {
+      // Watch for changes in form validity and show/hide PayPal button
+      if (newValue && this.form.payment_method === 'paypal') {
+        this.loadPayPalScript();
+      }
+    },
 },
 
   mounted() {

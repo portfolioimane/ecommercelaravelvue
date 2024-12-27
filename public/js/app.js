@@ -23533,6 +23533,17 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     }
   },
   methods: {
+    getOrderData: function getOrderData() {
+      return {
+        name: this.form.name || this.user.name,
+        email: this.form.email || this.user.email,
+        phone: this.form.phone || this.user.phone,
+        address: this.form.address || this.user.address,
+        payment_method: this.form.payment_method,
+        items: this.cartItems,
+        total: this.totalCartValue
+      };
+    },
     submitOrder: function submitOrder() {
       var _this = this;
       return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -23549,15 +23560,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
             case 3:
               // Set loading state to true
               _this.loading = true;
-              orderData = {
-                name: _this.form.name || _this.user.name,
-                email: _this.form.email || _this.user.email,
-                phone: _this.form.phone || _this.user.phone,
-                address: _this.form.address || _this.user.address,
-                payment_method: _this.form.payment_method,
-                items: _this.cartItems,
-                total: _this.totalCartValue
-              };
+              orderData = _this.getOrderData(); // Use the new method
               _context.prev = 5;
               if (!(_this.form.payment_method === 'stripe')) {
                 _context.next = 28;
@@ -23720,6 +23723,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
     },
     renderPayPalButton: function renderPayPalButton() {
       var _this5 = this;
+      // If validation passes, render the PayPal button
       var interval = setInterval(function () {
         var container = document.getElementById('paypal-button-container');
         if (container) {
@@ -23737,15 +23741,13 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
               });
             },
             onApprove: function onApprove(data, actions) {
-              // Capture the order
               return actions.order.capture().then(/*#__PURE__*/function () {
                 var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(details) {
                   var paypalOrderId, response, orderData;
                   return _regeneratorRuntime().wrap(function _callee4$(_context4) {
                     while (1) switch (_context4.prev = _context4.next) {
                       case 0:
-                        // Now that the order is captured, we can confirm the payment
-                        paypalOrderId = data.orderID; // PayPal order ID
+                        paypalOrderId = data.orderID;
                         _context4.prev = 1;
                         _context4.next = 4;
                         return _this5.$store.dispatch('orders/confirmPayPalPayment', paypalOrderId);
@@ -23755,16 +23757,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                           _context4.next = 11;
                           break;
                         }
-                        // Prepare the order data
-                        orderData = {
-                          name: _this5.form.name || _this5.user.name,
-                          email: _this5.form.email || _this5.user.email,
-                          phone: _this5.form.phone || _this5.user.phone,
-                          address: _this5.form.address || _this5.user.address,
-                          payment_method: _this5.form.payment_method,
-                          items: _this5.cartItems,
-                          total: _this5.totalCartValue
-                        }; // Submit the order after payment confirmation
+                        orderData = _this5.getOrderData();
                         _context4.next = 9;
                         return _this5.submitOrderAfterPayment(orderData);
                       case 9:
@@ -23773,14 +23766,13 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                       case 11:
                         _this5.errorMessage = 'Payment not completed.';
                       case 12:
-                        _context4.next = 18;
+                        _context4.next = 17;
                         break;
                       case 14:
                         _context4.prev = 14;
                         _context4.t0 = _context4["catch"](1);
                         _this5.errorMessage = 'Failed to confirm PayPal payment.';
-                        console.error(_context4.t0);
-                      case 18:
+                      case 17:
                       case "end":
                         return _context4.stop();
                     }
@@ -23789,19 +23781,14 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
                 return function (_x) {
                   return _ref.apply(this, arguments);
                 };
-              }())["catch"](function (error) {
-                // Handle errors in capturing the order
-                _this5.errorMessage = 'Failed to capture PayPal order.';
-                console.error(error);
-              });
+              }());
             },
             onError: function onError(err) {
               _this5.errorMessage = 'An error occurred with PayPal.';
-              console.error(err);
             }
           }).render('#paypal-button-container');
         }
-      }, 100); // Check every 100ms for the container's existence
+      }, 100);
     }
   },
   watch: {
@@ -23809,6 +23796,12 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
       if (newValue === 'stripe') {
         this.initializeStripe();
       } else if (newValue === 'paypal') {
+        this.loadPayPalScript();
+      }
+    },
+    isFormValid: function isFormValid(newValue) {
+      // Watch for changes in form validity and show/hide PayPal button
+      if (newValue && this.form.payment_method === 'paypal') {
         this.loadPayPalScript();
       }
     }
@@ -24989,32 +24982,40 @@ var _hoisted_13 = {
 var _hoisted_14 = {
   "class": "paypal-button-container"
 };
-var _hoisted_15 = ["disabled"];
+var _hoisted_15 = {
+  key: 0,
+  id: "paypal-button-container"
+};
 var _hoisted_16 = {
+  key: 1,
+  "class": "alert alert-warning"
+};
+var _hoisted_17 = ["disabled"];
+var _hoisted_18 = {
   key: 0,
   "class": "spinner-border spinner-border-sm",
   role: "status",
   "aria-hidden": "true"
 };
-var _hoisted_17 = {
+var _hoisted_19 = {
   "class": "col-md-6"
 };
-var _hoisted_18 = {
-  "class": "list-group"
-};
-var _hoisted_19 = {
-  "class": "text-golden"
-};
 var _hoisted_20 = {
-  "class": "text-end mt-4"
+  "class": "list-group"
 };
 var _hoisted_21 = {
   "class": "text-golden"
 };
+var _hoisted_22 = {
+  "class": "text-end mt-4"
+};
+var _hoisted_23 = {
+  "class": "text-golden"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_cache[22] || (_cache[22] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_cache[21] || (_cache[21] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
     "class": "text-center mb-4"
-  }, "Checkout", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_cache[19] || (_cache[19] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
+  }, "Checkout", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [_cache[18] || (_cache[18] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
     "class": "mb-4"
   }, "Customer Information", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
     onSubmit: _cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(function () {
@@ -25064,7 +25065,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     "class": "form-control",
     required: ""
-  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.address]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Payment method selection "), _cache[18] || (_cache[18] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
+  }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.address]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Payment method selection "), _cache[17] || (_cache[17] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
     "class": "mb-4"
   }, "Select Payment Method", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     type: "radio",
@@ -25105,21 +25106,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelRadio, $data.form.payment_method]]), _cache[15] || (_cache[15] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "class": "form-check-label",
     "for": "paypal"
-  }, "PayPal", -1 /* HOISTED */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" PayPal Button "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, _cache[16] || (_cache[16] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    id: "paypal-button-container"
-  }, null, -1 /* HOISTED */)]), 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.form.payment_method === 'paypal']]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Submit button with loading state, but only show it if PayPal is NOT selected "), $data.form.payment_method !== 'paypal' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
+  }, "PayPal", -1 /* HOISTED */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" PayPal Button "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [$options.isFormValid ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_15)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, "Please complete all fields before proceeding with PayPal."))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vShow, $data.form.payment_method === 'paypal']]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Submit button with loading state, but only show it if PayPal is NOT selected "), $data.form.payment_method !== 'paypal' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
     key: 3,
     type: "submit",
     "class": "btn btn-primary w-100",
     disabled: !$options.isFormValid || $data.loading
-  }, [$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_16)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _cache[17] || (_cache[17] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Place Order "))], 8 /* PROPS */, _hoisted_15)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 32 /* NEED_HYDRATION */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_17, [_cache[21] || (_cache[21] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
+  }, [$data.loading ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_18)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), _cache[16] || (_cache[16] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Place Order "))], 8 /* PROPS */, _hoisted_17)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 32 /* NEED_HYDRATION */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_19, [_cache[20] || (_cache[20] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h4", {
     "class": "mb-4 text-center"
-  }, "Order Summary", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_18, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.cartItems, function (item) {
+  }, "Order Summary", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_20, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.cartItems, function (item) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
       key: item.id,
       "class": "list-group-item d-flex justify-content-between align-items-center"
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.product.name) + " (x" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.quantity) + ")", 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "$" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.product.price), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_19, "$" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((item.quantity * item.product.price).toFixed(2)), 1 /* TEXT */)]);
-  }), 128 /* KEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_20, [_cache[20] || (_cache[20] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Total: ")), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_21, "$" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.totalCartValue.toFixed(2)), 1 /* TEXT */)])])])]);
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.product.name) + " (x" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.quantity) + ")", 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, "$" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(item.product.price), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_21, "$" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((item.quantity * item.product.price).toFixed(2)), 1 /* TEXT */)]);
+  }), 128 /* KEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", _hoisted_22, [_cache[19] || (_cache[19] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Total: ")), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_23, "$" + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.totalCartValue.toFixed(2)), 1 /* TEXT */)])])])]);
 }
 
 /***/ }),
