@@ -58,6 +58,8 @@ Route::middleware('auth:sanctum')->prefix('orders')->group(function () {
     Route::post('/create', [OrderController::class, 'create']);
     Route::get('/{id}', [OrderController::class, 'show']);
     Route::post('/create-stripe-payment', [OrderController::class, 'createStripePayment']);
+    Route::post('/confirm-paypal-payment', [OrderController::class, 'confirmPaypalPayment']);
+
 
 
 });

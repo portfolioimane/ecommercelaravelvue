@@ -25,7 +25,7 @@ const actions = {
       console.error('Error fetching orders:', error);
     }
   },
-    async fetchMyOrders({ commit }) {
+  async fetchMyOrders({ commit }) {
     try {
       const response = await axios.get('/myorders');
       commit('setOrders', response.data);
@@ -57,7 +57,6 @@ const actions = {
     }
   },
 
-
   // Create Stripe Payment Intent
   async createStripePayment({ commit }, totalAmount) {
     try {
@@ -69,7 +68,17 @@ const actions = {
     }
   },
 
-
+  // Confirm PayPal Payment
+  async confirmPayPalPayment(_, paypalOrderId) {
+    try {
+      const response = await axios.post('/orders/confirm-paypal-payment', { paypalOrderId });
+      return response.data; // Return the response (e.g., payment status)
+      console.log('confirmpaypal',response.data.status);
+    } catch (error) {
+      console.error('Error confirming PayPal payment:', error);
+      throw error;
+    }
+  },
 };
 
 // Getters - Derived state based on the store's state

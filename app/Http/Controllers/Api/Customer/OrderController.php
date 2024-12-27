@@ -11,9 +11,17 @@ use Illuminate\Support\Facades\Auth; // Add the Auth facade
 use Illuminate\Support\Facades\Log;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
+use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
 class OrderController extends Controller
 {
+        public function __construct()
+    {
+        // Initialize the PayPal client with API credentials
+        $this->paypal = new PayPalClient;
+        $this->paypal->setApiCredentials(config('paypal'));
+        $this->paypal->setAccessToken($this->paypal->getAccessToken());
+    }
     public function myorders(Request $request)
 {
     // Retrieve all orders for the authenticated user along with their order items and associated products
@@ -63,6 +71,42 @@ class OrderController extends Controller
             return response()->json(['error' => 'Failed to create payment intent'], 500);
         }
     }
+
+   
+public function confirmPaypalPayment(Request $request)
+{
+    Log::info('Confirm PayPal Payment API called', ['request' => $request->all()]);
+
+    $paypalOrderId = $request->paypalOrderId;
+
+    if (!$paypalOrderId) {
+        Log::error('PayPal Order ID is missing in the request.');
+        return response()->json(['error' => 'PayPal Order ID is required'], 400);
+    }
+
+    try {
+        // Fetch PayPal order details
+        $orderDetails = $this->paypal->showOrderDetails($paypalOrderId);
+        Log::info('Order details fetched from PayPal.', ['orderDetails' => $orderDetails]);
+
+        if (isset($orderDetails['status']) && $orderDetails['status'] === 'COMPLETED') {
+            Log::info('PayPal order completed successfully.', ['paypalOrderId' => $paypalOrderId]);
+            return response()->json(['status' => 'COMPLETED']);
+        }
+
+        Log::warning('PayPal order not completed.', ['orderDetails' => $orderDetails]);
+        return response()->json(['status' => 'NOT_COMPLETED'], 400);
+    } catch (\Exception $e) {
+        Log::error('Error while confirming PayPal payment.', [
+            'paypalOrderId' => $paypalOrderId,
+            'exception' => $e->getMessage(),
+        ]);
+        return response()->json(['error' => 'Failed to confirm PayPal payment'], 500);
+    }
+}
+
+
+
 
     
     public function create(Request $request)
