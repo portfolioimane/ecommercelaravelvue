@@ -23,7 +23,7 @@
           <tr v-for="item in cartItems" :key="item.id">
             <!-- Product Image and Name -->
             <td>
-              <img :src="item.product.image" alt="Product Image" class="cart-item-image" />
+              <img :src="`/storage/${item.product.image}`"  alt="Product Image" class="cart-item-image" />
               <div class="product-name">{{ item.product.name }}</div>
             </td>
             <!-- Product Price -->
@@ -69,7 +69,7 @@
   <h4 class="text-end">
     Total: <span class="text-golden">${{ totalCartValue }}</span>
   </h4>
-  <button @click="proceedToCheckout" class="btn btn-gold btn-lg">Proceed to Checkout</button>
+  <button @click="proceedToCheckout" class="btn btn-golden btn-block rounded-pill mt-3">Proceed to Checkout</button>
 </div>
 </div>
 
@@ -202,17 +202,6 @@ export default {
   margin-right: 5px;
 }
 
-.btn-gold {
-  background-color: #ffd700 !important;
-  color: #000 !important;
-  border: none !important;
-}
-
-.btn-gold:hover {
-  background-color: #e6c100 !important;
-  color: #000 !important;
-  transform: scale(1.05);
-}
 
 @media (max-width: 768px) {
   .table td, .table th {

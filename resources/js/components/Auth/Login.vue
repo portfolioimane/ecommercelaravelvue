@@ -10,7 +10,7 @@
         <label for="password" class="form-label">Password:</label>
         <input type="password" id="password" v-model="password" class="form-control" required />
       </div>
-      <button type="submit" class="btn btn-primary">Login</button>
+      <button type="submit" class="btn btn-golden btn-block rounded-pill mt-3">Login</button>
     </form>
     
     <div v-if="error" class="mt-3 alert alert-danger">{{ error }}</div>
@@ -40,34 +40,33 @@ export default {
   methods: {
     ...mapActions('auth', ['login']),
     
-    async loginUser() {
-      try {
-        // Log the login attempt
-        console.log('Attempting to login with email:', this.email);
+async loginUser() {
+  try {
+    console.log('Attempting to login with email:', this.email);
 
-        // Retrieve session_id from storage (sessionStorage or sessionStorage)
-        const session_id = sessionStorage.getItem('session_id') || null;
-        console.log('Session ID:', session_id);
+    // Send login credentials
+    await this.login({ email: this.email, password: this.password });
 
-        // Send login credentials along with session_id if it exists
-        await this.login({ email: this.email, password: this.password });
+    // Get the user from the Vuex state
+    const user = this.$store.getters['auth/user'];
 
-        // Log successful login
-        console.log('Login successful, redirecting to home.');
+    console.log('Login successful, user data:', user);
 
-        // After successful login, remove session_id from sessionStorage
-        sessionStorage.removeItem('session_id');
-        const redirect = this.$route.query.redirect || 'ProductList'; // Default to 
+    // Check user's role and redirect accordingly
+    if (user.role === 'admin') {
+      console.log('User is admin, redirecting to admin/dashboard.');
+      this.$router.push({ name: 'AdminDashboard' }); // Adjust route name as needed
+    } else {
+      console.log('User is not admin, redirecting to ProductList.');
+      const redirect = this.$route.query.redirect || 'ProductList';
+      this.$router.push({ name: redirect });
+    }
+  } catch (err) {
+    console.error('Login failed with error:', err);
+    this.error = err.response?.data?.message || 'Login failed. Please check your credentials.';
+  }
+},
 
-            // Navigate to the correct route
-             this.$router.push({ name: redirect }); 
-             
-      } catch (err) {
-        // Log error message for debugging
-        console.error('Login failed with error:', err);
-        this.error = err.response?.data?.message || 'Login failed. Please check your credentials.';
-      }
-    },
   },
 };
 </script>
@@ -76,4 +75,5 @@ export default {
 .container {
   max-width: 500px; /* Limit the width of the form */
 }
+
 </style>

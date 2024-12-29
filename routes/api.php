@@ -12,6 +12,10 @@ use App\Http\Controllers\Api\Customer\OrderController;
 
 use App\Http\Controllers\Api\Customer\ResetPasswordController;
 
+use App\Http\Controllers\Api\Backend\ProductsController as BackendProductsController;
+use App\Http\Controllers\Api\Backend\CategoriesController as BackendCategoriesController;
+
+
 
 
 
@@ -68,6 +72,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/myorders', [OrderController::class, 'myorders']);
 
 });   
+
+
+Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function () {
+    // Admin routes
+    Route::apiResource('products', BackendProductsController::class);
+    Route::apiResource('categories', BackendCategoriesController::class);
+
+});
+
 
 
 

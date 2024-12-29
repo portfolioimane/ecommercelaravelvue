@@ -96,7 +96,7 @@ export default {
 
 <style scoped>
 /* Global styles */
-#E6C200: #D4AF37; /* Golden accent color */
+#E6C200: var(--primary-color); /* Golden accent color */
 $light-gold: #f1c40f; /* Light golden for highlights */
 $background-color: #f5f5f5; /* Light background color */
 $card-bg-color: #fff; /* White background for cards */
@@ -146,7 +146,7 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
 .total .total-amount {
   font-size: 1.5em;
   font-weight: bold;
-  color:#D4AF37;
+  color:var(--primary-color);
 }
 
 /* Items Table */
@@ -192,7 +192,7 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
 }
 
 .back-button {
-  background-color: #D4AF37;
+  background-color: var(--primary-color);
   color: white;
   font-size: 1.2em;
   border: none;
@@ -202,7 +202,7 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
 }
 
 .back-button:hover {
-  background-color: darken(#D4AF37, 10%);
+  background-color: darken(var(--primary-color), 10%);
 }
 
 .loading {
@@ -217,7 +217,7 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
 
 .spinner {
   border: 4px solid #f3f3f3;
-  border-top: 4px solid #D4AF37; /* Golden color for the spinner */
+  border-top: 4px solid var(--primary-color); /* Golden color for the spinner */
   border-radius: 50%;
   width: 40px;
   height: 40px;

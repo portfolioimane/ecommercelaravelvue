@@ -1,1 +1,19 @@
+/* Define the global color variables */
+:root {
+  --primary-color: #D4AF37; /* Gold */
+  --secondary-color: #1F2A44; /* Dark blue */
+
+}
+
+
+.btn-golden {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.btn-golden:hover {
+  background-color: var(--primary-color) !important;
+  color: #000 !important;
+  transform: scale(1.05);
+}
 

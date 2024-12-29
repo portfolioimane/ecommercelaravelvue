@@ -4,7 +4,7 @@
     <div class="row">
       <div v-for="product in products" :key="product.id" class="col-lg-4 col-md-6 mb-4">
         <div class="card shadow-lg border-0 rounded-lg h-100">
-          <img :src="product.image" class="card-img-top rounded-top" alt="Product" />
+<img :src="`/storage/${product.image}`" class="card-img-top rounded-top" alt="Product" />
           <div class="card-body p-4">
             <h5 class="card-title text-dark font-weight-bold">{{ product.name }}</h5>
             <p class="card-text text-muted" style="font-size: 1rem;">{{ product.description }}</p>
@@ -13,7 +13,7 @@
               <p class="font-weight-bold text-golden" style="font-size: 1.25rem;">${{ product.price }}</p>
               <p class="font-weight-bold text-success" style="font-size: 1.1rem;">Stock: {{ product.stock }}</p>
             </div>
-            <button @click="viewDetails(product.id)" class="btn btn-warning btn-block rounded-pill mt-3">View Details</button>
+            <button @click="viewDetails(product.id)" class="btn btn-golden btn-block rounded-pill mt-3">View Details</button>
           </div>
         </div>
       </div>
@@ -67,19 +67,7 @@ export default {
 .text-success {
   color: #28a745;
 }
-.btn-warning {
-  background-color: #FFD700 !important;
-  border-color: #FFD700 !important;
-  padding: 12px 20px;
-  font-size: 1rem;
-  font-weight: 600;
-}
-.btn-warning:hover {
-  background-color: #e6c200 !important;
-  border-color: #e6c200 !important;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-}
+
 .card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }

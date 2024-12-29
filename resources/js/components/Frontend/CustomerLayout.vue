@@ -58,7 +58,6 @@ export default {
 
 .sidebar {
   width: 240px;
-  background-color: #fdf3e5; /* Light golden background for sidebar */
   color: #333; /* Darker text for readability */
   display: flex;
   flex-direction: column;
@@ -71,7 +70,7 @@ export default {
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 30px;
-  color: #D4AF37; /* Golden color for emphasis */
+  color: var(--primary-color); /* Golden color for emphasis */
 }
 
 .sidebar ul {
@@ -100,7 +99,7 @@ export default {
 
 .sidebar-link i {
   margin-right: 10px;
-  color: #D4AF37; /* Golden icon for consistency */
+  color: var(--primary-color); /* Golden icon for consistency */
 }
 
 .sidebar-link:hover {
@@ -110,7 +109,7 @@ export default {
 .sidebar-link.active {
   background-color: #f0e1a7; /* Light golden for active links */
   font-weight: bold;
-  color: #D4AF37;
+  color: var(--primary-color);
   box-shadow: 0 4px 10px rgba(243, 156, 18, 0.2); /* Stronger shadow for active link */
 }
 

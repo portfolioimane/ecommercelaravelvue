@@ -130,7 +130,7 @@ export default {
 .navbar-brand {
   font-size: 1.75rem;
   font-weight: 700;
-  color:#d4af37;
+  color:var(--primary-color);
 }
 
 .navbar-nav .nav-link {
@@ -142,14 +142,14 @@ export default {
 }
 
 .navbar-nav .nav-link:hover {
-  color:#d4af37;
+  color:var(--primary-color);
   transition: color 0.3s ease;
 }
 
 /* Cart Badge Styling */
 .badge {
   font-size: 14px;
-  background-color:#d4af37;
+  background-color:var(--primary-color);
   color: white;
   border-radius: 50%;
   padding: 3px 7px;
@@ -166,7 +166,7 @@ export default {
 }
 
 .nav-item .dropdown-item:hover {
-  background-color: #007bff;
+  background-color: var(--primary-color);
   color: white;
 }
 
@@ -185,11 +185,11 @@ export default {
 
 }
 .cart-icon{
-    color:#d4af37 !important;
+    color:var(--primary-color) !important;
 }
 
 .bg-badge{
-  background-color:#d4af37 !important;
+  background-color:var(--primary-color) !important;
   color:#fff;
 }
 /* Add arrow icon to indicate dropdown */

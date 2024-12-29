@@ -18,7 +18,7 @@
         <label for="password_confirmation" class="form-label">Confirm Password:</label>
         <input type="password" id="password_confirmation" v-model="password_confirmation" class="form-control" required />
       </div>
-      <button type="submit" class="btn btn-primary">Register</button>
+      <button type="submit" class="btn btn-golden btn-block rounded-pill mt-3">Register</button>
     </form>
     <div v-if="error" class="mt-3 alert alert-danger">{{ error }}</div>
   </div>
@@ -66,4 +66,5 @@ export default {
 .container {
   max-width: 500px; /* Limit the width of the form */
 }
+
 </style>

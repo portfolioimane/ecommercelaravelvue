@@ -3,6 +3,7 @@ import store from '../store/index.js';
 
 // Import the layout
 import AppLayout from '../components/Frontend/Layout/AppLayout.vue';
+import AdminLayout from '../components/Admin/Layout/AdminLayout.vue'; // Admin Layout
 
 // Import route components
 import Login from '../components/Auth/Login.vue';
@@ -19,114 +20,157 @@ import ForgotPassword from '../components/Frontend/ForgotPassword.vue';
 import Profile from '../components/Frontend/Profile.vue';
 import CustomerLayout from '../components/Frontend/CustomerLayout.vue';
 
+// Admin Components
+import AdminDashboard from '../components/Admin/Dashboard/AdminDashboard.vue';
+import AddProduct from '../components/Admin/Products/AddProduct.vue';
+import EditProduct from '../components/Admin/Products/EditProduct.vue';
+import Products from '../components/Admin/Products/Products.vue';
 
 
+import Categories from '../components/Admin/Categories/Categories.vue';
 
- const routes = [
+
+const routes = [
   {
-      path: '/',
-      component: AppLayout,
-      children: [
+    path: '/',
+    component: AppLayout,
+    children: [
       {
-      path: '/login',
-      name: 'Login',
-      component: Login,
+        name: 'Login',
+        path: '/login',
+        component: Login,
       },
       {
-      path: '/register',
-      name: 'Register',
-      component: Register,
+        name: 'Register',
+        path: '/register',
+        component: Register,
       },
       {
-  path: '/password/reset/:token', // :token will capture the token in the URL
-  name: 'ResetPassword',
-  component: ResetPassword, // The Vue component you created for the reset password form
-  props: true, // This allows you to pass the route params to the component
-},
-{
-  path: '/forgotpassword', // :token will capture the token in the URL
-  name: 'ForgotPassword',
-  component: ForgotPassword, // The Vue component you created for the reset password form
-  props: true, // This allows you to pass the route params to the component
-},
-      {
-      path: '/',
-      name: 'ProductList',
-      component:  ProductList,
+        name: 'ResetPassword',
+        path: '/password/reset/:token',
+        component: ResetPassword,
+        props: true,
       },
-
       {
-       path: '/product/:id',
-       name: 'ProductDetails',
-      component: ProductDetails,
+        name: 'ForgotPassword',
+        path: '/forgotpassword',
+        component: ForgotPassword,
+        props: true,
       },
-      { 
-        path: '/cart',
+      {
+        name: 'ProductList',
+        path: '/',
+        component: ProductList,
+      },
+      {
+        name: 'ProductDetails',
+        path: '/product/:id',
+        component: ProductDetails,
+      },
+      {
         name: 'Cart',
+        path: '/cart',
         component: Cart,
       },
-        { 
-         path: '/checkout',
-          name: 'Checkout',
-          meta: { requiresAuth: true },
-         component: Checkout,
-       },
-   
-        { 
-          path: '/orders',
-          meta: { requiresAuth: true },
-          name: 'OrderHistory',
-          component: OrderHistory,
-         },
-
       {
-  path: '/customerdashboard',
-  component: CustomerLayout,
-  meta: { requiresAuth: true },
-  children: [
-{
-      path: 'profile',
-      name: 'profile',
-      component: Profile,
-    }, 
-    {
-      path: 'myorders',
-      name: 'MyOrders',
-      component: MyOrders,
-    }, 
-       {
-       path: 'order/:id',
-       name: 'OrderDetails',
-       meta: { requiresAuth: true },
-      component: OrderDetails,
-      },  
-  ]
-},
-      ]
-    },
-
-
-  ];
-
+        name: 'Checkout',
+        path: '/checkout',
+        component: Checkout,
+        meta: { requiresAuth: true },
+      },
+      {
+        name: 'OrderHistory',
+        path: '/orders',
+        component: OrderHistory,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/customerdashboard',
+        component: CustomerLayout,
+        meta: { requiresAuth: true },
+        children: [
+          {
+            name: 'Profile',
+            path: 'profile',
+            component: Profile,
+          },
+          {
+            name: 'MyOrders',
+            path: 'myorders',
+            component: MyOrders,
+          },
+          {
+            name: 'OrderDetails',
+            path: 'order/:id',
+            component: OrderDetails,
+            meta: { requiresAuth: true },
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: '/admin',
+    component: AdminLayout,
+    meta: { requiresAdmin: true },
+    children: [
+      {
+        name: 'AdminDashboard',
+        path: 'dashboard',
+        component: AdminDashboard,
+      },
+      {
+        name: 'Products',
+        path: 'products',
+        component: Products,
+      },
+      {
+        name: 'AddProduct',
+        path: 'products/add',
+        component: AddProduct,
+      },
+      {
+        path: 'products/edit/:id',
+        name: 'EditProduct',
+        component: EditProduct,
+      },
+         {
+        name: 'Categories',
+        path: 'categories',
+        component: Categories,
+      },
+    ],
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
 });
 
-// Navigation guard for authentication and admin role check
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const isAuthenticated = store.getters['auth/isAuthenticated'];
-  const role = localStorage.getItem('user-role');
-  console.log('role', role);
+  const user = store.getters['auth/user']; // Fetch the user from Vuex store
+  const authChecked = store.getters['auth/authChecked']; // Get auth check status
+
+  if (!authChecked) {
+    // Wait until the auth check is finished
+    return next();
+  }
 
   if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
     next({ path: '/login' });
-  } else if (to.matched.some(record => record.meta.requiresAdmin) && role !== 'admin') {
-    next({ path: '/' });
+  } else if (to.matched.some(record => record.meta.requiresAdmin)) {
+    if (!user || user.role !== 'admin') {
+      next({ path: '/' });
+    } else {
+      next();
+    }
   } else {
     next();
   }
 });
+
+
 
 export default router;

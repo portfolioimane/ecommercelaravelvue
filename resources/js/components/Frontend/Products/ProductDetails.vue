@@ -4,7 +4,7 @@
     <div v-if="product" class="card shadow-lg border-0 rounded-lg">
       <div class="row g-0">
         <div class="col-md-6">
-          <img :src="product.image" class="card-img-top rounded-start" alt="Product Image" />
+          <img :src="`/storage/${product.image}`" class="card-img-top rounded-start" alt="Product Image" />
         </div>
         <div class="col-md-6">
           <div class="card-body p-4">
@@ -29,7 +29,7 @@
               <input type="number" id="quantity" v-model="quantity" class="form-control" min="1" :max="product.stock" />
             </div>
 
-            <button @click="addToCart" class="btn btn-warning btn-lg btn-block rounded-pill mt-4">Add to Cart</button>
+            <button @click="addToCart" class="btn btn-golden btn-lg btn-block rounded-pill mt-4">Add to Cart</button>
           </div>
         </div>
       </div>
@@ -127,20 +127,7 @@ export default {
   color: #0066cc;
 }
 
-.btn-warning {
-  background-color: #FFD700 !important;
-  border-color: #FFD700 !important;
-  font-size: 1.1rem;
-  font-weight: 600;
-  padding: 12px 20px;
-}
 
-.btn-warning:hover {
-  background-color: #e6c200 !important;
-  border-color: #e6c200 !important;
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-}
 
 .card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;

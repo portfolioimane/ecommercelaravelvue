@@ -256,7 +256,7 @@ async updateUserProfile() {
   font-size: 40px;
   font-weight: bold;
   color: #fff;
-  background-color: #D4AF37;
+  background-color: var(--primary-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -296,7 +296,7 @@ async updateUserProfile() {
 }
 
 .submit-btn {
-  background-color: #D4AF37;
+  background-color: var(--primary-color);
   color: white;
   padding: 10px 20px;
   border: none;

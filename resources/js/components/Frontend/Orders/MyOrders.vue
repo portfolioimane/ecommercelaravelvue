@@ -98,7 +98,7 @@ export default {
 }
 
 .orders-table button {
-  background-color: #D4AF37;
+  background-color: var(--primary-color);
   color: white;
   padding: 8px 16px;
   border: none;

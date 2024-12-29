@@ -72,7 +72,7 @@
           <button
             v-if="form.payment_method !== 'paypal'"
             type="submit"
-            class="btn btn-primary w-100"
+            class="btn btn-golden btn-block rounded-pill mt-3 w-100"
             :disabled="!isFormValid || loading"
           >
             <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -435,4 +435,5 @@ h2, h4 {
   background-color: #E6B800;
   border-color: #E6B800;
 }
+
 </style>
