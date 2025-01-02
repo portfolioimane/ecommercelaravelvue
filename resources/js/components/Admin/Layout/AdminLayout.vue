@@ -12,15 +12,15 @@
             Dashboard
           </router-link>
         </li>
-                   <li>
-  <router-link 
-    to="/admin/categories" 
-    class="sidebar-link" 
-    :class="{ active: isActive('/admin/categories') }">
-    <i class="material-icons sidebar-icon">category</i> 
-    Categories
-  </router-link>
-</li>
+        <li>
+          <router-link 
+            to="/admin/categories" 
+            class="sidebar-link" 
+            :class="{ active: isActive('/admin/categories') }">
+            <i class="material-icons sidebar-icon">category</i> 
+            Categories
+          </router-link>
+        </li>
 
         <!-- Manage Products Section -->
         <li>
@@ -45,9 +45,6 @@
           </ul>
         </li>
 
-
-
-
         <!-- Manage Orders Section -->
         <li>
           <router-link 
@@ -68,6 +65,23 @@
             <i class="material-icons sidebar-icon">people</i>
             Manage Customers
           </router-link>
+        </li>
+
+        <!-- Manage Settings Section -->
+        <li>
+          <div @click="toggleSettingsDropdown" class="dropdown-header">
+            <i class="material-icons sidebar-icon">settings</i>
+            Manage Settings
+            <i class="material-icons dropdown-arrow">{{ isSettingsDropdownOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</i>
+          </div>
+          <ul v-if="isSettingsDropdownOpen" class="dropdown-list">
+            <li>
+              <router-link 
+                to="/admin/paymentsetting" 
+                class="sidebar-link" 
+                :class="{ active: isActive('/admin/paymentsetting') }">Payments</router-link>
+            </li>
+          </ul>
         </li>
       </ul>
     </aside>
@@ -95,6 +109,7 @@ export default {
   data() {
     return {
       isProductsDropdownOpen: false,
+      isSettingsDropdownOpen: false, // Added for settings dropdown
     };
   },
   computed: {
@@ -106,11 +121,12 @@ export default {
     toggleProductsDropdown() {
       this.isProductsDropdownOpen = !this.isProductsDropdownOpen;
     },
-
+    toggleSettingsDropdown() {
+      this.isSettingsDropdownOpen = !this.isSettingsDropdownOpen; // Toggle for settings dropdown
+    },
     isActive(route) {
       return this.$route.path === route;
     },
-
     logout() {
       // Handle logout logic (adjust according to your authentication system)
       this.$store.dispatch('auth/logout');
@@ -122,6 +138,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 /* Global reset and font settings */
 * {
@@ -180,7 +197,6 @@ body {
   margin-bottom: 20px;
 }
 
-
 .sidebar h2 {
   font-size: 24px;
   font-weight: bold;
@@ -212,7 +228,6 @@ body {
 
 .dropdown-header:hover {
   background-color: #2A3C5D; /* Slightly lighter blue on hover */
-
 }
 
 .dropdown-list {
@@ -244,8 +259,8 @@ body {
   margin-right: 10px;
 }
 
-
-.navbar-link, .navbar-btn{
+/* Navbar and Logout Button */
+.navbar-link, .navbar-btn {
   font-size: 16px;
   color: var(--secondary-color); /* Dark blue for navbar links */
   font-weight: bold;
@@ -275,9 +290,6 @@ body {
   display: flex;
   align-items: center;
   transition: background-color 0.3s ease;
-  background-color:transparent;
-
+  background-color: transparent;
 }
-
-
 </style>

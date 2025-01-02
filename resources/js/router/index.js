@@ -25,6 +25,7 @@ import AdminDashboard from '../components/Admin/Dashboard/AdminDashboard.vue';
 import AddProduct from '../components/Admin/Products/AddProduct.vue';
 import EditProduct from '../components/Admin/Products/EditProduct.vue';
 import Products from '../components/Admin/Products/Products.vue';
+import PaymentSetting from '../components/Admin/Settings/PaymentSetting.vue';
 
 
 import Categories from '../components/Admin/Categories/Categories.vue';
@@ -138,6 +139,11 @@ const routes = [
         name: 'Categories',
         path: 'categories',
         component: Categories,
+      },
+       {
+        name: 'PaymentSetting',
+        path: 'paymentsetting',
+        component: PaymentSetting,
       },
     ],
   },

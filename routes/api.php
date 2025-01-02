@@ -14,6 +14,8 @@ use App\Http\Controllers\Api\Customer\ResetPasswordController;
 
 use App\Http\Controllers\Api\Backend\ProductsController as BackendProductsController;
 use App\Http\Controllers\Api\Backend\CategoriesController as BackendCategoriesController;
+use App\Http\Controllers\Api\Backend\PaymentSettingController as BackendPaymentSettingController;
+
 
 
 
@@ -78,6 +80,12 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
     // Admin routes
     Route::apiResource('products', BackendProductsController::class);
     Route::apiResource('categories', BackendCategoriesController::class);
+
+  Route::prefix('paymentsetting')->group(function () {
+    Route::put('/update', [BackendPaymentSettingController::class, 'update']); // Update payment provider settings
+    Route::get('/', [BackendPaymentSettingController::class, 'getSettings']); // Fetch payment provider settings
+});
+
 
 });
 
