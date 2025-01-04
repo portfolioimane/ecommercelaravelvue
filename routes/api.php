@@ -8,13 +8,16 @@ use App\Http\Controllers\Api\Customer\AuthController;
 use App\Http\Controllers\Api\Customer\ProductController;
 use App\Http\Controllers\Api\Customer\CartController;
 use App\Http\Controllers\Api\Customer\OrderController;
+use App\Http\Controllers\Api\Customer\KeysController;
 
 
 use App\Http\Controllers\Api\Customer\ResetPasswordController;
 
 use App\Http\Controllers\Api\Backend\ProductsController as BackendProductsController;
 use App\Http\Controllers\Api\Backend\CategoriesController as BackendCategoriesController;
+use App\Http\Controllers\Api\Backend\OrdersController as BackendOrdersController;
 use App\Http\Controllers\Api\Backend\PaymentSettingController as BackendPaymentSettingController;
+
 
 
 
@@ -24,6 +27,8 @@ use App\Http\Controllers\Api\Backend\PaymentSettingController as BackendPaymentS
 Route::post('/password/email', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::post('password/reset', [ResetPasswordController::class, 'reset']);
 // Authentication Routes
+
+
 
 Route::middleware('auth:sanctum')->get('/user', [AuthController::class, 'getUser']);
 // Public Auth Routes
@@ -66,9 +71,16 @@ Route::middleware('auth:sanctum')->prefix('orders')->group(function () {
     Route::post('/create-stripe-payment', [OrderController::class, 'createStripePayment']);
     Route::post('/confirm-paypal-payment', [OrderController::class, 'confirmPaypalPayment']);
 
-
-
 });
+
+
+ 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/stripe/public-key', [KeysController::class, 'getStripePublicKey']);
+    Route::get('/paypal/public-key', [KeysController::class, 'getPaypalPublicKey']);
+});
+
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user', [AuthController::class, 'updateProfile']);
     Route::get('/myorders', [OrderController::class, 'myorders']);
@@ -80,6 +92,16 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
     // Admin routes
     Route::apiResource('products', BackendProductsController::class);
     Route::apiResource('categories', BackendCategoriesController::class);
+
+    Route::get('/orders', [BackendOrdersController::class, 'index']);
+    
+    // Get details of a specific order
+    Route::get('/orders/{orderId}', [BackendOrdersController::class, 'show']);
+    
+    // Update the status of an order
+    Route::put('/orders/{orderId}/status', [BackendOrdersController::class, 'updateStatus']);
+
+
 
   Route::prefix('paymentsetting')->group(function () {
     Route::put('/update', [BackendPaymentSettingController::class, 'update']); // Update payment provider settings

@@ -56,17 +56,7 @@
           </router-link>
         </li>
 
-        <!-- Manage Customers Section -->
-        <li>
-          <router-link 
-            to="/admin/customers" 
-            class="sidebar-link" 
-            :class="{ active: isActive('/admin/customers') }">
-            <i class="material-icons sidebar-icon">people</i>
-            Manage Customers
-          </router-link>
-        </li>
-
+      
         <!-- Manage Settings Section -->
         <li>
           <div @click="toggleSettingsDropdown" class="dropdown-header">
@@ -87,7 +77,6 @@
     </aside>
 
     <main class="content">
-      <!-- View Website and Logout Section -->
       <div class="navbar-section">
         <a :href="websiteUrl" class="navbar-link view-website" target="_blank">
           <i class="material-icons navbar-icon">public</i>
@@ -109,7 +98,8 @@ export default {
   data() {
     return {
       isProductsDropdownOpen: false,
-      isSettingsDropdownOpen: false, // Added for settings dropdown
+      isCustomizeDropdownOpen: false, // Ensure this is initialized
+      isSettingsDropdownOpen: false, // For settings dropdown
     };
   },
   computed: {
@@ -121,6 +111,9 @@ export default {
     toggleProductsDropdown() {
       this.isProductsDropdownOpen = !this.isProductsDropdownOpen;
     },
+    toggleCustomizeDropdown() {
+      this.isCustomizeDropdownOpen = !this.isCustomizeDropdownOpen; // Toggle for customize dropdown
+    },
     toggleSettingsDropdown() {
       this.isSettingsDropdownOpen = !this.isSettingsDropdownOpen; // Toggle for settings dropdown
     },
@@ -128,9 +121,8 @@ export default {
       return this.$route.path === route;
     },
     logout() {
-      // Handle logout logic (adjust according to your authentication system)
       this.$store.dispatch('auth/logout');
-      this.$router.push('/login'); // Redirect to login page after logout
+      this.$router.push('/login');
     }
   },
   mounted() {
@@ -149,45 +141,45 @@ export default {
 
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f4f4; /* Light background color for general layout */
+  background-color: #f4f4f4;
 }
 
 .admin-dashboard {
   display: flex;
-  height: 100vh; /* Full height for the entire dashboard */
-  overflow: hidden; /* Prevents scrolling of the parent */
+  height: 100vh;
+  overflow: hidden;
   color: #333;
 }
 
 /* Sidebar */
 .sidebar {
-  position: fixed; /* Sidebar remains fixed in view */
+  position: fixed;
   top: 0;
   left: 0;
   width: 250px;
-  height: 100vh; /* Full viewport height */
-  background-color: var(--secondary-color); /* Dark blue background */
-  color: #f4f4f4; /* Light text for contrast */
+  height: 100vh;
+  background-color: var(--secondary-color);
+  color: #f4f4f4;
   padding: 20px;
-  overflow-y: auto; /* Allows scrolling within the sidebar if content overflows */
+  overflow-y: auto;
   border-right: 1px solid #444;
-  z-index: 100; /* Ensures the sidebar stays above other elements */
+  z-index: 100;
 }
 
 /* Content Area */
 .content {
-  margin-left: 250px; /* Offset the content to accommodate the fixed sidebar */
+  margin-left: 250px;
   flex-grow: 1;
   padding: 20px;
-  background-color: #ffffff; /* White background for content */
-  color: #333; /* Dark text for readability */
-  height: 100vh; /* Match viewport height */
-  overflow-y: auto; /* Content area scrolls independently */
+  background-color: #ffffff;
+  color: #333;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 /* Navbar Section */
 .navbar-section {
-  background-color: #ffffff; /* White navbar section */
+  background-color: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -201,7 +193,7 @@ body {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 30px;
-  color: #f4f4f4; /* Gold color for the title to highlight */
+  color: #f4f4f4;
 }
 
 .sidebar ul {
@@ -227,7 +219,7 @@ body {
 }
 
 .dropdown-header:hover {
-  background-color: #2A3C5D; /* Slightly lighter blue on hover */
+  background-color: #2A3C5D;
 }
 
 .dropdown-list {
@@ -248,11 +240,11 @@ body {
 }
 
 .sidebar-link:hover {
-  background-color: #2A3C5D; /* Gold color on hover */
+  background-color: #2A3C5D;
 }
 
 .sidebar-link.active {
-  background-color: #2A3C5D; /* Gold color for active links */
+  background-color: #2A3C5D;
 }
 
 .sidebar-icon {
@@ -262,7 +254,7 @@ body {
 /* Navbar and Logout Button */
 .navbar-link, .navbar-btn {
   font-size: 16px;
-  color: var(--secondary-color); /* Dark blue for navbar links */
+  color: var(--secondary-color);
   font-weight: bold;
   text-decoration: none;
   display: flex;
@@ -272,7 +264,7 @@ body {
 }
 
 .navbar-link:hover, .navbar-btn:hover {
-  color: #D4AF37; /* Gold color on hover */
+  color: #D4AF37;
 }
 
 .navbar-icon {
@@ -281,7 +273,7 @@ body {
 
 /* Logout Button */
 .navbar-btn {
-  color: var(--secondary-color); /* Dark blue text for contrast */
+  color: var(--secondary-color);
   border: none;
   font-size: 16px;
   cursor: pointer;

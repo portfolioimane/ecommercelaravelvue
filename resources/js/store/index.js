@@ -4,9 +4,13 @@ import cart from './modules/cart.js';
 import orders from './modules/orders.js';
 import product from './modules/product.js';
 import category from './modules/category.js';
+import keys from './modules/keys.js';
 import backendProducts from './modules/backend/products.js';
 import backendCategories from './modules/backend/categories.js';
+import backendOrders from './modules/backend/orders.js';
 import paymentSetting from './modules/backend/paymentSetting.js';
+
+
 
 
 const store = createStore({ // Use createStore for Vue 3
@@ -18,7 +22,10 @@ const store = createStore({ // Use createStore for Vue 3
     category,
     backendProducts,
     backendCategories,
+    backendOrders,
     paymentSetting,
+    keys,
+
   },
 });
 

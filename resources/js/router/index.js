@@ -29,6 +29,11 @@ import PaymentSetting from '../components/Admin/Settings/PaymentSetting.vue';
 
 
 import Categories from '../components/Admin/Categories/Categories.vue';
+import Orders from '../components/Admin/Orders/Orders.vue';
+import BackendOrderDetails from '../components/Admin/Orders/OrderDetails.vue';
+
+
+
 
 
 const routes = [
@@ -140,11 +145,23 @@ const routes = [
         path: 'categories',
         component: Categories,
       },
+            {
+        name: 'Orders',
+        path: 'orders',
+        component: Orders,
+      },
+      {
+            name: 'BackendOrderDetails',
+            path: 'order/:id',
+            component: BackendOrderDetails,
+       },
        {
         name: 'PaymentSetting',
         path: 'paymentsetting',
         component: PaymentSetting,
       },
+
+           
     ],
   },
 ];

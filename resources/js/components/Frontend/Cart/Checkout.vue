@@ -97,6 +97,7 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 import { loadStripe } from "@stripe/stripe-js";
 
 export default {
@@ -119,6 +120,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("keys", ["getStripePublicKey", "getPaypalPublicKey"]), // Namespaced getter
     cartItems() {
       return this.$store.getters['cart/cartItems'];
     },
@@ -133,6 +135,7 @@ export default {
     },
   },
   methods: {
+  ...mapActions("keys", ["fetchStripePublicKey", "fetchPaypalPublicKey"]), // Namespaced action
   getOrderData() {
     return {
       name: this.form.name || this.user.name,
@@ -227,8 +230,15 @@ export default {
         this.cardElement.unmount();
         this.cardElement = null;
       }
+      await this.fetchStripePublicKey();
+      const stripePublicKey = this.getStripePublicKey;
 
-      const stripePromise = loadStripe(process.env.VUE_APP_STRIPE_KEY);
+      if (!stripePublicKey) {
+        console.error("Stripe public key is not available");
+        return;
+      }
+
+      const stripePromise = loadStripe(stripePublicKey);
       this.stripe = await stripePromise;
       this.elements = this.stripe.elements();
       this.cardElement = this.elements.create('card');
@@ -238,18 +248,31 @@ export default {
 
 loadPayPalScript() {
   if (!this.paypalLoaded) {
-    const script = document.createElement('script');
-    script.src = `https://www.paypal.com/sdk/js?client-id=${process.env.VUE_APP_PAYPAL_CLIENT_ID}&currency=USD`;
-    script.async = true;
-    script.onload = () => {
-      this.paypalLoaded = true;
-      this.renderPayPalButton();
-    };
-    document.body.appendChild(script);
+    // Fetch PayPal public key from Vuex store asynchronously
+    this.fetchPaypalPublicKey().then(() => {
+      const clientId = this.getPaypalPublicKey;
+
+      if (!clientId) {
+        console.error('PayPal public key is not available');
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&currency=USD`;
+      script.async = true;
+      script.onload = () => {
+        this.paypalLoaded = true;
+        this.renderPayPalButton();
+      };
+      document.body.appendChild(script);
+    }).catch(error => {
+      console.error('Error fetching PayPal public key:', error);
+    });
   } else {
     this.renderPayPalButton();
   }
 },
+
 
 
 renderPayPalButton() {

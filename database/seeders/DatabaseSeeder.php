@@ -17,6 +17,7 @@ public function run()
         CategorySeeder::class,
         ProductSeeder::class,
 
+
     ]);
 }
 

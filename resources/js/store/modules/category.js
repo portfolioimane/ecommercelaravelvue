@@ -18,6 +18,7 @@ const actions = {
     try {
       const response = await axios.get('/store/categories');
       commit('setCategories', response.data);
+      console.log("categories", response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }

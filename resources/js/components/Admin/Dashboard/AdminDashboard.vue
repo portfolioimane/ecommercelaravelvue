@@ -6,15 +6,15 @@
     <div class="stats">
       <div class="stat-card">
         <h3>Total Products</h3>
-        <p>{{ productsCount }}</p> <!-- Display the total product count -->
+        <p>{{ productsCount }}</p>
       </div>
       <div class="stat-card">
         <h3>Total Orders</h3>
-        <p>{{ totalOrders }}</p> <!-- Display the total orders count -->
+        <p>{{ totalOrders }}</p>
       </div>
       <div class="stat-card">
-        <h3>Total Customers</h3>
-        <p>{{ totalCustomers }}</p> <!-- Display the total customers count -->
+        <h3>Total Categories</h3>
+        <p>{{ totalCategories }}</p>
       </div>
     </div>
 
@@ -32,9 +32,9 @@
         </thead>
         <tbody>
           <tr v-for="order in recentOrders" :key="order.id">
-            <td>{{ order.customerName }}</td>
-            <td>{{ order.date }}</td>
-            <td>{{ order.totalAmount }}</td>
+            <td>{{ order.name }}</td>
+            <td>{{ formatDate(order.created_at) }}</td>
+            <td>{{ order.total }} MAD</td>
             <td>{{ order.status }}</td>
           </tr>
         </tbody>
@@ -44,46 +44,54 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "Dashboard",
-  data() {
-    return {
-      productsCount: 0,           // Total number of products
-      totalOrders: 0,             // Total number of orders
-      totalCustomers: 0,          // Total number of customers
-      orders: [],                 // Store all fetched orders
-    };
-  },
   computed: {
-    // Get the three latest orders
+    ...mapGetters({
+      products: "backendProducts/allProducts",
+      orders: "backendOrders/orders",
+      categories: "backendCategories/allCategories",
+    }),
+
+    // Calculate the total number of products
+    productsCount() {
+      return this.products.length;
+    },
+
+    totalOrders() {
+      return this.orders.length;
+    },
+
+    totalCategories() {
+      return this.categories.length;
+    },
+
+    // Get the most recent 3 orders
     recentOrders() {
-      return this.orders
-        .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by date (latest first)
-        .slice(0, 3); // Get the 3 most recent orders
+      return [...this.orders]
+        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // Sort orders by date
+        .slice(0, 3); // Limit to the most recent 3 orders
     },
   },
   methods: {
     async fetchDashboardData() {
       try {
-        // Fetch total products data
-        const products = await this.$store.dispatch("products/fetchProducts");
-        this.productsCount = products.length;
-
-        // Fetch total orders data
-        const orders = await this.$store.dispatch("orders/fetchOrders");
-        this.orders = orders;
-        this.totalOrders = orders.length;
-
-        // Fetch total customers data
-        const customers = await this.$store.dispatch("customers/fetchCustomers");
-        this.totalCustomers = customers.length;
+        // Fetch products, orders, and categories data
+        await this.$store.dispatch("backendProducts/fetchProducts");
+        await this.$store.dispatch("backendOrders/fetchOrders");
+        await this.$store.dispatch("backendCategories/fetchCategories");
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       }
     },
+    formatDate(date) {
+      return new Date(date).toLocaleDateString("en-US"); // Format date
+    },
   },
   mounted() {
-    this.fetchDashboardData(); // Fetch data on component mount
+    this.fetchDashboardData(); // Fetch data when the component is mounted
   },
 };
 </script>
@@ -106,18 +114,17 @@ export default {
   border-radius: 8px;
   text-align: center;
   border: 1px solid #ddd;
-  transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth transition for scale and color */
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .stat-card:hover {
-  background-color: var(--primary-color) !important; /* Keeps background color same on hover */
-  transform: scale(1.05); /* Slight scale effect */
+  background-color: var(--primary-color);
+  transform: scale(1.05);
 }
-
 
 .stat-card h3 {
   margin: 0;
-  color:  var(--secondary-color);
+  color: var(--secondary-color);
 }
 
 .stat-card p {

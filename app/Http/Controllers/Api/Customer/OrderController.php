@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Log;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
+use App\Models\PaymentSetting; // Import the PaymentSetting model
+
 
 class OrderController extends Controller
 {
@@ -43,34 +45,45 @@ class OrderController extends Controller
         return response()->json($orders, 200);
     }
 
-    public function createStripePayment(Request $request)
-    {
-        try {
-            $totalAmount = $request->input('total');
-            $amountInCents = $totalAmount * 100; // Convert to cents
 
-            // Initialize Stripe with your secret key
-           Stripe::setApiKey(config('services.stripe.secret'));
+public function createStripePayment(Request $request)
+{
+    try {
+        $totalAmount = $request->input('total');
+        $amountInCents = $totalAmount * 100; // Convert to cents
 
-            // Create a PaymentIntent without confirming it
-            $paymentIntent = PaymentIntent::create([
-                'amount' => $amountInCents,
-                'currency' => 'usd', // Adjust currency as needed
-                'automatic_payment_methods' => ['enabled' => true],
-            ]);
+        // Retrieve the Stripe secret key from the database
+        $stripeSettings = PaymentSetting::where('provider', 'stripe')->where('enabled', true)->first();
 
-            Log::info('Stripe payment intent created', ['payment_intent_id' => $paymentIntent->id, 'status' => $paymentIntent->status]);
-
-            // Return the client secret to the frontend for further processing
-            return response()->json([
-                'clientSecret' => $paymentIntent->client_secret,
-            ], 200);
-
-        } catch (\Exception $e) {
-            Log::error('Error creating Stripe payment intent', ['error' => $e->getMessage()]);
-            return response()->json(['error' => 'Failed to create payment intent'], 500);
+        if (!$stripeSettings || !$stripeSettings->secret_key) {
+            return response()->json(['error' => 'Stripe is not configured'], 500);
         }
+
+        // Initialize Stripe with the secret key from the database
+        Stripe::setApiKey($stripeSettings->secret_key);
+
+        // Create a PaymentIntent
+        $paymentIntent = PaymentIntent::create([
+            'amount' => $amountInCents,
+            'currency' => 'usd',
+            'automatic_payment_methods' => ['enabled' => true],
+        ]);
+
+        Log::info('Stripe payment intent created', [
+            'payment_intent_id' => $paymentIntent->id,
+            'status' => $paymentIntent->status,
+        ]);
+
+        // Return client secret
+        return response()->json([
+            'clientSecret' => $paymentIntent->client_secret,
+        ], 200);
+
+    } catch (\Exception $e) {
+        Log::error('Error creating Stripe payment intent', ['error' => $e->getMessage()]);
+        return response()->json(['error' => 'Failed to create payment intent'], 500);
     }
+}
 
    
 public function confirmPaypalPayment(Request $request)
