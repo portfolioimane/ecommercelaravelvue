@@ -18,11 +18,10 @@ use App\Http\Controllers\Api\Backend\CategoriesController as BackendCategoriesCo
 use App\Http\Controllers\Api\Backend\OrdersController as BackendOrdersController;
 use App\Http\Controllers\Api\Backend\PaymentSettingController as BackendPaymentSettingController;
 
+use App\Http\Controllers\Api\Backend\HomePageHeaderController as BackendHomePageHeaderController;
 
 
-
-
-
+Route::get('/homepage-header', [BackendHomePageHeaderController::class, 'getHeader']);
 
 Route::post('/password/email', [ResetPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
 Route::post('password/reset', [ResetPasswordController::class, 'reset']);
@@ -100,7 +99,12 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
     
     // Update the status of an order
     Route::put('/orders/{orderId}/status', [BackendOrdersController::class, 'updateStatus']);
-
+    
+        Route::prefix('customize')->group(function () {
+        Route::put('/homepage-header', [BackendHomePageHeaderController::class, 'update']);
+        Route::get('/homepage-header', [BackendHomePageHeaderController::class, 'getHeader']);
+       
+        });
 
 
   Route::prefix('paymentsetting')->group(function () {

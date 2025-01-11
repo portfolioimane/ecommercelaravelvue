@@ -19,6 +19,7 @@ import ResetPassword from '../components/Frontend/ResetPassword.vue';
 import ForgotPassword from '../components/Frontend/ForgotPassword.vue';
 import Profile from '../components/Frontend/Profile.vue';
 import CustomerLayout from '../components/Frontend/CustomerLayout.vue';
+import Home from '../components/Frontend/Home.vue';
 
 // Admin Components
 import AdminDashboard from '../components/Admin/Dashboard/AdminDashboard.vue';
@@ -31,6 +32,8 @@ import PaymentSetting from '../components/Admin/Settings/PaymentSetting.vue';
 import Categories from '../components/Admin/Categories/Categories.vue';
 import Orders from '../components/Admin/Orders/Orders.vue';
 import BackendOrderDetails from '../components/Admin/Orders/OrderDetails.vue';
+import HomePageHeader from '../components/Admin/Customize/HomePageHeader.vue';
+
 
 
 
@@ -64,9 +67,9 @@ const routes = [
         props: true,
       },
       {
-        name: 'ProductList',
+        name: 'Home',
         path: '/',
-        component: ProductList,
+        component: Home,
       },
       {
         name: 'ProductDetails',
@@ -150,6 +153,7 @@ const routes = [
         path: 'orders',
         component: Orders,
       },
+
       {
             name: 'BackendOrderDetails',
             path: 'order/:id',
@@ -160,6 +164,12 @@ const routes = [
         path: 'paymentsetting',
         component: PaymentSetting,
       },
+      {
+        name: 'HomePageHeader',
+        path: 'customize/homepageheader',
+        component: HomePageHeader,
+      },
+
 
            
     ],

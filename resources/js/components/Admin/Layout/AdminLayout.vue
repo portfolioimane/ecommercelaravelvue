@@ -56,7 +56,24 @@
           </router-link>
         </li>
 
-      
+                <!-- Manage Customize Section -->
+        <li>
+          <div @click="toggleCustomizeDropdown" class="dropdown-header">
+            <i class="material-icons sidebar-icon">palette</i> <!-- Changed icon -->
+            Customize Website
+            <i class="material-icons dropdown-arrow">{{ isCustomizeDropdownOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</i>
+          </div>
+          <ul v-if="isCustomizeDropdownOpen" class="dropdown-list">
+            <li>
+              <router-link 
+                to="/admin/customize/homepageheader" 
+                class="sidebar-link" 
+                :class="{ active: isActive('/admin/customize/homepageheader') }">HomepageHeader</router-link>
+            </li>
+           
+          </ul>
+        </li>
+
         <!-- Manage Settings Section -->
         <li>
           <div @click="toggleSettingsDropdown" class="dropdown-header">
@@ -73,6 +90,9 @@
             </li>
           </ul>
         </li>
+
+
+
       </ul>
     </aside>
 

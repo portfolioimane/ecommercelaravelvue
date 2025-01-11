@@ -9,7 +9,7 @@ import backendProducts from './modules/backend/products.js';
 import backendCategories from './modules/backend/categories.js';
 import backendOrders from './modules/backend/orders.js';
 import paymentSetting from './modules/backend/paymentSetting.js';
-
+import backendHomePageHeader from './modules/backend/HomePageHeader.js';
 
 
 
@@ -25,6 +25,7 @@ const store = createStore({ // Use createStore for Vue 3
     backendOrders,
     paymentSetting,
     keys,
+    backendHomePageHeader,
 
   },
 });

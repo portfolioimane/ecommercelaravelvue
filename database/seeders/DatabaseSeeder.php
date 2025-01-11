@@ -16,8 +16,7 @@ public function run()
         UserSeeder::class,
         CategorySeeder::class,
         ProductSeeder::class,
-
-
+        HomepageHeaderSeeder::class,
     ]);
 }
 
