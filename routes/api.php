@@ -20,6 +20,14 @@ use App\Http\Controllers\Api\Backend\PaymentSettingController as BackendPaymentS
 
 use App\Http\Controllers\Api\Backend\HomePageHeaderController as BackendHomePageHeaderController;
 
+// routes/api.php
+
+use App\Http\Controllers\Api\Backend\VariantController;
+use App\Http\Controllers\Api\Backend\VariantValueController;
+
+
+
+
 
 Route::get('/homepage-header', [BackendHomePageHeaderController::class, 'getHeader']);
 
@@ -91,6 +99,17 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
     // Admin routes
     Route::apiResource('products', BackendProductsController::class);
     Route::apiResource('categories', BackendCategoriesController::class);
+    
+   Route::get('/variants', [VariantController::class, 'index']);
+Route::post('/variants', [VariantController::class, 'store']);
+Route::delete('/variants/{id}', [VariantController::class, 'destroy']); // Delete a variant
+Route::get('/variants/{id}', [VariantController::class, 'show']);
+
+
+// Variant Values Routes
+Route::get('/variant-values', [VariantValueController::class, 'index']);
+Route::post('/variant-values', [VariantValueController::class, 'store']);
+Route::delete('/variant-values/{id}', [VariantValueController::class, 'destroy']); // Delete a variant value
 
     Route::get('/orders', [BackendOrdersController::class, 'index']);
     

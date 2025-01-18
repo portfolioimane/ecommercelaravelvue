@@ -12,6 +12,7 @@
             Dashboard
           </router-link>
         </li>
+
         <li>
           <router-link 
             to="/admin/categories" 
@@ -45,6 +46,30 @@
           </ul>
         </li>
 
+        <!-- Variants Section (Dropdown) -->
+        <li>
+          <div @click="toggleVariantsDropdown" class="dropdown-header">
+            <i class="material-icons sidebar-icon">layers</i>
+            Variants
+            <i class="material-icons dropdown-arrow">{{ isVariantsDropdownOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</i>
+          </div>
+          <ul v-if="isVariantsDropdownOpen" class="dropdown-list">
+            <li>
+              <router-link 
+                to="/admin/variant" 
+                class="sidebar-link" 
+                :class="{ active: isActive('/admin/variant') }">All Variants</router-link>
+            </li>
+            <li>
+              <router-link 
+                to="/admin/createvariant" 
+                class="sidebar-link" 
+                :class="{ active: isActive('/admin/createvariant') }">Create Variant</router-link>
+            </li>
+                 
+          </ul>
+        </li>
+
         <!-- Manage Orders Section -->
         <li>
           <router-link 
@@ -56,10 +81,10 @@
           </router-link>
         </li>
 
-                <!-- Manage Customize Section -->
+        <!-- Manage Customize Section -->
         <li>
           <div @click="toggleCustomizeDropdown" class="dropdown-header">
-            <i class="material-icons sidebar-icon">palette</i> <!-- Changed icon -->
+            <i class="material-icons sidebar-icon">palette</i>
             Customize Website
             <i class="material-icons dropdown-arrow">{{ isCustomizeDropdownOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</i>
           </div>
@@ -68,9 +93,8 @@
               <router-link 
                 to="/admin/customize/homepageheader" 
                 class="sidebar-link" 
-                :class="{ active: isActive('/admin/customize/homepageheader') }">HomepageHeader</router-link>
+                :class="{ active: isActive('/admin/customize/homepageheader') }">HeroSection</router-link>
             </li>
-           
           </ul>
         </li>
 
@@ -90,9 +114,6 @@
             </li>
           </ul>
         </li>
-
-
-
       </ul>
     </aside>
 
@@ -118,6 +139,7 @@ export default {
   data() {
     return {
       isProductsDropdownOpen: false,
+      isVariantsDropdownOpen: false, // Toggle for variants dropdown
       isCustomizeDropdownOpen: false, // Ensure this is initialized
       isSettingsDropdownOpen: false, // For settings dropdown
     };
@@ -131,11 +153,14 @@ export default {
     toggleProductsDropdown() {
       this.isProductsDropdownOpen = !this.isProductsDropdownOpen;
     },
+    toggleVariantsDropdown() {
+      this.isVariantsDropdownOpen = !this.isVariantsDropdownOpen; // Toggle for variants dropdown
+    },
     toggleCustomizeDropdown() {
-      this.isCustomizeDropdownOpen = !this.isCustomizeDropdownOpen; // Toggle for customize dropdown
+      this.isCustomizeDropdownOpen = !this.isCustomizeDropdownOpen;
     },
     toggleSettingsDropdown() {
-      this.isSettingsDropdownOpen = !this.isSettingsDropdownOpen; // Toggle for settings dropdown
+      this.isSettingsDropdownOpen = !this.isSettingsDropdownOpen;
     },
     isActive(route) {
       return this.$route.path === route;
