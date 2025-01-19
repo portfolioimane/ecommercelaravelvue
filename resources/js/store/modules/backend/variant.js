@@ -59,6 +59,7 @@ export const actions = {
         try {
             const response = await axios.get('/admin/variants');
             commit('SET_VARIANTS', response.data);
+            console.log('variants', response.data);
         } catch (error) {
             console.error('Error fetching variants:', error);
         }

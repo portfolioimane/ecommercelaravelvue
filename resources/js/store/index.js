@@ -11,8 +11,7 @@ import backendOrders from './modules/backend/orders.js';
 import paymentSetting from './modules/backend/paymentSetting.js';
 import backendHomePageHeader from './modules/backend/HomePageHeader.js';
 import backendVariant from './modules/backend/variant.js';
-
-
+import backendVariantCombinations from './modules/backend/variantCombinations.js';
 
 const store = createStore({ // Use createStore for Vue 3
   modules: {
@@ -28,7 +27,7 @@ const store = createStore({ // Use createStore for Vue 3
     keys,
     backendHomePageHeader,
     backendVariant,
-
+    backendVariantCombinations,
   },
 });
 

@@ -33,6 +33,7 @@ const actions = {
     try {
       const response = await axios.get('/admin/products');
       commit('SET_PRODUCTS', response.data);
+      console.log('products',response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
     }

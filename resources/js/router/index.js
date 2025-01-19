@@ -26,6 +26,8 @@ import AdminDashboard from '../components/Admin/Dashboard/AdminDashboard.vue';
 import AddProduct from '../components/Admin/Products/AddProduct.vue';
 import EditProduct from '../components/Admin/Products/EditProduct.vue';
 import Products from '../components/Admin/Products/Products.vue';
+import ProductVariant from '../components/Admin/Products/ProductVariant.vue';
+
 import Variant from '../components/Admin/Variant/Variant.vue';
 import CreateVariant from '../components/Admin/Variant/CreateVariant.vue';
 import CreateVariantValue from '../components/Admin/Variant/CreateVariantValue.vue';
@@ -138,7 +140,24 @@ const routes = [
         path: 'products',
         component: Products,
       },
+
       {
+        name: 'AddProduct',
+        path: 'products/add',
+        component: AddProduct,
+      },
+         {
+        path: 'productvariant',
+        name: 'ProductVariant',
+        component: ProductVariant,
+      },
+
+      {
+        path: 'products/edit/:id',
+        name: 'EditProduct',
+        component: EditProduct,
+      },
+            {
         name: 'Variant',
         path: 'variant',
         component: Variant,
@@ -152,16 +171,6 @@ const routes = [
         name: 'CreateVariantValue',
         path: 'variant/:id/createvariantvalue',
         component: CreateVariantValue,
-      },
-      {
-        name: 'AddProduct',
-        path: 'products/add',
-        component: AddProduct,
-      },
-      {
-        path: 'products/edit/:id',
-        name: 'EditProduct',
-        component: EditProduct,
       },
          {
         name: 'Categories',

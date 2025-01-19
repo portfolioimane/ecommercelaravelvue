@@ -147,13 +147,13 @@ label {
 
 /* Primary Button Style */
 .btn-primary {
-  background-color: #007bff;
+  background-color: #D4AF37;
   color: #fff;
 }
 
 /* Hover Effect for Primary Button */
 .btn-primary:hover {
-  background-color: #0056b3;
+  background-color: #D4AF37;
 }
 
 /* Disabled Button Style */

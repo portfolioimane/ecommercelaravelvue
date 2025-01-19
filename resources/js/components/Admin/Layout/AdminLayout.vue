@@ -43,6 +43,12 @@
                 class="sidebar-link" 
                 :class="{ active: isActive('/admin/products/add') }">Add Product</router-link>
             </li>
+             <li>
+              <router-link 
+                to="/admin/productvariant" 
+                class="sidebar-link" 
+                :class="{ active: isActive('/admin/productvariant') }">Product Variant</router-link>
+            </li>
           </ul>
         </li>
 
