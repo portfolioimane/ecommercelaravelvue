@@ -28,6 +28,7 @@ import EditProduct from '../components/Admin/Products/EditProduct.vue';
 import Products from '../components/Admin/Products/Products.vue';
 import CreateProductVariant from '../components/Admin/Products/CreateProductVariant.vue';
 import ProductVariant from '../components/Admin/Products/ProductVariant.vue';
+import ProductVariantDetails from '../components/Admin/Products/ProductVariantDetails.vue';
 
 
 import Variant from '../components/Admin/Variant/Variant.vue';
@@ -158,7 +159,12 @@ const routes = [
         name: 'ProductVariant',
         component: ProductVariant,
       },
-
+                {
+        path: 'productvariant/:id',
+        name: 'ProductVariantDetails',
+        component: ProductVariantDetails,
+      },
+  
       {
         path: 'products/edit/:id',
         name: 'EditProduct',

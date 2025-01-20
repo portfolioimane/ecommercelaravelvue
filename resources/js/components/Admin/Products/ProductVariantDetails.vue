@@ -1,13 +1,9 @@
 <template>
   <div class="product-selector">
-    <div class="form-group">
-      <label for="product">Select Product:</label>
-      <select id="product" v-model="selectedProductId" @change="fetchVariantsAndValues" class="form-control">
-        <option v-for="product in products" :key="product.id" :value="product.id">
-          {{ product.name }}
-        </option>
-      </select>
-    </div>
+  <div class="product-info-container">
+    <h1 class="product-name">{{ currentProduct.name }}</h1>
+    <p class="product-description">{{ currentProduct.description }}</p>
+  </div>
 
     <!-- Create New Product Variant Button (shown only after product is selected) -->
     <div v-if="selectedProductId" class="create-variant-button">
@@ -80,17 +76,21 @@ export default {
   },
 
   computed: {
-    ...mapGetters('backendProducts', ['allProducts']),
+    ...mapGetters('backendProducts', ['currentProduct']),
     products() {
       return this.allProducts;
     },
     productvariants() {
       return this.$store.getters['backendProductVariant/getProductVariants'];
+    },
+    selectedProductName() {
+      const product = this.products.find(p => p.id === this.selectedProductId);
+      return product ? product.name : 'No product selected';
     }
   },
 
   methods: {
-    ...mapActions('backendProducts', ['fetchProducts']),
+    ...mapActions('backendProducts', ['fetchProductById']),
     ...mapActions('backendProductVariant', ['fetchProductVariants', 'updateProductVariant', 'deleteProductVariant']),
 
     // Fetch variants when a product is selected
@@ -137,18 +137,29 @@ export default {
   },
 
   watch: {
-    // Watch for route changes (if needed to refetch)
-    $route() {
-      this.fetchVariantsAndValues();
+    // Watch for route changes (to refetch if a new product ID is in the URL)
+    '$route'(to, from) {
+      const productId = to.params.id;
+      if (productId && productId !== this.selectedProductId) {
+        this.selectedProductId = productId;
+        this.fetchVariantsAndValues();
+      }
     }
   },
 
   mounted() {
-    this.fetchProducts(); // Fetch products when the component is mounted
+    // Check the route for product ID and set it to selectedProductId if it exists
+    const productId = this.$route.params.id;
+    if (productId) {
+      this.selectedProductId = productId;
+      this.fetchVariantsAndValues();
+    }
+
+    this.fetchProductById(this.selectedProductId);
   },
 
   created() {
-    this.fetchProducts(); // Ensure products are fetched when the component is created
+    this.fetchProductById(this.selectedProductId);
   }
 };
 </script>

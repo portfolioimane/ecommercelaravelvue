@@ -2,15 +2,10 @@
   <div class="product-variant">
     <h1>Create Product Variant Combinations</h1>
  
-    <!-- Product Selection -->
-    <div class="form-group">
-      <label for="product">Select Product:</label>
-      <select id="product" v-model="selectedProductId" @change="fetchVariantsAndValues" class="form-control">
-        <option v-for="product in products" :key="product.id" :value="product.id">
-          {{ product.name }}
-        </option>
-      </select>
-    </div>
+  <div class="product-info-container">
+    <h1 class="product-name">{{ currentProduct.name }}</h1>
+    <p class="product-description">{{ currentProduct.description }}</p>
+  </div>
 
     <!-- Variant Selection -->
     <div v-if="variants.length" class="variant-section">
@@ -142,8 +137,8 @@ export default {
   data() {
     return {
       successMessage: '', // Store the success message
-    notificationMessage: '', // Store the notification message
-      selectedProductId: null,
+      notificationMessage: '', // Store the notification message
+      selectedProductId: null,  // Will be set based on route
       selectedVariantId: '',
       selectedVariants: [],
       dropdownOpen: reactive({}),
@@ -152,7 +147,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('backendProducts', ['allProducts']),
+    ...mapGetters('backendProducts', ['currentProduct']),
     ...mapGetters('backendVariant', ['getVariants']),
     products() {
       return this.allProducts;
@@ -162,7 +157,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('backendProducts', ['fetchProducts']),
+    ...mapActions('backendProducts', ['fetchProductById']),
     ...mapActions('backendVariant', ['fetchVariants']),
     ...mapActions('backendVariantCombinations', ['fetchExistingCombinationValues']), // Added missing action
 
@@ -211,57 +206,54 @@ export default {
         this.selectedVariantValues[variantId].splice(index, 1);
       }
     },
-generateCombinations() {
-  const valuesArray = Object.values(this.selectedVariantValues);
 
-  if (valuesArray.length > 0) {
-    const combinations = this.cartesianProduct(...valuesArray);
-    const existingCombinationValues = this.$store.getters['backendVariantCombinations/existingCombinationValues'];
+    generateCombinations() {
+      const valuesArray = Object.values(this.selectedVariantValues);
 
-    const duplicates = [];
-    const filteredCombinations = combinations.map(combination => {
-      const combinationObject = combination.reduce((acc, value, index) => {
-        const variantName = this.selectedVariants[index]?.name;
-        acc[variantName] = value;
-        return acc;
-      }, {});
+      if (valuesArray.length > 0) {
+        const combinations = this.cartesianProduct(...valuesArray);
+        const existingCombinationValues = this.$store.getters['backendVariantCombinations/existingCombinationValues'];
 
-      const combinationExists = existingCombinationValues.some(existingCombination => 
-        JSON.stringify(existingCombination) === JSON.stringify(combinationObject)
-      );
+        const duplicates = [];
+        const filteredCombinations = combinations.map(combination => {
+          const combinationObject = combination.reduce((acc, value, index) => {
+            const variantName = this.selectedVariants[index]?.name;
+            acc[variantName] = value;
+            return acc;
+          }, {});
 
-      if (combinationExists) {
-        const existingCombination = Object.entries(combinationObject)
-          .map(([key, value]) => `${key}: ${value}`)
-          .join(' and ');
-        duplicates.push(existingCombination);
-        return null;
+          const combinationExists = existingCombinationValues.some(existingCombination => 
+            JSON.stringify(existingCombination) === JSON.stringify(combinationObject)
+          );
+
+          if (combinationExists) {
+            const existingCombination = Object.entries(combinationObject)
+              .map(([key, value]) => `${key}: ${value}`)
+              .join(' and ');
+            duplicates.push(existingCombination);
+            return null;
+          }
+
+          return {
+            combinationValues: combinationObject,
+            price: '',
+            image: null,
+          };
+        }).filter(combination => combination !== null);
+
+        this.combinationList = filteredCombinations;
+
+        // Notify the user about duplicates with successMessage
+        if (duplicates.length > 0) {
+           this.notificationMessage = `The following combinations already exist and were skipped: ${duplicates.join(', ')}`;
+
+          // Clear the success message after 3 seconds
+          setTimeout(() => {
+            this.notificationMessage = '';
+          }, 5000);
+        }
       }
-
-      return {
-        combinationValues: combinationObject,
-        price: '',
-        image: null,
-      };
-    }).filter(combination => combination !== null);
-
-    this.combinationList = filteredCombinations;
-
-    // Notify the user about duplicates with successMessage
-    if (duplicates.length > 0) {
-       this.notificationMessage = `The following combinations already exist and were skipped: ${duplicates.join(', ')}`;
-
-      // Clear the success message after 3 seconds
-      setTimeout(() => {
-        this.notificationMessage = '';
-      }, 5000);
-    }
-  }
-},
-
-
-
-
+    },
 
     async updateAllCombinations() {
       try {
@@ -303,6 +295,9 @@ generateCombinations() {
         setTimeout(() => {
           this.successMessage = '';
         }, 5000);
+
+        this.$router.push(`/admin/productvariant/${this.selectedProductId}`);
+
       } catch (error) {
         console.error('Error updating combinations:', error);
       }
@@ -340,10 +335,18 @@ generateCombinations() {
     },
   },
   created() {
-    this.fetchProducts();
+    // Check if the product ID exists in the route and set it
+    this.selectedProductId = this.$route.params.id;
+
+    // Fetch products and variants
+    this.fetchProductById(this.selectedProductId);
+    if (this.selectedProductId) {
+      this.fetchVariantsAndValues();
+    }
   },
 };
 </script>
+
 
 
 <style scoped>
@@ -467,5 +470,36 @@ h1 {
   text-align: center;
   transition: opacity 0.5s ease;
 }
+.product-info-container {
+  background-color: #1F2A44; /* Dark background color */
+  color: white; /* White text color for contrast */
+  padding: 10px;
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
+.product-name {
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  text-transform: capitalize;
+  letter-spacing: 1px; /* Adds some spacing for a more refined look */
+}
+
+.product-description {
+  font-size: 18px;
+  font-weight: 400;
+  text-align: center;
+  margin-top: 10px;
+  font-family: 'Roboto', sans-serif;
+  color: #E0E0E0; /* Lighter gray for description text */
+  line-height: 1.5; /* Adds spacing between lines for readability */
+  max-width: 800px; /* Ensures the text doesn't stretch too far across wide screens */
+}
 </style>

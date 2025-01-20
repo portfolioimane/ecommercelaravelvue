@@ -2,6 +2,14 @@
   <div class="variant-list-container">
     <h2 class="section-title">Variants and Their Values</h2>
 
+    <!-- Create Variant Button -->
+    <button 
+      class="btn btn-large-orange"
+      @click="goToCreateVariant"
+    >
+      Create Variant
+    </button>
+
     <table class="variant-table">
       <thead>
         <tr>
@@ -75,6 +83,10 @@ export default {
       } catch (error) {
         console.error('Error fetching variants:', error);
       }
+    },
+    // Redirect to the Create Variant page
+    goToCreateVariant() {
+      this.$router.push('/admin/createvariant');
     },
     // Redirect to the Create Variant Value page
     goToCreateVariantValue(variantId) {
@@ -237,5 +249,22 @@ export default {
 
 .btn-small-danger:hover {
   background-color: #c0392b; /* Darker red on hover */
+}
+
+/* Large Orange Button Style for Create Variant */
+.btn-large-orange {
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #ff8c00; /* Orange color */
+  color: white;
+  margin-bottom: 20px;
+}
+
+.btn-large-orange:hover {
+  background-color: #e67600; /* Darker orange on hover */
 }
 </style>

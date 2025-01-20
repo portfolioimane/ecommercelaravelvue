@@ -37,12 +37,7 @@
                 class="sidebar-link" 
                 :class="{ active: isActive('/admin/variant') }">All Variants</router-link>
             </li>
-            <li>
-              <router-link 
-                to="/admin/createvariant" 
-                class="sidebar-link" 
-                :class="{ active: isActive('/admin/createvariant') }">Create Variant</router-link>
-            </li>
+       
                  
           </ul>
         </li>
@@ -67,12 +62,7 @@
                 class="sidebar-link" 
                 :class="{ active: isActive('/admin/products/add') }">Add Product</router-link>
             </li>
-             <li>
-              <router-link 
-                to="/admin/createproductvariant" 
-                class="sidebar-link" 
-                :class="{ active: isActive('/admin/createproductvariant') }">Create Product Variant</router-link>
-            </li>
+       
                  <li>
               <router-link 
                 to="/admin/productvariant" 
