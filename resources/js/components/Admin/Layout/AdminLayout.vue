@@ -23,6 +23,30 @@
           </router-link>
         </li>
 
+               <!-- Variants Section (Dropdown) -->
+        <li>
+          <div @click="toggleVariantsDropdown" class="dropdown-header">
+            <i class="material-icons sidebar-icon">layers</i>
+            Manage Variants
+            <i class="material-icons dropdown-arrow">{{ isVariantsDropdownOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</i>
+          </div>
+          <ul v-if="isVariantsDropdownOpen" class="dropdown-list">
+            <li>
+              <router-link 
+                to="/admin/variant" 
+                class="sidebar-link" 
+                :class="{ active: isActive('/admin/variant') }">All Variants</router-link>
+            </li>
+            <li>
+              <router-link 
+                to="/admin/createvariant" 
+                class="sidebar-link" 
+                :class="{ active: isActive('/admin/createvariant') }">Create Variant</router-link>
+            </li>
+                 
+          </ul>
+        </li>
+        
         <!-- Manage Products Section -->
         <li>
           <div @click="toggleProductsDropdown" class="dropdown-header">
@@ -52,29 +76,7 @@
           </ul>
         </li>
 
-        <!-- Variants Section (Dropdown) -->
-        <li>
-          <div @click="toggleVariantsDropdown" class="dropdown-header">
-            <i class="material-icons sidebar-icon">layers</i>
-            Variants
-            <i class="material-icons dropdown-arrow">{{ isVariantsDropdownOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</i>
-          </div>
-          <ul v-if="isVariantsDropdownOpen" class="dropdown-list">
-            <li>
-              <router-link 
-                to="/admin/variant" 
-                class="sidebar-link" 
-                :class="{ active: isActive('/admin/variant') }">All Variants</router-link>
-            </li>
-            <li>
-              <router-link 
-                to="/admin/createvariant" 
-                class="sidebar-link" 
-                :class="{ active: isActive('/admin/createvariant') }">Create Variant</router-link>
-            </li>
-                 
-          </ul>
-        </li>
+
 
         <!-- Manage Orders Section -->
         <li>

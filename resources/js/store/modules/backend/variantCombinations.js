@@ -11,21 +11,24 @@ const mutations = {
 };
 
 const actions = {
-  async updateAllCombinations({ commit }, combinations) {
-    try {
-      const response = await axios.post('/admin/variant-combinations/update', {
-        combinations,
-      });
+async updateAllCombinations({ commit }, formData) {
+  try {
+    const response = await axios.post('/admin/variant-combinations/update', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
-      if (response.status === 200) {
-        commit('SET_COMBINATIONS', combinations);
-        return response.data;
-      }
-    } catch (error) {
-      console.error('Error updating combinations:', error);
-      throw error;
-    }
-  },
+    // Commit data to Vuex state directly without status check
+    commit('SET_COMBINATIONS', response.data);
+    return response.data;
+
+  } catch (error) {
+    console.error('Error updating combinations:', error);
+    throw error;
+  }
+},
+
 };
 
 const getters = {

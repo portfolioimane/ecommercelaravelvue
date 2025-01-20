@@ -24028,6 +24028,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
+      successMessage: '',
+      // Store the success message
       selectedProductId: null,
       selectedVariantId: '',
       selectedVariants: [],
@@ -24101,17 +24103,30 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       }
     },
     generateCombinations: function generateCombinations() {
+      var _this4 = this;
       var valuesArray = Object.values(this.selectedVariantValues);
       if (valuesArray.length > 0) {
         var combinations = this.cartesianProduct.apply(this, valuesArray);
         this.combinationList = combinations.map(function (combination) {
+          var combinationString = combination.map(function (value, index) {
+            var _this4$selectedVarian;
+            var variantName = (_this4$selectedVarian = _this4.selectedVariants[index]) === null || _this4$selectedVarian === void 0 ? void 0 : _this4$selectedVarian.name;
+            return "".concat(variantName, ": ").concat(value);
+          }).join(', '); // Join with commas to create a string like "size: small, color: red"
+
+          // Log the combination string and values
+          console.log('Combination String:', combinationString);
+          console.log('Combination Values:', combination);
           return {
-            combination: combination.join(' + '),
+            combination: combinationString,
             combinationValues: combination,
             price: '',
             image: null
           };
         });
+
+        // Log the entire combinationList to see all combinations
+        console.log('Combination List:', this.combinationList);
       }
     },
     cartesianProduct: function cartesianProduct() {
@@ -24129,41 +24144,65 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     handleImageUpload: function handleImageUpload(event, index) {
       var file = event.target.files[0];
       if (file) {
-        this.combinationList[index].image = file;
+        this.combinationList[index].image = file; // Store the image file in the combination
+        console.log("Image uploaded for combination ".concat(index, ":"), file); // Debugging line
+      } else {
+        this.combinationList[index].image = null; // Clear image if none is selected
+        console.log("No image selected for combination ".concat(index)); // Debugging line
       }
     },
     updateAllCombinations: function updateAllCombinations() {
-      var _this4 = this;
+      var _this5 = this;
       return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        var combinations, response;
+        var formData, response;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
               _context2.prev = 0;
-              combinations = _this4.combinationList.map(function (combination) {
-                return {
-                  product_id: _this4.selectedProductId,
-                  combination_values: combination.combinationValues,
-                  price: combination.price,
-                  image: combination.image // If you want to handle file uploads, make sure to include the file path
-                };
+              formData = new FormData();
+              _this5.combinationList.forEach(function (combination, index) {
+                formData.append("combinations[".concat(index, "][product_id]"), _this5.selectedProductId);
+                formData.append("combinations[".concat(index, "][combination_values]"), JSON.stringify(combination.combinationValues));
+                if (combination.price) {
+                  formData.append("combinations[".concat(index, "][price]"), combination.price);
+                }
+
+                // Debugging: Log the combination and image
+                console.log("Combination ".concat(index, ":"), combination);
+
+                // Append the image only if it's a valid File object (not null or undefined)
+                if (combination.image instanceof File) {
+                  formData.append("combinations[".concat(index, "][image]"), combination.image);
+                  console.log("Image appended for combination ".concat(index, ":"), combination.image); // Debugging line
+                } else {
+                  console.log("No image to append for combination ".concat(index)); // Debugging line
+                }
               });
-              _context2.next = 4;
-              return _this4.$store.dispatch('backendVariantCombinations/updateAllCombinations', combinations);
-            case 4:
+
+              // Send the FormData to the backend using your Vuex store
+              _context2.next = 5;
+              return _this5.$store.dispatch('backendVariantCombinations/updateAllCombinations', formData);
+            case 5:
               response = _context2.sent;
               console.log('Combinations updated:', response);
-              _context2.next = 11;
+              // Show success message
+              _this5.successMessage = 'All combinations updated successfully!';
+
+              // Hide the success message after 5 seconds
+              setTimeout(function () {
+                _this5.successMessage = '';
+              }, 5000);
+              _context2.next = 14;
               break;
-            case 8:
-              _context2.prev = 8;
+            case 11:
+              _context2.prev = 11;
               _context2.t0 = _context2["catch"](0);
               console.error('Error updating combinations:', _context2.t0);
-            case 11:
+            case 14:
             case "end":
               return _context2.stop();
           }
-        }, _callee2, null, [[0, 8]]);
+        }, _callee2, null, [[0, 11]]);
       }))();
     },
     isHexColor: function isHexColor(value) {
@@ -26527,58 +26566,21 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       }, "category", -1 /* HOISTED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Categories ")]);
     }),
     _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["class"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Manage Products Section "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  }, 8 /* PROPS */, ["class"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Variants Section (Dropdown) "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     onClick: _cache[0] || (_cache[0] = function () {
-      return $options.toggleProductsDropdown && $options.toggleProductsDropdown.apply($options, arguments);
+      return $options.toggleVariantsDropdown && $options.toggleVariantsDropdown.apply($options, arguments);
     }),
     "class": "dropdown-header"
   }, [_cache[7] || (_cache[7] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
     "class": "material-icons sidebar-icon"
-  }, "shopping_bag", -1 /* HOISTED */)), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Manage Products ")), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.isProductsDropdownOpen ? 'arrow_drop_up' : 'arrow_drop_down'), 1 /* TEXT */)]), $data.isProductsDropdownOpen ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("ul", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
-    to: "/admin/products",
-    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["sidebar-link", {
-      active: $options.isActive('/admin/products')
-    }])
-  }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return _cache[9] || (_cache[9] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("View Products")]);
-    }),
-    _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["class"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
-    to: "/admin/products/add",
-    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["sidebar-link", {
-      active: $options.isActive('/admin/products/add')
-    }])
-  }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return _cache[10] || (_cache[10] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Add Product")]);
-    }),
-    _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["class"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
-    to: "/admin/productvariant",
-    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["sidebar-link", {
-      active: $options.isActive('/admin/productvariant')
-    }])
-  }, {
-    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return _cache[11] || (_cache[11] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Product Variant")]);
-    }),
-    _: 1 /* STABLE */
-  }, 8 /* PROPS */, ["class"])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Variants Section (Dropdown) "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    onClick: _cache[1] || (_cache[1] = function () {
-      return $options.toggleVariantsDropdown && $options.toggleVariantsDropdown.apply($options, arguments);
-    }),
-    "class": "dropdown-header"
-  }, [_cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
-    "class": "material-icons sidebar-icon"
-  }, "layers", -1 /* HOISTED */)), _cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Variants ")), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.isVariantsDropdownOpen ? 'arrow_drop_up' : 'arrow_drop_down'), 1 /* TEXT */)]), $data.isVariantsDropdownOpen ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("ul", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+  }, "layers", -1 /* HOISTED */)), _cache[8] || (_cache[8] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Manage Variants ")), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.isVariantsDropdownOpen ? 'arrow_drop_up' : 'arrow_drop_down'), 1 /* TEXT */)]), $data.isVariantsDropdownOpen ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("ul", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
     to: "/admin/variant",
     "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["sidebar-link", {
       active: $options.isActive('/admin/variant')
     }])
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return _cache[14] || (_cache[14] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("All Variants")]);
+      return _cache[9] || (_cache[9] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("All Variants")]);
     }),
     _: 1 /* STABLE */
   }, 8 /* PROPS */, ["class"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
@@ -26588,7 +26590,44 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }])
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return _cache[15] || (_cache[15] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Create Variant")]);
+      return _cache[10] || (_cache[10] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Create Variant")]);
+    }),
+    _: 1 /* STABLE */
+  }, 8 /* PROPS */, ["class"])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Manage Products Section "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+    onClick: _cache[1] || (_cache[1] = function () {
+      return $options.toggleProductsDropdown && $options.toggleProductsDropdown.apply($options, arguments);
+    }),
+    "class": "dropdown-header"
+  }, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", {
+    "class": "material-icons sidebar-icon"
+  }, "shopping_bag", -1 /* HOISTED */)), _cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Manage Products ")), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("i", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.isProductsDropdownOpen ? 'arrow_drop_up' : 'arrow_drop_down'), 1 /* TEXT */)]), $data.isProductsDropdownOpen ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("ul", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    to: "/admin/products",
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["sidebar-link", {
+      active: $options.isActive('/admin/products')
+    }])
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return _cache[13] || (_cache[13] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("View Products")]);
+    }),
+    _: 1 /* STABLE */
+  }, 8 /* PROPS */, ["class"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    to: "/admin/products/add",
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["sidebar-link", {
+      active: $options.isActive('/admin/products/add')
+    }])
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return _cache[14] || (_cache[14] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Add Product")]);
+    }),
+    _: 1 /* STABLE */
+  }, 8 /* PROPS */, ["class"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
+    to: "/admin/productvariant",
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["sidebar-link", {
+      active: $options.isActive('/admin/productvariant')
+    }])
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return _cache[15] || (_cache[15] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("Product Variant")]);
     }),
     _: 1 /* STABLE */
   }, 8 /* PROPS */, ["class"])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Manage Orders Section "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("li", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_router_link, {
@@ -27111,13 +27150,17 @@ var _hoisted_16 = {
   "class": "combination-section"
 };
 var _hoisted_17 = {
-  "class": "combination-table"
+  key: 0,
+  "class": "success-message"
 };
 var _hoisted_18 = {
-  key: 1
+  "class": "combination-table"
 };
-var _hoisted_19 = ["onUpdate:modelValue"];
-var _hoisted_20 = ["onChange"];
+var _hoisted_19 = {
+  "class": "combination-value"
+};
+var _hoisted_20 = ["onUpdate:modelValue"];
+var _hoisted_21 = ["onChange"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", null, "Create Product Variant Combinations", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Product Selection "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "product"
@@ -27127,7 +27170,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.selectedProductId = $event;
     }),
     onChange: _cache[1] || (_cache[1] = function () {
-      return _ctx.fetchVariants && _ctx.fetchVariants.apply(_ctx, arguments);
+      return $options.fetchVariantsAndValues && $options.fetchVariantsAndValues.apply($options, arguments);
     }),
     "class": "form-control"
   }, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.products, function (product) {
@@ -27203,34 +27246,23 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       key: variant.id,
       value: variant.id
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(variant.name), 9 /* TEXT, PROPS */, _hoisted_15);
-  }), 128 /* KEYED_FRAGMENT */))], 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedVariantId]])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Variant Combinations "), $data.combinationList.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Variant Combinations", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_17, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Combination"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Price"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Image")])], -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.combinationList, function (combination, index) {
+  }), 128 /* KEYED_FRAGMENT */))], 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedVariantId]])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Variant Combinations "), $data.combinationList.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Variant Combinations", -1 /* HOISTED */)), $data.successMessage ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.successMessage), 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_18, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Combination"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Price"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Image")])], -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.combinationList, function (combination, index) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
       key: index
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(combination.combinationValues, function (value, idx) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
-        key: idx,
-        "class": "combination-value"
-      }, [$options.isHexColor(value) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
-        key: 0,
-        style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)({
-          backgroundColor: value
-        }),
-        "class": "color-preview"
-      }, null, 4 /* STYLE */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), !$options.isHexColor(value) ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(value), 1 /* TEXT */)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
-    }), 128 /* KEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(combination.combination), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
       type: "number",
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return combination.price = $event;
       },
       "class": "form-control",
       placeholder: "Price"
-    }, null, 8 /* PROPS */, _hoisted_19), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, combination.price]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    }, null, 8 /* PROPS */, _hoisted_20), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, combination.price]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
       type: "file",
       onChange: function onChange($event) {
         return $options.handleImageUpload($event, index);
       },
       "class": "form-control"
-    }, null, 40 /* PROPS, NEED_HYDRATION */, _hoisted_20)])]);
+    }, null, 40 /* PROPS, NEED_HYDRATION */, _hoisted_21)])]);
   }), 128 /* KEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     onClick: _cache[5] || (_cache[5] = function () {
       return $options.updateAllCombinations && $options.updateAllCombinations.apply($options, arguments);
@@ -35779,7 +35811,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.product-variant[data-v-0f9aab06] {\n  padding: 30px;\n  background-color: #f4f6f9;\n  border-radius: 12px;\n  font-family: 'Roboto', sans-serif;\n  color: #444;\n}\nh1[data-v-0f9aab06] {\n  font-size: 26px;\n  margin-bottom: 20px;\n}\n.color-preview[data-v-0f9aab06] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  border-radius: 50%;\n  margin-right: 8px;\n}\n/* Tag styles */\n.tags-container[data-v-0f9aab06] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 8px;\n  margin-top: 10px;\n}\n.tag[data-v-0f9aab06] {\n  display: flex;\n  align-items: center;\n  background-color: #007bff;\n  color: #fff;\n  padding: 5px 10px;\n  border-radius: 20px;\n  font-size: 14px;\n  font-weight: 500;\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);\n  transition: background-color 0.3s ease, transform 0.2s ease;\n}\n.tag[data-v-0f9aab06]:hover {\n  background-color: #0056b3;\n  transform: translateY(-2px);\n}\n\n\n\n/* Remove button styles */\n.tag-remove[data-v-0f9aab06] {\n  margin-left: 8px;\n  font-size: 18px;\n  font-weight: bold;\n  color: #fff;\n  cursor: pointer;\n  line-height: 1;\n  transition: color 0.3s ease, transform 0.2s ease;\n}\n.tag-remove[data-v-0f9aab06]:hover {\n  color: #ff4d4d;\n  transform: rotate(90deg);\n}\n\n/* Remove variant button styles */\n.remove-btn[data-v-0f9aab06] {\n  margin-top: 10px;\n  padding: 8px 16px;\n  background-color: #dc3545;\n  color: #fff;\n  border: none;\n  border-radius: 5px;\n  font-size: 14px;\n  font-weight: bold;\n  cursor: pointer;\n  transition: background-color 0.3s ease, transform 0.2s ease;\n}\n.remove-btn[data-v-0f9aab06]:hover {\n  background-color: #c82333;\n  transform: scale(1.05);\n}\n\n/* Input styles */\n.variant-input[data-v-0f9aab06] {\n  width: 100%;\n  padding: 8px;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  margin-top: 8px;\n  background-color: #fff;\n  font-size: 14px;\n  color: #444;\n  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);\n}\n.variant-input[data-v-0f9aab06]:focus {\n  border-color: #007bff;\n  outline: none;\n  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.product-variant[data-v-0f9aab06] {\n  padding: 30px;\n  background-color: #f4f6f9;\n  border-radius: 12px;\n  font-family: 'Roboto', sans-serif;\n  color: #444;\n}\nh1[data-v-0f9aab06] {\n  font-size: 26px;\n  margin-bottom: 20px;\n}\n.color-preview[data-v-0f9aab06] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  border-radius: 50%;\n  margin-right: 8px;\n}\n\n/* Tag styles */\n.tags-container[data-v-0f9aab06] {\n  display: flex;\n  flex-wrap: wrap;\n  gap: 8px;\n  margin-top: 10px;\n}\n.tag[data-v-0f9aab06] {\n  display: flex;\n  align-items: center;\n  background-color: #007bff;\n  color: #fff;\n  padding: 5px 10px;\n  border-radius: 20px;\n  font-size: 14px;\n  font-weight: 500;\n  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);\n  transition: background-color 0.3s ease, transform 0.2s ease;\n}\n.tag[data-v-0f9aab06]:hover {\n  background-color: #0056b3;\n  transform: translateY(-2px);\n}\n\n/* Remove button styles */\n.tag-remove[data-v-0f9aab06] {\n  margin-left: 8px;\n  font-size: 18px;\n  font-weight: bold;\n  color: #fff;\n  cursor: pointer;\n  line-height: 1;\n  transition: color 0.3s ease, transform 0.2s ease;\n}\n.tag-remove[data-v-0f9aab06]:hover {\n  color: #ff4d4d;\n  transform: rotate(90deg);\n}\n\n/* Remove variant button styles */\n.remove-btn[data-v-0f9aab06] {\n  margin-top: 10px;\n  padding: 8px 16px;\n  background-color: #dc3545;\n  color: #fff;\n  border: none;\n  border-radius: 5px;\n  font-size: 14px;\n  font-weight: bold;\n  cursor: pointer;\n  transition: background-color 0.3s ease, transform 0.2s ease;\n}\n.remove-btn[data-v-0f9aab06]:hover {\n  background-color: #c82333;\n  transform: scale(1.05);\n}\n\n/* Input styles */\n.variant-input[data-v-0f9aab06] {\n  width: 100%;\n  padding: 8px;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  margin-top: 8px;\n  background-color: #fff;\n  font-size: 14px;\n  color: #444;\n  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);\n}\n.variant-input[data-v-0f9aab06]:focus {\n  border-color: #007bff;\n  outline: none;\n  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);\n}\n.success-message[data-v-0f9aab06] {\n  background-color: #28a745; /* Green color */\n  color: white;\n  padding: 10px;\n  border-radius: 5px;\n  margin-bottom: 20px;\n  font-size: 16px;\n  text-align: center;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -48912,7 +48944,7 @@ var mutations = {
   }
 };
 var actions = {
-  updateAllCombinations: function updateAllCombinations(_ref, combinations) {
+  updateAllCombinations: function updateAllCombinations(_ref, formData) {
     return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var commit, response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
@@ -48921,30 +48953,26 @@ var actions = {
             commit = _ref.commit;
             _context.prev = 1;
             _context.next = 4;
-            return _utils_axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].post('/admin/variant-combinations/update', {
-              combinations: combinations
+            return _utils_axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].post('/admin/variant-combinations/update', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
             });
           case 4:
             response = _context.sent;
-            if (!(response.status === 200)) {
-              _context.next = 8;
-              break;
-            }
-            commit('SET_COMBINATIONS', combinations);
+            // Commit data to Vuex state directly without status check
+            commit('SET_COMBINATIONS', response.data);
             return _context.abrupt("return", response.data);
-          case 8:
-            _context.next = 14;
-            break;
-          case 10:
-            _context.prev = 10;
+          case 9:
+            _context.prev = 9;
             _context.t0 = _context["catch"](1);
             console.error('Error updating combinations:', _context.t0);
             throw _context.t0;
-          case 14:
+          case 13:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[1, 10]]);
+      }, _callee, null, [[1, 9]]);
     }))();
   }
 };

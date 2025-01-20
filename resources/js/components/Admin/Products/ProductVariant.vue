@@ -1,11 +1,11 @@
 <template>
   <div class="product-variant">
     <h1>Create Product Variant Combinations</h1>
-
+ 
     <!-- Product Selection -->
     <div class="form-group">
       <label for="product">Select Product:</label>
-      <select id="product" v-model="selectedProductId" @change="fetchVariants" class="form-control">
+      <select id="product" v-model="selectedProductId" @change="fetchVariantsAndValues" class="form-control">
         <option v-for="product in products" :key="product.id" :value="product.id">
           {{ product.name }}
         </option>
@@ -80,6 +80,9 @@
     <!-- Variant Combinations -->
     <div v-if="combinationList.length" class="combination-section">
       <h2>Variant Combinations</h2>
+    <div v-if="successMessage" class="success-message">
+      <p>{{ successMessage }}</p>
+    </div>
       <table class="combination-table">
         <thead>
           <tr>
@@ -88,39 +91,31 @@
             <th>Image</th>
           </tr>
         </thead>
-        <tbody>
-          <tr v-for="(combination, index) in combinationList" :key="index">
-            <td>
-              <span
-                v-for="(value, idx) in combination.combinationValues"
-                :key="idx"
-                class="combination-value"
-              >
-                <span
-                  v-if="isHexColor(value)"
-                  :style="{ backgroundColor: value }"
-                  class="color-preview"
-                ></span>
-                <span v-if="!isHexColor(value)">{{ value }}</span>
-              </span>
-            </td>
-            <td>
-              <input
-                type="number"
-                v-model="combination.price"
-                class="form-control"
-                placeholder="Price"
-              />
-            </td>
-            <td>
-              <input
-                type="file"
-                @change="handleImageUpload($event, index)"
-                class="form-control"
-              />
-            </td>
-          </tr>
-        </tbody>
+<tbody>
+  <tr v-for="(combination, index) in combinationList" :key="index">
+    <td>
+      <span class="combination-value">
+        {{ combination.combination }}
+      </span>
+    </td>
+    <td>
+      <input
+        type="number"
+        v-model="combination.price"
+        class="form-control"
+        placeholder="Price"
+      />
+    </td>
+    <td>
+      <input
+        type="file"
+        @change="handleImageUpload($event, index)"
+        class="form-control"
+      />
+    </td>
+  </tr>
+</tbody>
+
       </table>
       <button @click="updateAllCombinations" class="btn btn-success update-btn">Update All Combinations</button>
     </div>
@@ -134,6 +129,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   data() {
     return {
+      successMessage: '', // Store the success message
       selectedProductId: null,
       selectedVariantId: '',
       selectedVariants: [],
@@ -200,18 +196,38 @@ export default {
       }
     },
 
-    generateCombinations() {
-      const valuesArray = Object.values(this.selectedVariantValues);
-      if (valuesArray.length > 0) {
-        const combinations = this.cartesianProduct(...valuesArray);
-        this.combinationList = combinations.map(combination => ({
-          combination: combination.join(' + '),
-          combinationValues: combination,
-          price: '',
-          image: null,
-        }));
-      }
-    },
+generateCombinations() {
+  const valuesArray = Object.values(this.selectedVariantValues);
+  if (valuesArray.length > 0) {
+    const combinations = this.cartesianProduct(...valuesArray);
+
+    this.combinationList = combinations.map(combination => {
+      const combinationString = combination
+        .map((value, index) => {
+          const variantName = this.selectedVariants[index]?.name;
+          return `${variantName}: ${value}`;
+        })
+        .join(', '); // Join with commas to create a string like "size: small, color: red"
+
+      // Log the combination string and values
+      console.log('Combination String:', combinationString);
+      console.log('Combination Values:', combination);
+
+      return {
+        combination: combinationString,
+        combinationValues: combination,
+        price: '',
+        image: null,
+      };
+    });
+
+    // Log the entire combinationList to see all combinations
+    console.log('Combination List:', this.combinationList);
+  }
+},
+
+
+
 
     cartesianProduct(...arrays) {
       return arrays.reduce(
@@ -220,28 +236,57 @@ export default {
       );
     },
 
-    handleImageUpload(event, index) {
-      const file = event.target.files[0];
-      if (file) {
-        this.combinationList[index].image = file;
-      }
-    },
+handleImageUpload(event, index) {
+  const file = event.target.files[0];
+  if (file) {
+    this.combinationList[index].image = file; // Store the image file in the combination
+    console.log(`Image uploaded for combination ${index}:`, file); // Debugging line
+  } else {
+    this.combinationList[index].image = null; // Clear image if none is selected
+    console.log(`No image selected for combination ${index}`); // Debugging line
+  }
+},
+
 
 async updateAllCombinations() {
-    try {
-      const combinations = this.combinationList.map(combination => ({
-        product_id: this.selectedProductId,
-        combination_values: combination.combinationValues,
-        price: combination.price,
-        image: combination.image, // If you want to handle file uploads, make sure to include the file path
-      }));
+  try {
+    const formData = new FormData();
 
-      const response = await this.$store.dispatch('backendVariantCombinations/updateAllCombinations', combinations);
-      console.log('Combinations updated:', response);
-    } catch (error) {
-      console.error('Error updating combinations:', error);
-    }
-  },
+    this.combinationList.forEach((combination, index) => {
+      formData.append(`combinations[${index}][product_id]`, this.selectedProductId);
+      formData.append(`combinations[${index}][combination_values]`, JSON.stringify(combination.combinationValues));
+
+      if (combination.price) {
+        formData.append(`combinations[${index}][price]`, combination.price);
+      }
+
+      // Debugging: Log the combination and image
+      console.log(`Combination ${index}:`, combination);
+
+      // Append the image only if it's a valid File object (not null or undefined)
+      if (combination.image instanceof File) {
+        formData.append(`combinations[${index}][image]`, combination.image);
+        console.log(`Image appended for combination ${index}:`, combination.image); // Debugging line
+      } else {
+        console.log(`No image to append for combination ${index}`); // Debugging line
+      }
+    });
+
+    // Send the FormData to the backend using your Vuex store
+    const response = await this.$store.dispatch('backendVariantCombinations/updateAllCombinations', formData);
+
+    console.log('Combinations updated:', response);
+    // Show success message
+        this.successMessage = 'All combinations updated successfully!';
+
+        // Hide the success message after 5 seconds
+        setTimeout(() => {
+          this.successMessage = '';
+        }, 5000);
+  } catch (error) {
+    console.error('Error updating combinations:', error);
+  }
+},
 
 
     isHexColor(value) {
@@ -284,6 +329,7 @@ h1 {
   border-radius: 50%;
   margin-right: 8px;
 }
+
 /* Tag styles */
 .tags-container {
   display: flex;
@@ -309,8 +355,6 @@ h1 {
   background-color: #0056b3;
   transform: translateY(-2px);
 }
-
-
 
 /* Remove button styles */
 .tag-remove {
@@ -365,5 +409,13 @@ h1 {
   outline: none;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
-
+.success-message {
+  background-color: #28a745; /* Green color */
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  text-align: center;
+}
 </style>
