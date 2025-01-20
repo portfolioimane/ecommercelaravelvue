@@ -21,6 +21,8 @@ use App\Http\Controllers\Api\Backend\PaymentSettingController as BackendPaymentS
 use App\Http\Controllers\Api\Backend\HomePageHeaderController as BackendHomePageHeaderController;
 
 use App\Http\Controllers\Api\Backend\VariantCombinationController;
+use App\Http\Controllers\Api\Backend\ProductVariantController;
+
 
 
 
@@ -104,7 +106,16 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
     Route::apiResource('products', BackendProductsController::class);
     Route::apiResource('categories', BackendCategoriesController::class);
 
+
+Route::get('product/{productId}/productvariants', [ProductVariantController::class, 'index']);
+Route::put('productvariant/{id}', [ProductVariantController::class, 'update']);
+Route::delete('productvariant/{id}', [ProductVariantController::class, 'destroy']);
+
+
     Route::post('/variant-combinations/update', [VariantCombinationController::class, 'updateAllCombinations']);
+    // In routes/api.php
+    Route::get('/existing-combination-values/{productId}', [VariantCombinationController::class, 'getExistingCombinationValues']);
+
 
     
        Route::get('/variants', [VariantController::class, 'index']);

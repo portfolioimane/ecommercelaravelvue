@@ -69,6 +69,12 @@
             </li>
              <li>
               <router-link 
+                to="/admin/createproductvariant" 
+                class="sidebar-link" 
+                :class="{ active: isActive('/admin/createproductvariant') }">Create Product Variant</router-link>
+            </li>
+                 <li>
+              <router-link 
                 to="/admin/productvariant" 
                 class="sidebar-link" 
                 :class="{ active: isActive('/admin/productvariant') }">Product Variant</router-link>

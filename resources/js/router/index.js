@@ -26,7 +26,9 @@ import AdminDashboard from '../components/Admin/Dashboard/AdminDashboard.vue';
 import AddProduct from '../components/Admin/Products/AddProduct.vue';
 import EditProduct from '../components/Admin/Products/EditProduct.vue';
 import Products from '../components/Admin/Products/Products.vue';
+import CreateProductVariant from '../components/Admin/Products/CreateProductVariant.vue';
 import ProductVariant from '../components/Admin/Products/ProductVariant.vue';
+
 
 import Variant from '../components/Admin/Variant/Variant.vue';
 import CreateVariant from '../components/Admin/Variant/CreateVariant.vue';
@@ -147,6 +149,11 @@ const routes = [
         component: AddProduct,
       },
          {
+        path: 'createproductvariant',
+        name: 'CreateProductVariant',
+        component: CreateProductVariant,
+      },
+           {
         path: 'productvariant',
         name: 'ProductVariant',
         component: ProductVariant,

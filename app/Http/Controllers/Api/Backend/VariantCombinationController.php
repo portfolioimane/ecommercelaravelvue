@@ -8,6 +8,26 @@ use Illuminate\Support\Facades\Log;
 
 class VariantCombinationController extends Controller
 {
+
+public function getExistingCombinationValues($productId)
+{
+    // Fetch combinations for the specific product
+    $combinations = VariantCombination::where('product_id', $productId)->get();
+
+    // Debugging: log the raw combinations fetched from the database
+    \Log::debug('Fetched Combinations for Product ID ' . $productId, ['combinations' => $combinations]);
+
+    // Return only the combination_values as an array
+    $combinationValues = $combinations->pluck('combination_values')->toArray();
+
+    // Debugging: log the plucked combination values
+    \Log::debug('Plucked Combination Values for Product ID ' . $productId, ['combination_values' => $combinationValues]);
+
+    return $combinationValues;
+}
+
+
+
 public function updateAllCombinations(Request $request)
 {
     Log::debug('Received updateAllCombinations request', ['request_data' => $request->all()]);
