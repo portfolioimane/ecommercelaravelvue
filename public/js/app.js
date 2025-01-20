@@ -24108,18 +24108,19 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       if (valuesArray.length > 0) {
         var combinations = this.cartesianProduct.apply(this, valuesArray);
         this.combinationList = combinations.map(function (combination) {
-          var combinationString = combination.map(function (value, index) {
+          // Construct combination values as a JSON object (key-value pairs)
+          var combinationObject = combination.reduce(function (acc, value, index) {
             var _this4$selectedVarian;
             var variantName = (_this4$selectedVarian = _this4.selectedVariants[index]) === null || _this4$selectedVarian === void 0 ? void 0 : _this4$selectedVarian.name;
-            return "".concat(variantName, ": ").concat(value);
-          }).join(', '); // Join with commas to create a string like "size: small, color: red"
+            acc[variantName] = value; // Store as key-value pair in a JSON object
+            return acc;
+          }, {});
 
-          // Log the combination string and values
-          console.log('Combination String:', combinationString);
-          console.log('Combination Values:', combination);
+          // Log the combination object
+          console.log('Combination Object:', combinationObject);
           return {
-            combination: combinationString,
-            combinationValues: combination,
+            combinationValues: combinationObject,
+            // Send combinationValues as a JSON object
             price: '',
             image: null
           };
@@ -24127,28 +24128,6 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
         // Log the entire combinationList to see all combinations
         console.log('Combination List:', this.combinationList);
-      }
-    },
-    cartesianProduct: function cartesianProduct() {
-      for (var _len = arguments.length, arrays = new Array(_len), _key = 0; _key < _len; _key++) {
-        arrays[_key] = arguments[_key];
-      }
-      return arrays.reduce(function (a, b) {
-        return a.flatMap(function (d) {
-          return b.map(function (e) {
-            return [].concat(_toConsumableArray(d), [e]);
-          });
-        });
-      }, [[]]);
-    },
-    handleImageUpload: function handleImageUpload(event, index) {
-      var file = event.target.files[0];
-      if (file) {
-        this.combinationList[index].image = file; // Store the image file in the combination
-        console.log("Image uploaded for combination ".concat(index, ":"), file); // Debugging line
-      } else {
-        this.combinationList[index].image = null; // Clear image if none is selected
-        console.log("No image selected for combination ".concat(index)); // Debugging line
       }
     },
     updateAllCombinations: function updateAllCombinations() {
@@ -24162,7 +24141,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
               formData = new FormData();
               _this5.combinationList.forEach(function (combination, index) {
                 formData.append("combinations[".concat(index, "][product_id]"), _this5.selectedProductId);
-                formData.append("combinations[".concat(index, "][combination_values]"), JSON.stringify(combination.combinationValues));
+
+                // Send the combinationValues as a JSON string
+                formData.append("combinations[".concat(index, "][combination_values]"), JSON.stringify(combination.combinationValues) // Convert to JSON string before sending
+                );
                 if (combination.price) {
                   formData.append("combinations[".concat(index, "][price]"), combination.price);
                 }
@@ -24204,6 +24186,28 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           }
         }, _callee2, null, [[0, 11]]);
       }))();
+    },
+    cartesianProduct: function cartesianProduct() {
+      for (var _len = arguments.length, arrays = new Array(_len), _key = 0; _key < _len; _key++) {
+        arrays[_key] = arguments[_key];
+      }
+      return arrays.reduce(function (a, b) {
+        return a.flatMap(function (d) {
+          return b.map(function (e) {
+            return [].concat(_toConsumableArray(d), [e]);
+          });
+        });
+      }, [[]]);
+    },
+    handleImageUpload: function handleImageUpload(event, index) {
+      var file = event.target.files[0];
+      if (file) {
+        this.combinationList[index].image = file; // Store the image file in the combination
+        console.log("Image uploaded for combination ".concat(index, ":"), file); // Debugging line
+      } else {
+        this.combinationList[index].image = null; // Clear image if none is selected
+        console.log("No image selected for combination ".concat(index)); // Debugging line
+      }
     },
     isHexColor: function isHexColor(value) {
       var hexColorRegex = /^#([0-9A-F]{3}){1,2}$/i;
@@ -27159,8 +27163,14 @@ var _hoisted_18 = {
 var _hoisted_19 = {
   "class": "combination-value"
 };
-var _hoisted_20 = ["onUpdate:modelValue"];
-var _hoisted_21 = ["onChange"];
+var _hoisted_20 = {
+  key: 1
+};
+var _hoisted_21 = {
+  key: 2
+};
+var _hoisted_22 = ["onUpdate:modelValue"];
+var _hoisted_23 = ["onChange"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_cache[12] || (_cache[12] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h1", null, "Create Product Variant Combinations", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Product Selection "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[6] || (_cache[6] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "product"
@@ -27249,20 +27259,34 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }), 128 /* KEYED_FRAGMENT */))], 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedVariantId]])])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Variant Combinations "), $data.combinationList.length ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_16, [_cache[11] || (_cache[11] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Variant Combinations", -1 /* HOISTED */)), $data.successMessage ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_17, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.successMessage), 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_18, [_cache[10] || (_cache[10] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Combination"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Price"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Image")])], -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.combinationList, function (combination, index) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
       key: index
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(combination.combination), 1 /* TEXT */)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", _hoisted_19, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(combination.combinationValues, function (value, key, i) {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+        key: key
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("strong", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(key) + ":", 1 /* TEXT */), key === 'color' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+        key: 0,
+        style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)({
+          backgroundColor: value,
+          width: '20px',
+          height: '20px',
+          borderRadius: '50%',
+          display: 'inline-block',
+          marginLeft: '5px'
+        })
+      }, null, 4 /* STYLE */)) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(value), 1 /* TEXT */)), i < Object.keys(combination.combinationValues).length - 1 ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_21, ", ")) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Add comma between values, but not after the last one ")]);
+    }), 128 /* KEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
       type: "number",
       "onUpdate:modelValue": function onUpdateModelValue($event) {
         return combination.price = $event;
       },
       "class": "form-control",
       placeholder: "Price"
-    }, null, 8 /* PROPS */, _hoisted_20), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, combination.price]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+    }, null, 8 /* PROPS */, _hoisted_22), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, combination.price]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
       type: "file",
       onChange: function onChange($event) {
         return $options.handleImageUpload($event, index);
       },
       "class": "form-control"
-    }, null, 40 /* PROPS, NEED_HYDRATION */, _hoisted_21)])]);
+    }, null, 40 /* PROPS, NEED_HYDRATION */, _hoisted_23)])]);
   }), 128 /* KEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     onClick: _cache[5] || (_cache[5] = function () {
       return $options.updateAllCombinations && $options.updateAllCombinations.apply($options, arguments);

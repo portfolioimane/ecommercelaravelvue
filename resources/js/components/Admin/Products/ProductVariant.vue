@@ -95,7 +95,12 @@
   <tr v-for="(combination, index) in combinationList" :key="index">
     <td>
       <span class="combination-value">
-        {{ combination.combination }}
+        <span v-for="(value, key, i) in combination.combinationValues" :key="key">
+          <strong>{{ key }}:</strong> 
+          <span v-if="key === 'color'" :style="{ backgroundColor: value, width: '20px', height: '20px', borderRadius: '50%', display: 'inline-block', marginLeft: '5px' }"></span>
+          <span v-else>{{ value }}</span>
+          <span v-if="i < Object.keys(combination.combinationValues).length - 1">, </span> <!-- Add comma between values, but not after the last one -->
+        </span>
       </span>
     </td>
     <td>
@@ -115,6 +120,7 @@
     </td>
   </tr>
 </tbody>
+
 
       </table>
       <button @click="updateAllCombinations" class="btn btn-success update-btn">Update All Combinations</button>
@@ -202,20 +208,18 @@ generateCombinations() {
     const combinations = this.cartesianProduct(...valuesArray);
 
     this.combinationList = combinations.map(combination => {
-      const combinationString = combination
-        .map((value, index) => {
-          const variantName = this.selectedVariants[index]?.name;
-          return `${variantName}: ${value}`;
-        })
-        .join(', '); // Join with commas to create a string like "size: small, color: red"
+      // Construct combination values as a JSON object (key-value pairs)
+      const combinationObject = combination.reduce((acc, value, index) => {
+        const variantName = this.selectedVariants[index]?.name;
+        acc[variantName] = value; // Store as key-value pair in a JSON object
+        return acc;
+      }, {});
 
-      // Log the combination string and values
-      console.log('Combination String:', combinationString);
-      console.log('Combination Values:', combination);
+      // Log the combination object
+      console.log('Combination Object:', combinationObject);
 
       return {
-        combination: combinationString,
-        combinationValues: combination,
+        combinationValues: combinationObject, // Send combinationValues as a JSON object
         price: '',
         image: null,
       };
@@ -226,35 +230,18 @@ generateCombinations() {
   }
 },
 
-
-
-
-    cartesianProduct(...arrays) {
-      return arrays.reduce(
-        (a, b) => a.flatMap(d => b.map(e => [...d, e])),
-        [[]]
-      );
-    },
-
-handleImageUpload(event, index) {
-  const file = event.target.files[0];
-  if (file) {
-    this.combinationList[index].image = file; // Store the image file in the combination
-    console.log(`Image uploaded for combination ${index}:`, file); // Debugging line
-  } else {
-    this.combinationList[index].image = null; // Clear image if none is selected
-    console.log(`No image selected for combination ${index}`); // Debugging line
-  }
-},
-
-
 async updateAllCombinations() {
   try {
     const formData = new FormData();
 
     this.combinationList.forEach((combination, index) => {
       formData.append(`combinations[${index}][product_id]`, this.selectedProductId);
-      formData.append(`combinations[${index}][combination_values]`, JSON.stringify(combination.combinationValues));
+
+      // Send the combinationValues as a JSON string
+      formData.append(
+        `combinations[${index}][combination_values]`,
+        JSON.stringify(combination.combinationValues) // Convert to JSON string before sending
+      );
 
       if (combination.price) {
         formData.append(`combinations[${index}][price]`, combination.price);
@@ -277,14 +264,36 @@ async updateAllCombinations() {
 
     console.log('Combinations updated:', response);
     // Show success message
-        this.successMessage = 'All combinations updated successfully!';
+    this.successMessage = 'All combinations updated successfully!';
 
-        // Hide the success message after 5 seconds
-        setTimeout(() => {
-          this.successMessage = '';
-        }, 5000);
+    // Hide the success message after 5 seconds
+    setTimeout(() => {
+      this.successMessage = '';
+    }, 5000);
   } catch (error) {
     console.error('Error updating combinations:', error);
+  }
+},
+
+
+
+
+
+    cartesianProduct(...arrays) {
+      return arrays.reduce(
+        (a, b) => a.flatMap(d => b.map(e => [...d, e])),
+        [[]]
+      );
+    },
+
+handleImageUpload(event, index) {
+  const file = event.target.files[0];
+  if (file) {
+    this.combinationList[index].image = file; // Store the image file in the combination
+    console.log(`Image uploaded for combination ${index}:`, file); // Debugging line
+  } else {
+    this.combinationList[index].image = null; // Clear image if none is selected
+    console.log(`No image selected for combination ${index}`); // Debugging line
   }
 },
 
