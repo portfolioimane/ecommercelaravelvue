@@ -9,6 +9,11 @@
       </select>
     </div>
 
+    <!-- Create New Product Variant Button (shown only after product is selected) -->
+    <div v-if="selectedProductId" class="create-variant-button">
+      <button class="btn btn-success" @click="createNewProductVariant">Create New Product Variant</button>
+    </div>
+
     <div class="product-variants">
       <h2>Product Variants</h2>
       <table class="table">
@@ -23,13 +28,20 @@
         <tbody>
           <tr v-for="productvariant in productvariants" :key="productvariant.id">
             <td>
-              {{ productvariant.combination_values }}
+              <div class="combination-values">
+                <div v-for="(value, key) in productvariant.combination_values" :key="key" class="combination-item">
+                  <span>{{ key }}: </span>
+                  <span v-if="key === 'color'">
+                    <span class="color-circle" :style="{ backgroundColor: value }"></span>
+                  </span>
+                  <span v-else>{{ value }}</span>
+                </div>
+              </div>
             </td>
             <td>{{ productvariant.price }}</td>
             <td><img :src="getImagePath(productvariant.image)" alt="Product Variant Image" class="variant-image" /></td>
             <td>
-              <button class="btn btn-warning" @click="updateProductVariant(productvariant)">Update</button>
-              <button class="btn btn-danger" @click="deleteProductVariant(productvariant.id)">Delete</button>
+              <button class="btn btn-danger" @click="deleteProductVariantNow(productvariant.id)">Delete</button>
             </td>
           </tr>
         </tbody>
@@ -70,28 +82,25 @@ export default {
       }
     },
 
-    // Method to format combination values directly
-
-
     // Construct image path for variants
     getImagePath(image) {
       return `/${image}`;
     },
 
-    // Update method for product variant
-    updateProductVariant(productvariant) {
-      const updatedData = {
-        combination_values: '{"size": "large", "color": "#ff0000"}',
-        price: 250.00,
-        image: 'new_image_path.png'
-      };
-      this.updateProductVariant({ id: productvariant.id, productVariantData: updatedData });
-    },
-
     // Delete method for a product variant
-    deleteProductVariant(id) {
+    deleteProductVariantNow(id) {
       if (confirm('Are you sure you want to delete this product variant?')) {
         this.deleteProductVariant(id);
+      }
+    },
+
+    // Create New Product Variant
+    createNewProductVariant() {
+      if (this.selectedProductId) {
+        // Redirect to the create new product variant page with the selected product ID
+        this.$router.push(`/admin/createproductvariant/${this.selectedProductId}`);
+      } else {
+        alert('Please select a product first.');
       }
     }
   },
@@ -180,6 +189,11 @@ h2 {
   color: white;
 }
 
+.btn-success {
+  background-color: #4caf50;
+  color: white;
+}
+
 .btn:hover {
   opacity: 0.8;
 }
@@ -191,10 +205,28 @@ h2 {
 /* Style for the color circle */
 .color-circle {
   display: inline-block;
-  width: 25px;  /* Increase the size of the circle */
-  height: 25px; /* Make the circle slightly larger */
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  margin-left: 10px; /* Increase space between text and circle */
+  margin-left: 5px;
   border: 1px solid #ddd;
+}
+
+/* Horizontal alignment for combination values */
+.combination-values {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.combination-item {
+  margin-right: 15px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Optional additional spacing for combination items */
+.combination-item span {
+  margin-right: 5px;
 }
 </style>

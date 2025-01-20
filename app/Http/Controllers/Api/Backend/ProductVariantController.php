@@ -19,35 +19,7 @@ class ProductVariantController extends Controller
 
         return response()->json($productVariants);
     }
-
-    // Update a product variant
-    public function update(Request $request, $id)
-    {
-        Log::debug("Updating product variant with ID: {$id}"); // Log the variant ID
-
-        // Validate incoming data (optional, but good practice)
-        $validated = $request->validate([
-            'combination_values' => 'required|json',
-            'price' => 'required|numeric',
-            'image' => 'nullable|string'
-        ]);
-
-        Log::debug("Validated data: ", $validated); // Log the validated input data
-
-        $productVariant = VariantCombination::findOrFail($id);
-
-        // Log current data before update
-        Log::debug("Current product variant data: ", $productVariant->toArray());
-
-        $productVariant->combination_values = $validated['combination_values'];
-        $productVariant->price = $validated['price'];
-        $productVariant->image = $validated['image'];
-        $productVariant->save();
-
-        Log::debug("Updated product variant data: ", $productVariant->toArray()); // Log updated data
-
-        return response()->json($productVariant);
-    }
+    
 
     // Delete a product variant
     public function destroy($id)

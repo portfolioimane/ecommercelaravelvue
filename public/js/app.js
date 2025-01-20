@@ -24299,27 +24299,23 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
         this.fetchProductVariants(this.selectedProductId);
       }
     },
-    // Method to format combination values directly
     // Construct image path for variants
     getImagePath: function getImagePath(image) {
       return "/".concat(image);
     },
-    // Update method for product variant
-    updateProductVariant: function updateProductVariant(productvariant) {
-      var updatedData = {
-        combination_values: '{"size": "large", "color": "#ff0000"}',
-        price: 250.00,
-        image: 'new_image_path.png'
-      };
-      this.updateProductVariant({
-        id: productvariant.id,
-        productVariantData: updatedData
-      });
-    },
     // Delete method for a product variant
-    deleteProductVariant: function deleteProductVariant(id) {
+    deleteProductVariantNow: function deleteProductVariantNow(id) {
       if (confirm('Are you sure you want to delete this product variant?')) {
         this.deleteProductVariant(id);
+      }
+    },
+    // Create New Product Variant
+    createNewProductVariant: function createNewProductVariant() {
+      if (this.selectedProductId) {
+        // Redirect to the create new product variant page with the selected product ID
+        this.$router.push("/admin/createproductvariant/".concat(this.selectedProductId));
+      } else {
+        alert('Please select a product first.');
       }
     }
   }),
@@ -27442,16 +27438,28 @@ var _hoisted_2 = {
 };
 var _hoisted_3 = ["value"];
 var _hoisted_4 = {
-  "class": "product-variants"
+  key: 0,
+  "class": "create-variant-button"
 };
 var _hoisted_5 = {
+  "class": "product-variants"
+};
+var _hoisted_6 = {
   "class": "table"
 };
-var _hoisted_6 = ["src"];
-var _hoisted_7 = ["onClick"];
-var _hoisted_8 = ["onClick"];
+var _hoisted_7 = {
+  "class": "combination-values"
+};
+var _hoisted_8 = {
+  key: 0
+};
+var _hoisted_9 = {
+  key: 1
+};
+var _hoisted_10 = ["src"];
+var _hoisted_11 = ["onClick"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[2] || (_cache[2] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [_cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("label", {
     "for": "product"
   }, "Select Product:", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("select", {
     id: "product",
@@ -27467,24 +27475,34 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       key: product.id,
       value: product.id
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(product.name), 9 /* TEXT, PROPS */, _hoisted_3);
-  }), 128 /* KEYED_FRAGMENT */))], 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedProductId]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [_cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Product Variants", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_5, [_cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Combination"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Price"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Image"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Actions")])], -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.productvariants, function (productvariant) {
+  }), 128 /* KEYED_FRAGMENT */))], 544 /* NEED_HYDRATION, NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, $data.selectedProductId]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Create New Product Variant Button (shown only after product is selected) "), $data.selectedProductId ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    "class": "btn btn-success",
+    onClick: _cache[2] || (_cache[2] = function () {
+      return $options.createNewProductVariant && $options.createNewProductVariant.apply($options, arguments);
+    })
+  }, "Create New Product Variant")])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [_cache[5] || (_cache[5] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Product Variants", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_6, [_cache[4] || (_cache[4] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Combination"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Price"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Image"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", null, "Actions")])], -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($options.productvariants, function (productvariant) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", {
       key: productvariant.id
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(productvariant.combination_values), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(productvariant.price), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(productvariant.combination_values, function (value, key) {
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
+        key: key,
+        "class": "combination-item"
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(key) + ": ", 1 /* TEXT */), key === 'color' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+        "class": "color-circle",
+        style: (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeStyle)({
+          backgroundColor: value
+        })
+      }, null, 4 /* STYLE */)])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(value), 1 /* TEXT */))]);
+    }), 128 /* KEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(productvariant.price), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
       src: $options.getImagePath(productvariant.image),
       alt: "Product Variant Image",
       "class": "variant-image"
-    }, null, 8 /* PROPS */, _hoisted_6)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-      "class": "btn btn-warning",
-      onClick: function onClick($event) {
-        return $options.updateProductVariant(productvariant);
-      }
-    }, "Update", 8 /* PROPS */, _hoisted_7), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    }, null, 8 /* PROPS */, _hoisted_10)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("td", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
       "class": "btn btn-danger",
       onClick: function onClick($event) {
-        return $options.deleteProductVariant(productvariant.id);
+        return $options.deleteProductVariantNow(productvariant.id);
       }
-    }, "Delete", 8 /* PROPS */, _hoisted_8)])]);
+    }, "Delete", 8 /* PROPS */, _hoisted_11)])]);
   }), 128 /* KEYED_FRAGMENT */))])])])]);
 }
 
@@ -36052,7 +36070,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.product-selector[data-v-0f9aab06] {\n  padding: 20px;\n  font-family: Arial, sans-serif;\n}\n.form-group[data-v-0f9aab06] {\n  margin-bottom: 20px;\n}\n.form-group label[data-v-0f9aab06] {\n  font-size: 16px;\n  font-weight: bold;\n}\n.product-variants[data-v-0f9aab06] {\n  margin-top: 20px;\n}\nh2[data-v-0f9aab06] {\n  font-size: 24px;\n  font-weight: bold;\n  margin-bottom: 20px;\n}\n.table[data-v-0f9aab06] {\n  width: 100%;\n  border-collapse: collapse;\n  margin-top: 20px;\n}\n.table th[data-v-0f9aab06], .table td[data-v-0f9aab06] {\n  padding: 12px;\n  text-align: left;\n  border: 1px solid #ddd;\n}\n.table th[data-v-0f9aab06] {\n  background-color: #f4f4f4;\n}\n.variant-image[data-v-0f9aab06] {\n  width: 50px;\n  height: 50px;\n  -o-object-fit: cover;\n     object-fit: cover;\n  border-radius: 5px;\n}\n.btn[data-v-0f9aab06] {\n  padding: 6px 12px;\n  margin: 5px;\n  border: none;\n  cursor: pointer;\n  border-radius: 5px;\n  font-size: 14px;\n}\n.btn-warning[data-v-0f9aab06] {\n  background-color: #ff9800;\n  color: white;\n}\n.btn-danger[data-v-0f9aab06] {\n  background-color: #f44336;\n  color: white;\n}\n.btn[data-v-0f9aab06]:hover {\n  opacity: 0.8;\n}\n.table tr[data-v-0f9aab06]:hover {\n  background-color: #f9f9f9;\n}\n\n/* Style for the color circle */\n.color-circle[data-v-0f9aab06] {\n  display: inline-block;\n  width: 25px;  /* Increase the size of the circle */\n  height: 25px; /* Make the circle slightly larger */\n  border-radius: 50%;\n  margin-left: 10px; /* Increase space between text and circle */\n  border: 1px solid #ddd;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.product-selector[data-v-0f9aab06] {\n  padding: 20px;\n  font-family: Arial, sans-serif;\n}\n.form-group[data-v-0f9aab06] {\n  margin-bottom: 20px;\n}\n.form-group label[data-v-0f9aab06] {\n  font-size: 16px;\n  font-weight: bold;\n}\n.product-variants[data-v-0f9aab06] {\n  margin-top: 20px;\n}\nh2[data-v-0f9aab06] {\n  font-size: 24px;\n  font-weight: bold;\n  margin-bottom: 20px;\n}\n.table[data-v-0f9aab06] {\n  width: 100%;\n  border-collapse: collapse;\n  margin-top: 20px;\n}\n.table th[data-v-0f9aab06], .table td[data-v-0f9aab06] {\n  padding: 12px;\n  text-align: left;\n  border: 1px solid #ddd;\n}\n.table th[data-v-0f9aab06] {\n  background-color: #f4f4f4;\n}\n.variant-image[data-v-0f9aab06] {\n  width: 50px;\n  height: 50px;\n  -o-object-fit: cover;\n     object-fit: cover;\n  border-radius: 5px;\n}\n.btn[data-v-0f9aab06] {\n  padding: 6px 12px;\n  margin: 5px;\n  border: none;\n  cursor: pointer;\n  border-radius: 5px;\n  font-size: 14px;\n}\n.btn-warning[data-v-0f9aab06] {\n  background-color: #ff9800;\n  color: white;\n}\n.btn-danger[data-v-0f9aab06] {\n  background-color: #f44336;\n  color: white;\n}\n.btn-success[data-v-0f9aab06] {\n  background-color: #4caf50;\n  color: white;\n}\n.btn[data-v-0f9aab06]:hover {\n  opacity: 0.8;\n}\n.table tr[data-v-0f9aab06]:hover {\n  background-color: #f9f9f9;\n}\n\n/* Style for the color circle */\n.color-circle[data-v-0f9aab06] {\n  display: inline-block;\n  width: 20px;\n  height: 20px;\n  border-radius: 50%;\n  margin-left: 5px;\n  border: 1px solid #ddd;\n}\n\n/* Horizontal alignment for combination values */\n.combination-values[data-v-0f9aab06] {\n  display: flex;\n  align-items: center;\n  flex-wrap: wrap;\n}\n.combination-item[data-v-0f9aab06] {\n  margin-right: 15px;\n  display: inline-flex;\n  align-items: center;\n}\n\n/* Optional additional spacing for combination items */\n.combination-item span[data-v-0f9aab06] {\n  margin-right: 5px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -47814,7 +47832,7 @@ var routes = [{
     path: 'products/add',
     component: _components_Admin_Products_AddProduct_vue__WEBPACK_IMPORTED_MODULE_18__["default"]
   }, {
-    path: 'createproductvariant',
+    path: 'createproductvariant/:id',
     name: 'CreateProductVariant',
     component: _components_Admin_Products_CreateProductVariant_vue__WEBPACK_IMPORTED_MODULE_21__["default"]
   }, {

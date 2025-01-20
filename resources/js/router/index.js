@@ -149,7 +149,7 @@ const routes = [
         component: AddProduct,
       },
          {
-        path: 'createproductvariant',
+        path: 'createproductvariant/:id',
         name: 'CreateProductVariant',
         component: CreateProductVariant,
       },
