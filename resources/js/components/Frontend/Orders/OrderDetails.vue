@@ -32,6 +32,8 @@
         <thead>
           <tr>
             <th>Product</th>
+            <th>Image</th>
+            <th>Variant</th>
             <th>Price</th>
             <th>Quantity</th>
             <th>Subtotal</th>
@@ -40,9 +42,43 @@
         <tbody>
           <tr v-for="item in order.order_items" :key="item.id">
             <td>{{ item.product.name }}</td>
-            <td>${{ item.product.price }}</td>
+<td>
+  <img 
+    :src="item.variant && item.variant.image ? `/${item.variant.image}` : `/${item.product.image}`" 
+    alt="Product Image" 
+    width="50" 
+    height="50" 
+    class="product-image"
+  />
+</td>
+
+
+
+          <td>
+  <div v-if="item.variant?.combination_values" class="combination-values">
+    <div 
+      v-for="(value, key) in item.variant.combination_values" 
+      :key="key" 
+      class="combination-item"
+    >
+      <span class="key-label">{{ key }}:</span>
+      <span v-if="key === 'color'">
+        <span 
+          class="color-circle" 
+          :style="{ backgroundColor: value }"
+        ></span>
+      </span>
+      <span v-else>{{ value }}</span>
+    </div>
+  </div>
+  <span v-else>N/A</span>
+</td>
+
+<td>
+  ${{ item.variant ? item.variant.price : item.product.price }}
+</td>
             <td>{{ item.quantity }}</td>
-            <td>${{ (item.product.price * item.quantity).toFixed(2) }}</td>
+            <td>${{ ((item.variant ? item.variant.price : item.product.price) * item.quantity).toFixed(2) }}</td>
           </tr>
         </tbody>
       </table>
@@ -228,4 +264,13 @@ $box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+.color-circle {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  margin-left: 5px;
+}
+
 </style>

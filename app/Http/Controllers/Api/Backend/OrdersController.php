@@ -18,7 +18,10 @@ class OrdersController extends Controller
         Log::info('Fetching all orders'); // Log entry
 
         try {
-            $orders = Order::with('orderItems')->get(); // Fetch orders with their items
+            $orders = Order::with([
+        'orderItems.product',          // Load the related product for each cart item
+        'orderItems.variant'           // Load the associated variant for each cart item
+         ])->get(); // Fetch orders with their items
             Log::info('Orders fetched successfully', ['orders_count' => $orders->count()]); // Log success
         } catch (\Exception $e) {
             Log::error('Error fetching orders: ' . $e->getMessage()); // Log error
@@ -40,7 +43,10 @@ public function show($orderId)
 
     try {
         // Eager load OrderItems and their associated Product model
-        $order = Order::with('orderItems.product')->find($orderId); // Load related product for each order item
+        $order = Order::with([
+        'orderItems.product',          // Load the related product for each cart item
+        'orderItems.variant'           // Load the associated variant for each cart item
+         ])->find($orderId); // Load related product for each order item
 
         if (!$order) {
             Log::warning('Order not found', ['order_id' => $orderId]); // Log warning

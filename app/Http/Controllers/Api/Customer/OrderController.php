@@ -28,7 +28,10 @@ class OrderController extends Controller
 {
     // Retrieve all orders for the authenticated user along with their order items and associated products
     $orders = Order::where('user_id', $request->user()->id)  // Filter by the authenticated user's ID
-        ->with('orderItems.product')  // Include related order items and their products
+        ->with([
+        'orderItems.product',          // Load the related product for each cart item
+        'orderItems.variant'           // Load the associated variant for each cart item
+         ])  // Include related order items and their products
         ->get();  // Retrieve all matching orders
 
     return response()->json($orders, 200);  // Return the orders as a JSON response
@@ -156,6 +159,7 @@ public function confirmPaypalPayment(Request $request)
             OrderItem::create([
                 'order_id' => $order->id,
                 'product_id' => $item['product_id'],
+                'variant_id' => $item['variant_id'],
                 'quantity' => $item['quantity'],
             ]);
         }
@@ -174,7 +178,10 @@ public function confirmPaypalPayment(Request $request)
     public function show($id)
     {
         // Retrieve the order by its ID, including its items and associated products
-        $order = Order::with('orderItems.product')->find($id);
+        $order = Order::with([
+        'orderItems.product',          // Load the related product for each cart item
+        'orderItems.variant'           // Load the associated variant for each cart item
+         ])->find($id);
 
 
         if ($order) {

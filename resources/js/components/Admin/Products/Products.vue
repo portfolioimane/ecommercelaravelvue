@@ -25,7 +25,7 @@
           <td>{{ product.category.name}}</td>
           <td>
             <img 
-              :src="product.image ? `/storage/${product.image}` : '/images/products/default-product.png'" 
+              :src="product.image ? `/${product.image}` : '/images/products/default-product.png'" 
               alt="Product Image" 
               class="product-image"
             />

@@ -15,6 +15,7 @@ public function up()
         $table->id();
         $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
         $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
+        $table->foreignId('variant_id')->nullable()->constrained('variant_combinations')->onDelete('set null'); 
         $table->integer('quantity');
         $table->timestamps();
     });

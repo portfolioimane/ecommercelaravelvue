@@ -18,36 +18,38 @@ class ProductsController extends Controller
         return response()->json($products);
     }
 
-    public function store(Request $request)
-    {
-        // Validate and create a new product
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
-            'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+public function store(Request $request)
+{
+    // Validate and create a new product
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'price' => 'required|numeric',
+        'stock' => 'required|integer',
+        'category_id' => 'required|exists:categories,id',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        if ($validator->fails()) {
-            Log::error('Validation failed', ['errors' => $validator->errors()]);
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $data = $request->all();
-
-        // Store image if uploaded
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('images/products', 'public');
-            $data['image'] = $path;
-            Log::info('Image uploaded', ['path' => $path]);
-        }
-
-        $product = Product::create($data);
-        Log::info('New product created', ['product' => $product]);
-        return response()->json($product, 201);
+    if ($validator->fails()) {
+        Log::error('Validation failed', ['errors' => $validator->errors()]);
+        return response()->json(['errors' => $validator->errors()], 422);
     }
+
+    $data = $request->all();
+
+    // Store image if uploaded
+    if ($request->hasFile('image')) {
+        $path = $request->file('image')->store('images/products', 'public');
+        // Prepend 'storage/' to the image path
+        $data['image'] = 'storage/' . $path;
+        Log::info('Image uploaded', ['path' => $path]);
+    }
+
+    $product = Product::create($data);
+    Log::info('New product created', ['product' => $product]);
+    return response()->json($product, 201);
+}
+
 
     public function show($id)
     {
@@ -57,39 +59,41 @@ class ProductsController extends Controller
         return response()->json($product);
     }
 
-    public function update(Request $request, $id)
-    {
-        // Validate and update a product
-        $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'sometimes|required|numeric',
-            'stock' => 'sometimes|required|integer',
-            'category_id' => 'sometimes|required|exists:categories,id',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+ public function update(Request $request, $id)
+{
+    // Validate and update a product
+    $validator = Validator::make($request->all(), [
+        'name' => 'sometimes|required|string|max:255',
+        'description' => 'nullable|string',
+        'price' => 'sometimes|required|numeric',
+        'stock' => 'sometimes|required|integer',
+        'category_id' => 'sometimes|required|exists:categories,id',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        if ($validator->fails()) {
-            Log::error('Validation failed on update', ['errors' => $validator->errors()]);
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $product = Product::findOrFail($id);
-        $data = $request->all();
-
-        // Store new image if uploaded, and delete the old one
-        if ($request->hasFile('image')) {
-            if ($product->image) {
-                Storage::delete('public/' . $product->image);
-            }
-            $path = $request->file('image')->store('images/products', 'public');
-            $data['image'] = $path;
-        }
-
-        $product->update($data);
-        Log::info('Product updated', ['product' => $product]);
-        return response()->json($product);
+    if ($validator->fails()) {
+        Log::error('Validation failed on update', ['errors' => $validator->errors()]);
+        return response()->json(['errors' => $validator->errors()], 422);
     }
+
+    $product = Product::findOrFail($id);
+    $data = $request->all();
+
+    // Store new image if uploaded, and delete the old one
+    if ($request->hasFile('image')) {
+        if ($product->image) {
+            Storage::delete('public/' . $product->image);
+        }
+        $path = $request->file('image')->store('images/products', 'public');
+        // Prepend 'storage/' to the new image path
+        $data['image'] = 'storage/' . $path;
+    }
+
+    $product->update($data);
+    Log::info('Product updated', ['product' => $product]);
+    return response()->json($product);
+}
+
 
     public function destroy($id)
     {
