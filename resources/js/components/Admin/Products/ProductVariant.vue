@@ -42,6 +42,7 @@
             <td>{{ productvariant.price }}</td>
             <td><img :src="getImagePath(productvariant.image)" alt="Product Variant Image" class="variant-image" /></td>
             <td>
+              <button class="btn btn-warning" @click="editProductVariant(productvariant)">Update</button>
               <button class="btn btn-danger" @click="openDeleteModal(productvariant.id)">Delete</button>
             </td>
           </tr>
@@ -64,8 +65,44 @@
         </div>
       </div>
     </div>
+
+    <!-- Update Product Variant Modal -->
+    <div v-if="showUpdateModal" class="modal-overlay" @click="closeUpdateModal">
+      <div class="modal-content" @click.stop>
+        <h3>Update Product Variant</h3>
+
+        <!-- Price Input -->
+        <div class="form-group">
+          <label for="price">Price:</label>
+          <input type="number" id="price" v-model="updatedPrice" class="form-control" />
+        </div>
+
+        <!-- Image Upload -->
+        <div class="form-group">
+          <label for="image">Image:</label>
+          <input 
+            type="file" 
+            id="image" 
+            @change="handleImageUpload" 
+            class="form-control" 
+            accept="image/*" 
+          />
+          <div v-if="previewImage" class="image-preview">
+            <img :src="previewImage" alt="Selected Image" class="img-thumbnail" />
+          </div>
+        </div>
+
+        <!-- Modal Buttons -->
+        <div class="modal-buttons">
+          <button class="btn btn-success" @click="editProductVariantNow">Save Changes</button>
+          <button class="btn btn-secondary" @click="closeUpdateModal">Cancel</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
+
+
 
 <script>
 import { mapGetters, mapActions } from "vuex";
@@ -76,6 +113,11 @@ export default {
       selectedProductId: null,
       showDeleteModal: false,
       productVariantToDelete: null,
+      showUpdateModal: false,
+      productVariantToUpdate: null,
+      updatedPrice: null,
+      updatedImage: null,
+      previewImage: null // For previewing the selected image
     };
   },
 
@@ -128,27 +170,77 @@ export default {
     // Create New Product Variant
     createNewProductVariant() {
       if (this.selectedProductId) {
-        // Redirect to the create new product variant page with the selected product ID
         this.$router.push(`/admin/createproductvariant/${this.selectedProductId}`);
       } else {
         alert('Please select a product first.');
+      }
+    },
+
+    // Open the update modal and set initial values
+    editProductVariant(productvariant) {
+      this.productVariantToUpdate = productvariant;
+      this.updatedPrice = productvariant.price;
+      this.updatedImage = productvariant.image;
+      this.previewImage = this.getImagePath(productvariant.image); // Set preview image
+      this.showUpdateModal = true;
+    },
+
+    // Close the update modal
+    closeUpdateModal() {
+      this.showUpdateModal = false;
+      this.productVariantToUpdate = null;
+      this.updatedPrice = null;
+      this.updatedImage = null;
+      this.previewImage = null; // Reset preview image
+    },
+
+    // Handle image file upload
+    handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.previewImage = e.target.result; // Set image preview
+          this.updatedImage = file; // Store the file for upload
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+
+    // Update the product variant
+    async editProductVariantNow() {
+      if (this.productVariantToUpdate) {
+        const variantId = this.productVariantToUpdate.id;
+
+        const formData = new FormData();
+        formData.append("_method", "PUT");
+        formData.append("price", this.updatedPrice);
+        if (this.updatedImage) {
+          formData.append("image", this.updatedImage);
+      }
+
+        await this.updateProductVariant({
+          id: variantId,
+          formData,
+        });
+
+        this.closeUpdateModal();
       }
     }
   },
 
   watch: {
-    // Watch for route changes (if needed to refetch)
     $route() {
       this.fetchVariantsAndValues();
     }
   },
 
   mounted() {
-    this.fetchProducts(); // Fetch products when the component is mounted
+    this.fetchProducts();
   },
 
   created() {
-    this.fetchProducts(); // Ensure products are fetched when the component is created
+    this.fetchProducts();
   }
 };
 </script>

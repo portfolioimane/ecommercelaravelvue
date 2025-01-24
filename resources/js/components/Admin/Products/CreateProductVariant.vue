@@ -100,7 +100,7 @@
           <strong>{{ key }}:</strong> 
           <span v-if="key === 'color'" :style="{ backgroundColor: value, width: '20px', height: '20px', borderRadius: '50%', display: 'inline-block', marginLeft: '5px' }"></span>
           <span v-else>{{ value }}</span>
-          <span v-if="i < Object.keys(combination.combinationValues).length - 1">, </span> <!-- Add comma between values, but not after the last one -->
+          <span v-if="i < Object.keys(combination.combinationValues).length - 1">, </span>
         </span>
       </span>
     </td>
@@ -118,9 +118,12 @@
         @change="handleImageUpload($event, index)"
         class="form-control"
       />
+      <span v-if="errorFile" class="text-danger">{{ errorFile }}</span> <!-- Show error message -->
     </td>
   </tr>
 </tbody>
+
+
 
 
       </table>
@@ -137,6 +140,7 @@ export default {
   data() {
     return {
       successMessage: '', // Store the success message
+      errorFile: '',
       notificationMessage: '', // Store the notification message
       selectedProductId: null,  // Will be set based on route
       selectedVariantId: '',
@@ -310,16 +314,29 @@ export default {
       );
     },
 
-    handleImageUpload(event, index) {
-      const file = event.target.files[0];
-      if (file) {
-        this.combinationList[index].image = file; // Store the image file in the combination
-        console.log(`Image uploaded for combination ${index}:`, file); // Debugging line
-      } else {
-        this.combinationList[index].image = null; // Clear image if none is selected
-        console.log(`No image selected for combination ${index}`); // Debugging line
-      }
-    },
+handleImageUpload(event, index) {
+  const file = event.target.files[0];
+  this.errorFile = ''; // Clear previous errors
+
+  if (file) {
+    const maxSize = 2 * 1024 * 1024; // 2 MB in bytes
+    console.log('filesize', file.size);
+
+    if (file.size > maxSize) {
+      this.errorFile = `Error: File size cannot exceed 2 MB`; // Set the error message
+      this.combinationList[index].image = null; // Clear the selected image
+      console.log(`Error: File size exceeds 2 MB for combination ${index}`);
+    } else {
+      this.combinationList[index].image = file; // Store the valid image
+      console.log(`Image uploaded for combination ${index}:`, file);
+    }
+  } else {
+    this.combinationList[index].image = null; // Clear image if none is selected
+    console.log(`No image selected for combination ${index}`);
+  }
+},
+
+
 
     isHexColor(value) {
       const hexColorRegex = /^#([0-9A-F]{3}){1,2}$/i;
@@ -460,7 +477,7 @@ h1 {
   text-align: center;
 }
 .notification-message {
-  background-color: #1F2A44;
+  background-color:#e67600;
   color: #fff;
   padding: 10px;
   border: 1px solid #c3e6cb;

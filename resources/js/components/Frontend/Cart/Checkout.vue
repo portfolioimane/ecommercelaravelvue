@@ -81,17 +81,46 @@
         </form>
       </div>
 
-      <div class="col-md-6">
-        <h4 class="mb-4 text-center">Order Summary</h4>
-        <ul class="list-group">
-          <li v-for="item in cartItems" :key="item.id" class="list-group-item d-flex justify-content-between align-items-center">
-            <span>{{ item.product.name }} (x{{ item.quantity }})</span>
-            <span>${{ item.product.price }}</span>
-            <span class="text-golden">${{ (item.quantity * item.product.price).toFixed(2) }}</span>
-          </li>
-        </ul>
-        <h5 class="text-end mt-4">Total: <span class="text-golden">${{ totalCartValue.toFixed(2) }}</span></h5>
+<div class="col-md-6">
+  <h4 class="mb-4 text-center">Order Summary</h4>
+  <ul class="list-group">
+    <li 
+      v-for="item in cartItems" 
+      :key="item.id" 
+      class="list-group-item d-flex flex-column align-items-start"
+    >
+<div class="d-flex justify-content-between align-items-center w-100">
+  <span>{{ item.product.name }} (x{{ item.quantity }})</span>
+  <span>${{ item.variant?.price || item.product.price }}</span>
+  <span class="text-golden">
+    ${{ (item.quantity * (item.variant?.price || item.product.price)).toFixed(2) }}
+  </span>
+</div>
+
+      
+      <!-- Combination Values -->
+      <div v-if="item.variant?.combination_values" class="combination-values mt-2">
+        <div 
+          v-for="(value, key) in item.variant.combination_values" 
+          :key="key" 
+          class="combination-item"
+        >
+          <span class="key-label">{{ key }}:</span>
+          <span v-if="key === 'color'">
+            <span 
+              class="color-circle" 
+              :style="{ backgroundColor: value }"
+            ></span>
+          </span>
+          <span v-else>{{ value }}</span>
+        </div>
       </div>
+      <span v-else class="text-muted mt-2"></span>
+    </li>
+  </ul>
+  <h5 class="text-end mt-4">Total: <span class="text-golden">${{ totalCartValue.toFixed(2) }}</span></h5>
+</div>
+
     </div>
   </div>
 </template>
@@ -458,5 +487,33 @@ h2, h4 {
   background-color: #E6B800;
   border-color: #E6B800;
 }
+
+.combination-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.combination-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.key-label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.color-circle {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  margin-left: 5px;
+}
+
 
 </style>

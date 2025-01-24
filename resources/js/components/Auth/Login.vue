@@ -58,7 +58,7 @@ async loginUser() {
       this.$router.push({ name: 'AdminDashboard' }); // Adjust route name as needed
     } else {
       console.log('User is not admin, redirecting to ProductList.');
-      const redirect = this.$route.query.redirect || 'ProductList';
+      const redirect = this.$route.query.redirect || 'Home';
       this.$router.push({ name: redirect });
     }
   } catch (err) {

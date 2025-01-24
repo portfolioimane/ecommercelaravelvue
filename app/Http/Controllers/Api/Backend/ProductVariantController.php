@@ -5,6 +5,8 @@ use App\Http\Controllers\Controller;
 use App\Models\VariantCombination;  // It's still VariantCombination as per database, but we'll use productvariant in API
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log; // Import the Log facade
+use Illuminate\Support\Facades\Storage;
+
 
 class ProductVariantController extends Controller
 {
@@ -19,7 +21,48 @@ class ProductVariantController extends Controller
 
         return response()->json($productVariants);
     }
-    
+
+    // Update a product variant
+public function update(Request $request, $id)
+{
+    Log::debug("Updating product variant with ID: {$id}"); // Log the variant ID
+
+    // Validate incoming data
+    $validatedData = $request->validate([
+        'price' => 'required|numeric', // Ensure price is required and numeric
+    ]);
+
+    // Find the product variant by ID
+    $productVariant = VariantCombination::findOrFail($id);
+
+    // If there's an image, handle the file upload
+    if ($request->hasFile('image')) {
+        // Store the new image in the 'variant_images' folder in the public disk
+        $imagePath = $request->file('image')->store('variant_images', 'public');
+        
+        // Add the 'storage/' prefix to the path
+        $imagePath = 'storage/' . $imagePath; 
+
+        Log::debug('Image uploaded', ['image_path' => $imagePath]); // Log the image path
+
+        // Remove the old image if exists
+        if ($productVariant->image) {
+            Storage::disk('public')->delete($productVariant->image);
+        }
+
+        // Add the new image path to the validated data
+        $validatedData['image'] = $imagePath;
+    }
+
+    // Update the product variant with the validated data
+    $productVariant->update($validatedData);
+
+    Log::debug("Updated product variant with ID: {$id}"); // Log that update was successful
+
+    return response()->json($productVariant);
+}
+
+
 
     // Delete a product variant
     public function destroy($id)

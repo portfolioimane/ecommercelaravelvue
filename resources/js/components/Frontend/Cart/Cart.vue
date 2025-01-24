@@ -13,6 +13,7 @@
         <thead>
           <tr>
             <th scope="col">Product</th>
+            <th scope="col">Variant</th>
             <th scope="col">Price</th>
             <th scope="col">Quantity</th>
             <th scope="col">Total</th>
@@ -26,9 +27,34 @@
               <img :src="`/storage/${item.product.image}`"  alt="Product Image" class="cart-item-image" />
               <div class="product-name">{{ item.product.name }}</div>
             </td>
+<td>
+  <div v-if="item.variant?.combination_values" class="combination-values">
+    <div 
+      v-for="(value, key) in item.variant.combination_values" 
+      :key="key" 
+      class="combination-item"
+    >
+      <span class="key-label">{{ key }}:</span>
+      <span v-if="key === 'color'">
+        <span 
+          class="color-circle" 
+          :style="{ backgroundColor: value }"
+        ></span>
+      </span>
+      <span v-else>{{ value }}</span>
+    </div>
+  </div>
+  <span v-else>N/A</span>
+</td>
             <!-- Product Price -->
-            <td class="align-middle">${{ item.product.price }}</td>
-            <!-- Product Quantity -->
+<td class="align-middle">
+  <span v-if="item.variant?.price">
+    ${{ item.variant.price }}
+  </span>
+  <span v-else>
+    ${{ item.product.price }}
+  </span>
+</td>            <!-- Product Quantity -->
             <td class="align-middle">
               <div class="quantity-container">
                 <button
@@ -49,8 +75,14 @@
             </td>
             <!-- Product Total -->
 <td class="align-middle">
-  ${{ (item.product.price * item.quantity).toFixed(2) }}
+  <span v-if="item.variant?.price">
+    ${{ (item.variant.price * item.quantity).toFixed(2) }}
+  </span>
+  <span v-else>
+    ${{ (item.product.price * item.quantity).toFixed(2) }}
+  </span>
 </td>
+
             <!-- Remove Button -->
             <td class="align-middle">
               <button
@@ -93,6 +125,7 @@ export default {
   },
   computed: {
     cartItems() {
+
       return this.$store.getters['cart/cartItems'] || [];
     },
     totalCartValue() {
@@ -104,6 +137,7 @@ export default {
     async fetchCart() {
       try {
         await this.$store.dispatch('cart/fetchCart');
+               console.log('Fetched cart data:', this.cartItems); // Log cart items after fetching
       } catch (error) {
         console.error('Error fetching cart data:', error);
       } finally {
@@ -262,6 +296,32 @@ color:#000 !important;
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+.combination-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.combination-item {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.key-label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.color-circle {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  margin-left: 5px;
 }
 
 </style>

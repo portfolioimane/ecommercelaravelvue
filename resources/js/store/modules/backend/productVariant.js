@@ -29,9 +29,9 @@ const actions = {
       console.error('Error fetching product variants:', error);
     }
   },
-  async updateProductVariant({ commit }, { id, productVariantData }) {
+  async updateProductVariant({ commit }, { id, formData }) {
     try {
-      const response = await axios.put(`/admin/productvariant/${id}`, productVariantData);
+      const response = await axios.post(`/admin/productvariantupdate/${id}`, formData);
       commit('UPDATE_PRODUCTVARIANT', response.data);
     } catch (error) {
       console.error('Error updating product variant:', error);

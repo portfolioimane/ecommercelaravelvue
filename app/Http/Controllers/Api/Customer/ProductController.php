@@ -27,4 +27,15 @@ class ProductController extends Controller
 
         return response()->json(['message' => 'Product not found'], 404);
     }
+    
+    public function getProductVariants($productId)
+    {
+        $product = Product::with('variants')->find($productId);
+
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+
+        return response()->json($product->variants, 200);
+    }
 }

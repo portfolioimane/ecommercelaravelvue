@@ -48,9 +48,13 @@ private function getCart(Request $request, $type)
         Log::info('Authenticated User ID: ' . auth()->user()->id);
 
         // Fetch the cart for the authenticated user
-        $cart = Cart::where('user_id', auth()->user()->id)
-                    ->with('cartItems.product')
-                    ->first(); // A user should only have one cart
+       $cart = Cart::where('user_id', auth()->user()->id)
+          ->with([
+        'cartItems.product',          // Load the related product for each cart item
+        'cartItems.variant'           // Load the associated variant for each cart item
+         ])
+    ->first(); // A user should only have one cart
+
 
         // Log if a cart is found or not
         if ($cart) {
@@ -67,9 +71,12 @@ private function getCart(Request $request, $type)
 
         if ($sessionId) {
             // Retrieve the cart for the guest using session_id
-            $cart = Cart::where('session_id', $sessionId)
-                        ->with('cartItems.product')
-                        ->first(); // A guest should also have one cart
+         $cart = Cart::where('session_id', $sessionId)
+    ->with([
+        'cartItems.product',          // Load the related product for each cart item
+        'cartItems.variant'           // Load the associated variant for each cart item
+    ])
+    ->first(); // A guest should also have one cart
 
             // Log if a cart is found or not
             if ($cart) {
@@ -98,6 +105,7 @@ public function addToAuthenticatedCart(Request $request)
     $data = $request->validate([
         'product_id' => 'required|integer',
         'quantity' => 'required|integer|min:1',
+        'variant_id' => 'nullable|integer',  // Optional variant_id
     ]);
 
     // Retrieve the cart for the authenticated user
@@ -120,7 +128,9 @@ public function addToGuestCart(Request $request)
     $data = $request->validate([
         'product_id' => 'required|integer',
         'quantity' => 'required|integer|min:1',
+        'variant_id' => 'nullable|integer',  // Optional variant_id
     ]);
+        \Log::debug('Validated data: ', $data);
 
     // Ensure session_id is provided, if not, return an error
     if (!$sessionId) {
@@ -139,10 +149,14 @@ public function addToGuestCart(Request $request)
 
 private function addToCart($cart, $data)
 {
+            \Log::debug('Validated data ADD: ', $data);
+
     // Find existing cart item or create a new one
     $cartItem = CartItem::where('cart_id', $cart->id)
                         ->where('product_id', $data['product_id'])
+                        ->where('variant_id', $data['variant_id'])
                         ->first();
+
 
     if ($cartItem) {
         // If cart item exists, update the quantity
@@ -154,7 +168,9 @@ private function addToCart($cart, $data)
         $cartItem = CartItem::create([
             'cart_id' => $cart->id,
             'product_id' => $data['product_id'],
+            'variant_id' => $data['variant_id'],
             'quantity' => $data['quantity']
+
         ]);
     }
 

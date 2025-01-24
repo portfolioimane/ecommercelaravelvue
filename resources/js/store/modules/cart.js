@@ -50,30 +50,32 @@ async fetchCart({ commit }) {
   }
 },
 
+async addProductToCart({ commit }, { product, quantity, variant_id }) {
+  try {
+    const isAuthenticated = sessionStorage.getItem('user-token') !== null;
 
-  async addProductToCart({ commit }, { product, quantity }) {
-    try {
-      const isAuthenticated = sessionStorage.getItem('user-token') !== null;
-
-      if (isAuthenticated) {
-        // Authenticated user: no session_id required
-        const response = await axios.post('/cart/add', {
-          product_id: product.id,
-          quantity,
-        });
-        commit('setCart', response.data.cart_items);
-      } else {
-        // Guest user: session_id is required
-        const response = await axios.post('/cartguest/add', {
-          product_id: product.id,
-          quantity,
-        });
-        commit('setCart', response.data.cart_items);
-      }
-    } catch (error) {
-      console.error('Error adding product to cart:', error);
+    if (isAuthenticated) {
+      // Authenticated user: no session_id required
+      const response = await axios.post('/cart/add', {
+        product_id: product.id,
+        quantity,
+        variant_id, // Include variant_id in the request
+      });
+      commit('setCart', response.data.cart_items);
+    } else {
+      // Guest user: session_id is required
+      const response = await axios.post('/cartguest/add', {
+        product_id: product.id,
+        quantity,
+        variant_id, // Include variant_id in the request
+      });
+      commit('setCart', response.data.cart_items);
     }
-  },
+  } catch (error) {
+    console.error('Error adding product to cart:', error);
+  }
+},
+
 
   async removeProductFromCart({ commit }, itemId) {
     try {
@@ -109,12 +111,16 @@ const getters = {
     // Return 0 if cart is empty or undefined
     return state.cart ? state.cart.reduce((total, item) => total + item.quantity, 0) : 0;
   },
-  totalCartValue: (state) =>
-    parseFloat(
-      state.cart
-        .reduce((total, item) => total + item.quantity * item.product.price, 0)
-        .toFixed(2)
-    ),
+totalCartValue: (state) =>
+  parseFloat(
+    state.cart
+      .reduce((total, item) => {
+        const price = item.variant?.price || item.product.price; // Use variant price if available, otherwise use product price
+        return total + item.quantity * price;
+      }, 0)
+      .toFixed(2)
+  ),
+
 };
 
 export default {

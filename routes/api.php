@@ -53,6 +53,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::prefix('store')->group(function () {
     Route::get('/products', [ProductController::class, 'index']);
     Route::get('/products/{id}', [ProductController::class, 'show']);
+    Route::get('/products/{productId}/variants', [ProductController::class, 'getProductVariants']);
 });
 
 // Cart Routes
@@ -108,7 +109,7 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
 
 
 Route::get('product/{productId}/productvariants', [ProductVariantController::class, 'index']);
-Route::put('productvariant/{id}', [ProductVariantController::class, 'update']);
+Route::put('productvariantupdate/{id}', [ProductVariantController::class, 'update']);
 Route::delete('productvariant/{id}', [ProductVariantController::class, 'destroy']);
 
 
