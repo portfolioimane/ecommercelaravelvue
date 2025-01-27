@@ -133,7 +133,7 @@ export default {
           name: newUser.name || "",
           email: newUser.email || "",
           phone: newUser.phone || "",
-          avatarPreview: newUser.avatar ? `/storage/${newUser.avatar}` : "", 
+          avatarPreview: newUser.avatar ? `/${newUser.avatar}` : "", 
         };
       }
       this.isLoading = false; 

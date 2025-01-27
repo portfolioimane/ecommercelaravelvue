@@ -23,7 +23,7 @@
           </router-link>
         </li>
 
-               <!-- Variants Section (Dropdown) -->
+        <!-- Variants Section (Dropdown) -->
         <li>
           <div @click="toggleVariantsDropdown" class="dropdown-header">
             <i class="material-icons sidebar-icon">layers</i>
@@ -37,8 +37,6 @@
                 class="sidebar-link" 
                 :class="{ active: isActive('/admin/variant') }">All Variants</router-link>
             </li>
-       
-                 
           </ul>
         </li>
         
@@ -62,8 +60,7 @@
                 class="sidebar-link" 
                 :class="{ active: isActive('/admin/products/add') }">Add Product</router-link>
             </li>
-       
-                 <li>
+            <li>
               <router-link 
                 to="/admin/productvariant" 
                 class="sidebar-link" 
@@ -71,8 +68,6 @@
             </li>
           </ul>
         </li>
-
-
 
         <!-- Manage Orders Section -->
         <li>
@@ -84,6 +79,39 @@
             Manage Orders
           </router-link>
         </li>
+
+        <!-- Manage Reviews Section (Dropdown) -->
+        <li>
+          <div @click="toggleReviewsDropdown" class="dropdown-header">
+            <i class="material-icons sidebar-icon">reviews</i>
+            Manage Reviews
+            <i class="material-icons dropdown-arrow">{{ isReviewsDropdownOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</i>
+          </div>
+          <ul v-if="isReviewsDropdownOpen" class="dropdown-list">
+            <li>
+              <router-link 
+                to="/admin/reviews" 
+                class="sidebar-link" 
+                :class="{ active: isActive('/admin/reviews') }">All Reviews</router-link>
+            </li>
+            <li>
+              <router-link 
+                to="/admin/reviews/add" 
+                class="sidebar-link" 
+                :class="{ active: isActive('/admin/reviews/add') }">Add Review</router-link>
+            </li>
+          </ul>
+        </li>
+
+        <li>
+  <router-link 
+    to="/admin/customers" 
+    class="sidebar-link" 
+    :class="{ active: isActive('/admin/customers') }">
+    <i class="material-icons sidebar-icon">people</i>
+    Manage Customers
+  </router-link>
+</li>
 
         <!-- Manage Customize Section -->
         <li>
@@ -143,9 +171,10 @@ export default {
   data() {
     return {
       isProductsDropdownOpen: false,
-      isVariantsDropdownOpen: false, // Toggle for variants dropdown
-      isCustomizeDropdownOpen: false, // Ensure this is initialized
-      isSettingsDropdownOpen: false, // For settings dropdown
+      isVariantsDropdownOpen: false, 
+      isCustomizeDropdownOpen: false, 
+      isSettingsDropdownOpen: false,
+      isReviewsDropdownOpen: false, // For the reviews dropdown
     };
   },
   computed: {
@@ -158,13 +187,16 @@ export default {
       this.isProductsDropdownOpen = !this.isProductsDropdownOpen;
     },
     toggleVariantsDropdown() {
-      this.isVariantsDropdownOpen = !this.isVariantsDropdownOpen; // Toggle for variants dropdown
+      this.isVariantsDropdownOpen = !this.isVariantsDropdownOpen; 
     },
     toggleCustomizeDropdown() {
       this.isCustomizeDropdownOpen = !this.isCustomizeDropdownOpen;
     },
     toggleSettingsDropdown() {
       this.isSettingsDropdownOpen = !this.isSettingsDropdownOpen;
+    },
+    toggleReviewsDropdown() {
+      this.isReviewsDropdownOpen = !this.isReviewsDropdownOpen; // For toggling reviews dropdown
     },
     isActive(route) {
       return this.$route.path === route;
@@ -179,6 +211,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 /* Global reset and font settings */

@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\Customer\ProductController;
 use App\Http\Controllers\Api\Customer\CartController;
 use App\Http\Controllers\Api\Customer\OrderController;
 use App\Http\Controllers\Api\Customer\KeysController;
+use App\Http\Controllers\Api\Customer\ReviewController; 
 
 
 use App\Http\Controllers\Api\Customer\ResetPasswordController;
@@ -22,6 +23,8 @@ use App\Http\Controllers\Api\Backend\HomePageHeaderController as BackendHomePage
 
 use App\Http\Controllers\Api\Backend\VariantCombinationController;
 use App\Http\Controllers\Api\Backend\ProductVariantController;
+use App\Http\Controllers\Api\Backend\ReviewController as BackendReviewController; 
+use App\Http\Controllers\Api\Backend\UsersController;
 
 
 
@@ -33,7 +36,16 @@ use App\Http\Controllers\Api\Backend\VariantController;
 use App\Http\Controllers\Api\Backend\VariantValueController;
 
 
+// routes/api.php
 
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/products/{productId}/reviews', [ReviewController::class, 'index']);
+    Route::post('/products/{productId}/reviews', [ReviewController::class, 'store']);
+});
+
+
+Route::get('reviews/latest-featured', [ReviewController::class, 'latestFeaturedReviews']);
 
 Route::get('/homepage-header', [BackendHomePageHeaderController::class, 'getHeader']);
 
@@ -85,6 +97,8 @@ Route::middleware('auth:sanctum')->prefix('orders')->group(function () {
     Route::post('/create-stripe-payment', [OrderController::class, 'createStripePayment']);
     Route::post('/confirm-paypal-payment', [OrderController::class, 'confirmPaypalPayment']);
 
+
+
 });
 
 
@@ -98,6 +112,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::put('/user', [AuthController::class, 'updateProfile']);
     Route::get('/myorders', [OrderController::class, 'myorders']);
+
 
 });   
 
@@ -138,6 +153,27 @@ Route::delete('/variant-values/{id}', [VariantValueController::class, 'destroy']
     
     // Update the status of an order
     Route::put('/orders/{orderId}/status', [BackendOrdersController::class, 'updateStatus']);
+
+
+
+Route::prefix('users')->group(function () {
+    Route::get('/', [UsersController::class, 'index']);
+    Route::get('/current-user', [UsersController::class, 'currentUser']);
+    Route::get('/customers', [UsersController::class, 'customers']);
+    Route::post('/', [UsersController::class, 'store']);
+    Route::put('/{user}', [UsersController::class, 'update']);
+    Route::delete('/{user}', [UsersController::class, 'destroy']);
+});
+
+
+
+      Route::prefix('reviews')->group(function () {
+    Route::get('/', [BackendReviewController::class, 'index']);
+    Route::put('/{id}', [BackendReviewController::class, 'update']);
+    Route::put('/{id}/feature', [BackendReviewController::class, 'feature']);
+    Route::delete('/{id}', [BackendReviewController::class, 'destroy']);
+    Route::post('/', [BackendReviewController::class, 'store']);
+      });
     
         Route::prefix('customize')->group(function () {
         Route::put('/homepage-header', [BackendHomePageHeaderController::class, 'update']);

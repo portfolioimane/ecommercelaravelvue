@@ -13,6 +13,10 @@ import backendHomePageHeader from './modules/backend/HomePageHeader.js';
 import backendVariant from './modules/backend/variant.js';
 import backendVariantCombinations from './modules/backend/variantCombinations.js';
 import backendProductVariant from './modules/backend/productVariant.js';
+import backendReview from './modules/backend/review.js';
+import backendUsers from './modules/backend/users.js';
+import reviews from './modules/review.js';
+
 
 const store = createStore({ // Use createStore for Vue 3
   modules: {
@@ -30,6 +34,9 @@ const store = createStore({ // Use createStore for Vue 3
     backendVariant,
     backendVariantCombinations,
     backendProductVariant,
+    backendReview,
+    backendUsers,
+    reviews,
 
   },
 });

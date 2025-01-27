@@ -20,6 +20,7 @@ import ForgotPassword from '../components/Frontend/ForgotPassword.vue';
 import Profile from '../components/Frontend/Profile.vue';
 import CustomerLayout from '../components/Frontend/CustomerLayout.vue';
 import Home from '../components/Frontend/Home.vue';
+import Review from '../components/Frontend/Products/Review.vue';
 
 // Admin Components
 import AdminDashboard from '../components/Admin/Dashboard/AdminDashboard.vue';
@@ -43,6 +44,11 @@ import Categories from '../components/Admin/Categories/Categories.vue';
 import Orders from '../components/Admin/Orders/Orders.vue';
 import BackendOrderDetails from '../components/Admin/Orders/OrderDetails.vue';
 import HomePageHeader from '../components/Admin/Customize/HomePageHeader.vue';
+
+import AddReview from '../components/Admin/Review/AddReview.vue';
+import ReviewList from '../components/Admin/Review/ReviewList.vue';
+import Customers from '../components/Admin/Customers/Customers.vue';
+
 
 
 
@@ -194,6 +200,21 @@ const routes = [
         name: 'Orders',
         path: 'orders',
         component: Orders,
+      },
+               {
+        name: 'Customers',
+        path: 'customers',
+        component: Customers,
+      },
+       {
+        name: 'AddReview',
+        path: 'reviews/add',
+        component: AddReview,
+      },
+       {
+        name: 'Reviews',
+        path: 'reviews',
+        component: ReviewList,
       },
 
       {

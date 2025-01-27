@@ -50,12 +50,17 @@
         </div>
       </div>
     </div>
-  </div>
+      <Review :productId="Number(productId)" />
+      </div>
 </template>
 
 
 <script>
+import Review from './Review.vue';
 export default {
+components: {
+    Review
+  },
   data() {
     return {
       product: null,
@@ -74,6 +79,9 @@ export default {
       });
   },
   computed: {
+    productId() {
+      return this.$route.params.id;  // Capture the product ID from the URL
+    },
     optionsMap() {
       // Dynamically generate option types based on available options in the variants
       const map = {};

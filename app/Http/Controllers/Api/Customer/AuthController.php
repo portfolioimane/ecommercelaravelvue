@@ -175,9 +175,11 @@ public function updateProfile(Request $request)
             Log::debug('Deleted old avatar: ' . $user->avatar); // Log file deletion
         }
 
-        // Save the new avatar file
+        // Store the new avatar file and get the full path
         $avatarPath = $request->file('avatar')->store('avatars', 'public');
-        $validatedData['avatar'] = $avatarPath; // Store the new avatar path
+        
+        // Save the full avatar path in the database, like 'storage/avatars/imagename.jpg'
+        $validatedData['avatar'] = 'storage/' . $avatarPath;
     }
 
     // Check if the password is being updated and hash it
@@ -195,6 +197,7 @@ public function updateProfile(Request $request)
         return response()->json(['error' => 'Failed to update profile', 'details' => $e->getMessage()], 500);
     }
 }
+
 
 
 

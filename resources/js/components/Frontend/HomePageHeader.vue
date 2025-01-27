@@ -57,8 +57,9 @@ export default {
 <style scoped>
 .hero-section {
   width: 100%;
-  height: 100vh;
+  height: 60vh; /* Reduced height */
   position: relative;
+  overflow: hidden;
 }
 
 .hero-bg {
@@ -69,7 +70,7 @@ export default {
   height: 100%;
   background-size: cover;
   background-position: center;
-  z-index: 0; /* Make sure the overlay and content are above the background */
+  z-index: 0;
 }
 
 .hero-overlay {
@@ -78,8 +79,8 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* 50% black overlay */
-  z-index: 1; /* Overlay above the background */
+  background-color: rgba(0, 0, 0, 0.4); /* Slightly lighter overlay for text contrast */
+  z-index: 1;
 }
 
 .hero-content {
@@ -89,31 +90,61 @@ export default {
   transform: translate(-50%, -50%);
   text-align: center;
   color: white;
-  z-index: 2; /* Content above overlay */
+  z-index: 2;
+  max-width: 80%; /* Prevents text from stretching too wide */
 }
 
 .hero-title {
-  font-size: 3rem;
-  font-weight: bold;
+  font-size: 3rem; /* Adjusted font size */
+  font-weight: 700;
+  line-height: 1.3;
+  text-transform: uppercase;
+  margin: 0;
 }
 
 .hero-subtitle {
-  font-size: 1.5rem;
+  font-size: 1.4rem; /* Adjusted font size */
+  font-weight: 400;
   margin-top: 1rem;
+  line-height: 1.5;
+  max-width: 75%;
 }
 
 .hero-btn {
   margin-top: 2rem;
-  padding: 1rem 2rem;
+  padding: 1rem 2.5rem;
   background-color: #D4AF37; /* Gold color for button */
   color: white;
   border: none;
-  font-size: 1rem;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .hero-btn:hover {
   background-color: #b8972e; /* Darker gold on hover */
+  transform: translateY(-3px); /* Button lift effect */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.hero-btn:focus {
+  outline: none; /* Removes outline on focus */
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  .hero-subtitle {
+    font-size: 1.4rem;
+  }
+  .hero-btn {
+    font-size: 1rem;
+    padding: 1rem 2rem;
+  }
 }
 </style>
+
