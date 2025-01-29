@@ -10,6 +10,7 @@ const state = {
     stock: 0,
     category_id: null,
     image: null,
+    featured: false,  // Added featured property
   },
 };
 
@@ -26,6 +27,12 @@ const mutations = {
       state.products.splice(index, 1, { ...updatedProduct });
     }
   },
+  TOGGLE_FEATURED(state, productId) {
+    const product = state.products.find(product => product.id === productId);
+    if (product) {
+      product.featured = !product.featured; // Toggle featured status
+    }
+  },
 };
 
 const actions = {
@@ -33,7 +40,7 @@ const actions = {
     try {
       const response = await axios.get('/admin/products');
       commit('SET_PRODUCTS', response.data);
-      console.log('products',response.data);
+      console.log('products', response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
     }
@@ -46,15 +53,13 @@ const actions = {
       console.error('Error fetching product:', error);
     }
   },
- async addProduct({ commit }, formData) {
+  async addProduct({ dispatch }, formData) {
     try {
-
-
-     const response = await axios.post('/admin/products', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data', // Ensure the header supports FormData
-          },
-        });
+      const response = await axios.post('/admin/products', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // Ensure the header supports FormData
+        },
+      });
 
       dispatch('fetchProducts');
     } catch (error) {
@@ -63,7 +68,6 @@ const actions = {
   },
   async updateProduct({ dispatch }, { id, formData }) {
     try {
-
       await axios.post(`/admin/products/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -84,6 +88,20 @@ const actions = {
       dispatch('fetchProducts');
     } catch (error) {
       console.error('Error deleting product:', error);
+    }
+  },
+  async toggleFeatured({ commit, dispatch }, productId) {
+    try {
+      // Toggle featured status on the server
+      await axios.put(`/admin/products/${productId}/toggle-featured`);
+      
+      // Update the local state
+      commit('TOGGLE_FEATURED', productId);
+      
+      // Optionally refetch products if the server response isn't updated
+      dispatch('fetchProducts');
+    } catch (error) {
+      console.error('Error toggling featured product:', error);
     }
   },
 };

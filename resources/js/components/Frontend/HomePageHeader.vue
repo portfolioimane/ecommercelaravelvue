@@ -98,16 +98,16 @@ export default {
   font-size: 3rem; /* Adjusted font size */
   font-weight: 700;
   line-height: 1.3;
-  text-transform: uppercase;
   margin: 0;
+  text-transform: capitalize; /* Capitalize first letter of each word */
 }
+
 
 .hero-subtitle {
   font-size: 1.4rem; /* Adjusted font size */
   font-weight: 400;
   margin-top: 1rem;
   line-height: 1.5;
-  max-width: 75%;
 }
 
 .hero-btn {

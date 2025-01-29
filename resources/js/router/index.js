@@ -8,7 +8,7 @@ import AdminLayout from '../components/Admin/Layout/AdminLayout.vue'; // Admin L
 // Import route components
 import Login from '../components/Auth/Login.vue';
 import Register from '../components/Auth/Register.vue';
-import ProductList from '../components/Frontend/Products/ProductList.vue';
+import FeaturedProduct from '../components/Frontend/Products/FeaturedProduct.vue';
 import ProductDetails from '../components/Frontend/Products/ProductDetails.vue';
 import Cart from '../components/Frontend/Cart/Cart.vue';
 import Checkout from '../components/Frontend/Cart/Checkout.vue';
@@ -21,6 +21,8 @@ import Profile from '../components/Frontend/Profile.vue';
 import CustomerLayout from '../components/Frontend/CustomerLayout.vue';
 import Home from '../components/Frontend/Home.vue';
 import Review from '../components/Frontend/Products/Review.vue';
+
+import MyWishlist from '../components/Frontend/MyWishlist.vue';
 
 // Admin Components
 import AdminDashboard from '../components/Admin/Dashboard/AdminDashboard.vue';
@@ -92,6 +94,7 @@ const routes = [
         path: '/product/:id',
         component: ProductDetails,
       },
+  
       {
         name: 'Cart',
         path: '/cart',
@@ -130,6 +133,11 @@ const routes = [
             component: OrderDetails,
             meta: { requiresAuth: true },
           },
+              {
+        name: 'MyWishlist',
+        path: 'wishlist',
+        component: MyWishlist,
+      },
         ],
       },
     ],

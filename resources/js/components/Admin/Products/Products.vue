@@ -12,6 +12,7 @@
           <th>Stock</th>
           <th>Category</th>
           <th>Image</th>
+          <th>Featured</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -30,6 +31,15 @@
               class="product-image"
             />
           </td>
+<td>
+  <input 
+    type="checkbox" 
+    v-model="product.featured" 
+    @change="toggleFeatured(product)" 
+  />
+</td>
+
+
           <td>
             <button class="btn secondary" @click="editProduct(product)">Edit</button>
             <button class="btn danger" @click="openDeleteModal(product.id)">Delete</button>
@@ -68,6 +78,13 @@ export default {
     products() {
       return this.allProducts;
     },
+    products() {
+      // Normalize is_featured value to boolean
+      return this.allProducts.map(product=> ({
+        ...product,
+        featured: Boolean(product.featured), // Convert to true/false
+      }));
+    },
   },
   methods: {
     editProduct(product) {
@@ -92,6 +109,18 @@ export default {
         console.error('Error deleting product:', error);
       }
     },
+async toggleFeatured(product) {
+  try {
+    // Dispatch toggleFeatured action with the product ID
+    await this.$store.dispatch('backendProducts/toggleFeatured', product.id);
+        this.$store.dispatch('backendProducts/fetchProducts');
+        console.log('allproducts', this.products);
+        this.showMessage('Product featured status updated', 'success');
+  } catch (error) {
+    this.showMessage('Error updating featured status', 'error');
+    console.error('Error updating featured status:', error);
+  }
+},
     showMessage(text, type) {
       this.message = { text, type }; // Show message with type (success, error, warning)
       setTimeout(() => {
@@ -106,6 +135,8 @@ export default {
 </script>
 
 <style scoped>
+/* (Keep the existing styles) */
+
 .products {
   padding: 30px;
   background-color: #f9f9f9;

@@ -12,18 +12,29 @@
         <li class="nav-item">
           <a href="#contact" class="nav-link">Contact</a>
         </li>
- 
 
         <!-- Cart Icon with Item Count -->
         <li class="nav-item position-relative">
           <router-link to="/cart" class="nav-link cart-icon d-flex align-items-center">
             <span class="material-icons cart-icon">shopping_cart</span>
-            <!-- Display cartItemCount only when it's not loading -->
             <span v-if="!loading" class="badge bg-badge position-absolute top-0 start-100 translate-middle rounded-circle p-1">
               {{ cartItemCount }}
             </span>
           </router-link>
         </li>
+
+ <!-- Wishlist Icon with Item Count -->
+<li class="nav-item position-relative">
+  <router-link to="/customerdashboard/wishlist" class="nav-link wishlist-icon d-flex align-items-center">
+    <!-- Filled heart icon -->
+    <span class="material-icons wishlist-icon">favorite</span>
+    <!-- Display wishlistItemCount only when it's not loading -->
+    <span v-if="!loading" class="badge bg-badge position-absolute top-0 start-100 translate-middle rounded-circle p-1">
+      {{ wishlistItemCount }}
+    </span>
+  </router-link>
+</li>
+
 
         <!-- Login/Register Dropdown -->
         <li class="nav-item dropdown" v-if="!isAuthenticated">
@@ -62,12 +73,13 @@ export default {
 
   computed: {
     ...mapGetters('auth', ['isAuthenticated', 'user']),
-    ...mapGetters('cart', ['cartItemCount'])  // Access cartItemCount from Vuex store
+    ...mapGetters('cart', ['cartItemCount']),
+    ...mapGetters('wishlist', ['wishlistItemCount'])  // Access wishlistItemCount from Vuex store
   },
 
   data() {
     return {
-      loading: true,  // Loading state to track cart data fetch
+      loading: true,  // Loading state to track wishlist and cart data fetch
     };
   },
 
@@ -75,12 +87,14 @@ export default {
     // Watch for changes in the authentication state
     isAuthenticated(newVal) {
       if (newVal) {
-        // If logged in, fetch the cart
+        // If logged in, fetch the cart and wishlist
         this.$store.dispatch('auth/checkAuth');
         this.fetchCart();
+        this.fetchWishlist();
       } else {
-        // If logged out, clear the cart
+        // If logged out, clear the cart and wishlist
         this.$store.commit('cart/setCart', []);
+        this.$store.commit('wishlist/setWishlist', []);
       }
     }
   },
@@ -88,8 +102,9 @@ export default {
   mounted() {
     this.$store.dispatch('auth/checkAuth');  // Check if the user is authenticated using the cookie
 
-    // Fetch cart if already authenticated
+    // Fetch cart and wishlist if already authenticated
     this.fetchCart();
+    this.fetchWishlist();
   },
 
   methods: {
@@ -99,7 +114,17 @@ export default {
         this.loading = false;  // Set loading to false once cart data is fetched
       } catch (error) {
         console.error('Error fetching cart:', error);
-        this.loading = false;  // Make sure loading state is reset in case of error
+        this.loading = false;
+      }
+    },
+
+    async fetchWishlist() {
+      try {
+        await this.$store.dispatch('wishlist/fetchWishlist');
+        this.loading = false;  // Set loading to false once wishlist data is fetched
+      } catch (error) {
+        console.error('Error fetching wishlist:', error);
+        this.loading = false;
       }
     },
 
@@ -141,7 +166,7 @@ export default {
   transition: color 0.3s ease;
 }
 
-/* Cart Badge Styling */
+/* Cart and Wishlist Badge Styling */
 .badge {
   font-size: 14px;
   background-color:var(--primary-color);
@@ -177,10 +202,10 @@ export default {
 .material-icons {
   font-size: 1.5rem;
   vertical-align: middle;
-
 }
-.cart-icon{
-    color:var(--primary-color) !important;
+
+.cart-icon, .wishlist-icon {
+  color:var(--primary-color) !important;
 }
 
 .bg-badge{

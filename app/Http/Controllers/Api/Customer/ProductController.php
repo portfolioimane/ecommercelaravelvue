@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -38,4 +39,21 @@ class ProductController extends Controller
 
         return response()->json($product->variants, 200);
     }
+
+
+public function getFeaturedProducts()
+{
+   // Eager load the category relationship
+        $featuredProducts = Product::with('category')
+                                   ->where('featured', true)
+                                    ->latest()
+                                    ->take(4) 
+                                   ->get();
+
+        return response()->json($featuredProducts , 200);
+}
+
+
+
+
 }

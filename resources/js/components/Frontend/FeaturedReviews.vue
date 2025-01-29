@@ -73,7 +73,7 @@ export default {
 }
 
 .section-title {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: bold;
   text-align: center;
   margin-bottom: 2.5rem;

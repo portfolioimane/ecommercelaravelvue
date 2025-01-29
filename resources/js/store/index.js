@@ -16,7 +16,7 @@ import backendProductVariant from './modules/backend/productVariant.js';
 import backendReview from './modules/backend/review.js';
 import backendUsers from './modules/backend/users.js';
 import reviews from './modules/review.js';
-
+import wishlist from './modules/wishlist.js';
 
 const store = createStore({ // Use createStore for Vue 3
   modules: {
@@ -37,6 +37,7 @@ const store = createStore({ // Use createStore for Vue 3
     backendReview,
     backendUsers,
     reviews,
+    wishlist,
 
   },
 });

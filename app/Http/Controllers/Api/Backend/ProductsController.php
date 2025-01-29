@@ -106,4 +106,19 @@ public function store(Request $request)
         Log::info('Product deleted', ['product_id' => $id]);
         return response()->json(null, 204);
     }
+
+public function toggleFeatured($productId)
+    {
+        // Find the product by ID
+        $product = Product::findOrFail($productId);
+
+        // Toggle the featured status
+        $product->featured = !$product->featured;
+
+        // Save the product with the updated featured status
+        $product->save();
+
+        // Return the updated product as a JSON response
+        return response()->json($product);
+    }
 }

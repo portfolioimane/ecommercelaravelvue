@@ -26,8 +26,15 @@ use App\Http\Controllers\Api\Backend\ProductVariantController;
 use App\Http\Controllers\Api\Backend\ReviewController as BackendReviewController; 
 use App\Http\Controllers\Api\Backend\UsersController;
 
+use App\Http\Controllers\Api\Customer\WishlistController;
 
+Route::middleware('auth:sanctum')->group(function () {
+Route::get('/wishlist', [WishlistController::class, 'index']);
+Route::post('/wishlist', [WishlistController::class, 'store']);
+Route::delete('/wishlist/{productId}', [WishlistController::class, 'destroy']);
+});
 
+Route::get('/store/products/featured', [ProductController::class, 'getFeaturedProducts']);
 
 // routes/api.php
 
@@ -121,7 +128,8 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
     // Admin routes
     Route::apiResource('products', BackendProductsController::class);
     Route::apiResource('categories', BackendCategoriesController::class);
-
+    
+    Route::put('/products/{productId}/toggle-featured', [BackendProductsController::class, 'toggleFeatured']);
 
 Route::get('product/{productId}/productvariants', [ProductVariantController::class, 'index']);
 Route::put('productvariantupdate/{id}', [ProductVariantController::class, 'update']);

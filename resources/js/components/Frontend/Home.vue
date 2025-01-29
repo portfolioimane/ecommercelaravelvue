@@ -4,7 +4,7 @@
     <HomePageHeader />
 
     <!-- Product List Section -->
-    <ProductList />
+    <FeaturedProduct />
 
         <!-- Featured Reviews Section -->
     <FeaturedReviews />
@@ -14,14 +14,14 @@
 <script>
 // Import the components
 import HomePageHeader from './HomePageHeader.vue';
-import ProductList from './Products/ProductList.vue';
+import FeaturedProduct from './Products/FeaturedProduct.vue';
 import FeaturedReviews from './FeaturedReviews.vue';  // Import the new FeaturedReviews component
 
 export default {
   name: 'Home',
   components: {
     HomePageHeader,
-    ProductList,
+    FeaturedProduct,
     FeaturedReviews,  // Register the FeaturedReviews component
   },
 };
