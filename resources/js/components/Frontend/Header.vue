@@ -7,10 +7,10 @@
           <router-link to="/" class="nav-link">Home</router-link>
         </li>
         <li class="nav-item">
-          <a href="#services" class="nav-link">Shop</a>
+          <a href="shop" class="nav-link">Shop</a>
         </li>
         <li class="nav-item">
-          <a href="#contact" class="nav-link">Contact</a>
+          <a href="contact" class="nav-link">Contact</a>
         </li>
 
         <!-- Cart Icon with Item Count -->

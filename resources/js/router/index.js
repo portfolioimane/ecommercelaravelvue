@@ -21,6 +21,7 @@ import Profile from '../components/Frontend/Profile.vue';
 import CustomerLayout from '../components/Frontend/CustomerLayout.vue';
 import Home from '../components/Frontend/Home.vue';
 import Review from '../components/Frontend/Products/Review.vue';
+import ProductList from '../components/Frontend/Products/ProductList.vue';
 
 import MyWishlist from '../components/Frontend/MyWishlist.vue';
 
@@ -40,6 +41,8 @@ import CreateVariantValue from '../components/Admin/Variant/CreateVariantValue.v
 
 
 import PaymentSetting from '../components/Admin/Settings/PaymentSetting.vue';
+
+import GeneralCustomize from '../components/Admin/Customize/GeneralCustomize.vue';
 
 
 import Categories from '../components/Admin/Categories/Categories.vue';
@@ -94,6 +97,12 @@ const routes = [
         path: '/product/:id',
         component: ProductDetails,
       },
+           {
+        name: 'ProductList',
+        path: '/shop',
+        component: ProductList,
+      },
+  
   
       {
         name: 'Cart',
@@ -234,6 +243,11 @@ const routes = [
         name: 'PaymentSetting',
         path: 'paymentsetting',
         component: PaymentSetting,
+      },
+              {
+        name: 'GeneralCustomize',
+        path: 'generalcustomize',
+        component: GeneralCustomize,
       },
       {
         name: 'HomePageHeader',

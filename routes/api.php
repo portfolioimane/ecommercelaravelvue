@@ -26,7 +26,11 @@ use App\Http\Controllers\Api\Backend\ProductVariantController;
 use App\Http\Controllers\Api\Backend\ReviewController as BackendReviewController; 
 use App\Http\Controllers\Api\Backend\UsersController;
 
+use App\Http\Controllers\Api\Backend\GeneralCustomizeController;
+
+
 use App\Http\Controllers\Api\Customer\WishlistController;
+
 
 Route::middleware('auth:sanctum')->group(function () {
 Route::get('/wishlist', [WishlistController::class, 'index']);
@@ -35,6 +39,13 @@ Route::delete('/wishlist/{productId}', [WishlistController::class, 'destroy']);
 });
 
 Route::get('/store/products/featured', [ProductController::class, 'getFeaturedProducts']);
+Route::get('/store/categories', [BackendCategoriesController::class, 'index']);
+
+// routes/api.php
+
+
+
+
 
 // routes/api.php
 
@@ -194,6 +205,15 @@ Route::prefix('users')->group(function () {
     Route::put('/update', [BackendPaymentSettingController::class, 'update']); // Update payment provider settings
     Route::get('/', [BackendPaymentSettingController::class, 'getSettings']); // Fetch payment provider settings
 });
+
+
+Route::prefix('general-customizes')->group(function () {
+    Route::get('/', [GeneralCustomizeController::class, 'index']);
+    Route::post('/upload-logo', [GeneralCustomizeController::class, 'uploadLogo']);
+    Route::post('/update-or-create', [GeneralCustomizeController::class, 'updateOrCreate']);
+
+});
+
 
 
 });

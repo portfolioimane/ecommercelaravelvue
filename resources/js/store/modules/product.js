@@ -1,29 +1,54 @@
 import axios from '../../utils/axios.js';
 
-// State - Manages the products array
 const state = {
   products: [],
+  filteredProducts: [], // New state to hold filtered products
+  categories: [],
+  productVariants: [],
   featuredProducts: [], // New state property to hold featured products
-  productVariants: [],  // Add a new state property to manage variants
+  wishlist: [], // Wishlist management
+  searchQuery: '',
+  selectedCategory: '',
+  priceRange: { min: 0, max: 10000 }, // Default price range
 };
 
-// Mutations - Handle synchronous changes to the state
 const mutations = {
   setProducts(state, products) {
     state.products = products;
+    state.filteredProducts = products; // Initially, all products are displayed
   },
-  setFeaturedProducts(state, featuredProducts) { // Mutation to set featured products
+  setCategories(state, categories) {
+    state.categories = categories;
+  },
+  setProductVariants(state, variants) {
+    state.productVariants = variants;
+  },
+    setFeaturedProducts(state, featuredProducts) { // Mutation to set featured products
     state.featuredProducts = featuredProducts;
   },
-  setProductDetails(state, product) {
-    state.products = [product];
+  setWishlist(state, wishlist) {
+    state.wishlist = wishlist;
   },
-  setProductVariants(state, variants) {  // Add mutation to set variants
-    state.productVariants = variants;
+  setSearchQuery(state, query) {
+    state.searchQuery = query;
+    state.filteredProducts = state.products.filter(product =>
+      product.name.toLowerCase().includes(query.toLowerCase())
+    );
+  },
+  setSelectedCategory(state, category) {
+    state.selectedCategory = category;
+    state.filteredProducts = category
+      ? state.products.filter(product => product.category.name === category)
+      : state.products;
+  },
+  setPriceRange(state, range) {
+    state.priceRange = range;
+    state.filteredProducts = state.products.filter(
+      product => product.price >= range.min && product.price <= range.max
+    );
   },
 };
 
-// Actions - Handle asynchronous logic (or commit mutations)
 const actions = {
   async fetchProducts({ commit }) {
     try {
@@ -33,9 +58,7 @@ const actions = {
       console.error('Error fetching products:', error);
     }
   },
-  
-  // Action to fetch only featured products
-  async fetchFeaturedProducts({ commit }) {
+    async fetchFeaturedProducts({ commit }) {
     try {
       const response = await axios.get('/store/products/featured'); // Assuming the API endpoint for featured products
       commit('setFeaturedProducts', response.data);
@@ -43,33 +66,29 @@ const actions = {
       console.error('Error fetching featured products:', error);
     }
   },
-
-  async fetchProductById({ commit }, productId) {
+  async fetchCategories({ commit }) {
     try {
-      const response = await axios.get(`/store/products/${productId}`);
-      commit('setProductDetails', response.data);
+      const response = await axios.get('/store/categories');
+      commit('setCategories', response.data);
     } catch (error) {
-      console.error('Error fetching product details:', error);
+      console.error('Error fetching categories:', error);
     }
   },
-  
-  async fetchProductVariants({ commit }, productId) {  // New action to fetch variants
+  async fetchWishlist({ commit }) {
     try {
-      const response = await axios.get(`/store/products/${productId}/variants`);
-      commit('setProductVariants', response.data);
-      console.log('product variants', response.data);
+      const response = await axios.get('/store/wishlist');
+      commit('setWishlist', response.data);
     } catch (error) {
-      console.error('Error fetching product variants:', error);
+      console.error('Error fetching wishlist:', error);
     }
   },
 };
 
-// Getters - Derived state based on the store's state
 const getters = {
-  allProducts: (state) => state.products,
-  featuredProducts: (state) => state.featuredProducts, // Getter to access featured products
-  productCount: (state) => state.products.length,
-  allProductVariants: (state) => state.productVariants,  // New getter for variants
+  allProducts: state => state.filteredProducts,
+  featuredProducts: (state) => state.featuredProducts, 
+  allCategories: state => state.categories,
+  wishlist: state => state.wishlist,
 };
 
 export default {

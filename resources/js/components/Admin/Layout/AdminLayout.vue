@@ -121,6 +121,12 @@
             <i class="material-icons dropdown-arrow">{{ isCustomizeDropdownOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</i>
           </div>
           <ul v-if="isCustomizeDropdownOpen" class="dropdown-list">
+              <li>
+              <router-link 
+                to="/admin/generalcustomize" 
+                class="sidebar-link" 
+                :class="{ active: isActive('/admin/generalcustomize') }">General</router-link>
+            </li>
             <li>
               <router-link 
                 to="/admin/customize/homepageheader" 
@@ -138,6 +144,7 @@
             <i class="material-icons dropdown-arrow">{{ isSettingsDropdownOpen ? 'arrow_drop_up' : 'arrow_drop_down' }}</i>
           </div>
           <ul v-if="isSettingsDropdownOpen" class="dropdown-list">
+  
             <li>
               <router-link 
                 to="/admin/paymentsetting" 

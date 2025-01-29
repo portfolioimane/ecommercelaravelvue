@@ -4,7 +4,7 @@
     <div class="row">
       <div v-for="product in products" :key="product.id" class="col-lg-3 col-md-6 mb-4">
         <div class="card shadow-sm border-0 rounded-lg h-100 position-relative">
-          <img :src="`/storage/${product.image}`" class="card-img-top rounded-top" alt="Product" />
+          <img :src="`/${product.image}`" class="card-img-top rounded-top" alt="Product" />
           <div class="card-body p-3">
             <h5 class="card-title text-dark font-weight-bold">{{ product.name }}</h5>
             <p class="card-text text-muted" style="font-size: 0.875rem;">{{ product.description }}</p>
