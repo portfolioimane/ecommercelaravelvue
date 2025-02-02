@@ -16,8 +16,11 @@ import backendProductVariant from './modules/backend/productVariant.js';
 import backendReview from './modules/backend/review.js';
 import backendUsers from './modules/backend/users.js';
 import backendGeneralCustomize from './modules/backend/generalCustomize.js';
+import generalCustomize from './modules/generalcustomize.js';
 import reviews from './modules/review.js';
 import wishlist from './modules/wishlist.js';
+import contact from './modules/contact.js';
+import backendContact from './modules/backend/contact.js';
 
 const store = createStore({ // Use createStore for Vue 3
   modules: {
@@ -40,6 +43,10 @@ const store = createStore({ // Use createStore for Vue 3
     reviews,
     wishlist,
     backendGeneralCustomize,
+    generalCustomize,
+    contact,
+    backendContact
+
 
   },
 });

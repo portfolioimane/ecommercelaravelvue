@@ -280,11 +280,11 @@ export default {
 
 .reminder-note {
   margin-top: 20px;
-  padding: 10px;
   border-radius: 5px;
   text-align: center;
   font-size: 14px;
   color: #333;
+  background-color:orange;
 }
 
 /* Modal Styling */

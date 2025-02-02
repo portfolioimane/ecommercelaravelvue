@@ -28,8 +28,22 @@ use App\Http\Controllers\Api\Backend\UsersController;
 
 use App\Http\Controllers\Api\Backend\GeneralCustomizeController;
 
+// routes/api.php
+
+use App\Http\Controllers\Api\Backend\ContactController as BackendContactController;
+
+
 
 use App\Http\Controllers\Api\Customer\WishlistController;
+
+use App\Http\Controllers\Api\Customer\CutomizeController;
+
+use App\Http\Controllers\Api\Customer\ContactController;
+
+
+Route::post('/contact', [ContactController::class, 'store']);
+
+Route::get('/general-customizes', [CutomizeController::class, 'index']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -140,6 +154,9 @@ Route::prefix('admin')->middleware(['auth:sanctum', 'admin'])->group(function ()
     Route::apiResource('products', BackendProductsController::class);
     Route::apiResource('categories', BackendCategoriesController::class);
     
+
+    Route::get('/contact-messages', [BackendContactController::class, 'index']);
+
     Route::put('/products/{productId}/toggle-featured', [BackendProductsController::class, 'toggleFeatured']);
 
 Route::get('product/{productId}/productvariants', [ProductVariantController::class, 'index']);

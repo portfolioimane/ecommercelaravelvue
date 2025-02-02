@@ -18,6 +18,8 @@ import MyOrders from '../components/Frontend/Orders/MyOrders.vue';
 import ResetPassword from '../components/Frontend/ResetPassword.vue';
 import ForgotPassword from '../components/Frontend/ForgotPassword.vue';
 import Profile from '../components/Frontend/Profile.vue';
+import Contact from '../components/Frontend/Contact.vue';
+
 import CustomerLayout from '../components/Frontend/CustomerLayout.vue';
 import Home from '../components/Frontend/Home.vue';
 import Review from '../components/Frontend/Products/Review.vue';
@@ -53,6 +55,7 @@ import HomePageHeader from '../components/Admin/Customize/HomePageHeader.vue';
 import AddReview from '../components/Admin/Review/AddReview.vue';
 import ReviewList from '../components/Admin/Review/ReviewList.vue';
 import Customers from '../components/Admin/Customers/Customers.vue';
+import ContactMessages from '../components/Admin/Customers/ContactMessages.vue';
 
 
 
@@ -103,7 +106,11 @@ const routes = [
         component: ProductList,
       },
   
-  
+      {
+        name: 'Contact',
+        path: '/contact',
+        component: Contact,
+      },
       {
         name: 'Cart',
         path: '/cart',
@@ -223,6 +230,12 @@ const routes = [
         path: 'customers',
         component: Customers,
       },
+
+{
+  path: 'contact-messages',
+  name: 'ContactMessages',
+  component: ContactMessages,
+},
        {
         name: 'AddReview',
         path: 'reviews/add',

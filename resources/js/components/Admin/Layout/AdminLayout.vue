@@ -66,6 +66,7 @@
                 class="sidebar-link" 
                 :class="{ active: isActive('/admin/productvariant') }">Product Variant</router-link>
             </li>
+
           </ul>
         </li>
 
@@ -112,6 +113,17 @@
     Manage Customers
   </router-link>
 </li>
+
+<li>
+  <router-link 
+    to="/admin/contact-messages" 
+    class="sidebar-link" 
+    :class="{ active: isActive('/admin/contact-messages') }">
+    <i class="material-icons sidebar-icon">message</i>
+    Contact Messages
+  </router-link>
+</li>
+
 
         <!-- Manage Customize Section -->
         <li>

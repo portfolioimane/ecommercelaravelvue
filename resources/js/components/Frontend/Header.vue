@@ -23,18 +23,15 @@
           </router-link>
         </li>
 
- <!-- Wishlist Icon with Item Count -->
-<li class="nav-item position-relative">
-  <router-link to="/customerdashboard/wishlist" class="nav-link wishlist-icon d-flex align-items-center">
-    <!-- Filled heart icon -->
-    <span class="material-icons wishlist-icon">favorite</span>
-    <!-- Display wishlistItemCount only when it's not loading -->
-    <span v-if="!loading" class="badge bg-badge position-absolute top-0 start-100 translate-middle rounded-circle p-1">
-      {{ wishlistItemCount }}
-    </span>
-  </router-link>
-</li>
-
+        <!-- Wishlist Icon with Item Count -->
+        <li class="nav-item position-relative">
+          <router-link to="/customerdashboard/wishlist" class="nav-link wishlist-icon d-flex align-items-center">
+            <span class="material-icons wishlist-icon">favorite</span>
+            <span v-if="!loading" class="badge bg-badge position-absolute top-0 start-100 translate-middle rounded-circle p-1">
+              {{ wishlistItemCount }}
+            </span>
+          </router-link>
+        </li>
 
         <!-- Login/Register Dropdown -->
         <li class="nav-item dropdown" v-if="!isAuthenticated">
@@ -74,7 +71,7 @@ export default {
   computed: {
     ...mapGetters('auth', ['isAuthenticated', 'user']),
     ...mapGetters('cart', ['cartItemCount']),
-    ...mapGetters('wishlist', ['wishlistItemCount'])  // Access wishlistItemCount from Vuex store
+    ...mapGetters('wishlist', ['wishlistItemCount'])
   },
 
   data() {
@@ -102,9 +99,11 @@ export default {
   mounted() {
     this.$store.dispatch('auth/checkAuth');  // Check if the user is authenticated using the cookie
 
-    // Fetch cart and wishlist if already authenticated
+    // Only fetch cart and wishlist if authenticated
     this.fetchCart();
-    this.fetchWishlist();
+    if (this.isAuthenticated) {
+      this.fetchWishlist();
+    }
   },
 
   methods: {
@@ -119,6 +118,7 @@ export default {
     },
 
     async fetchWishlist() {
+      if (!this.isAuthenticated) return;  // Prevent fetching wishlist if not authenticated
       try {
         await this.$store.dispatch('wishlist/fetchWishlist');
         this.loading = false;  // Set loading to false once wishlist data is fetched
