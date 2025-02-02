@@ -10,9 +10,20 @@
     </div>
 
     <!-- Create New Product Variant Button (shown only after product is selected) -->
-    <div v-if="selectedProductId" class="create-variant-button">
-      <button class="btn btn-success" @click="createNewProductVariant">Create New Product Variant</button>
-    </div>
+<!-- Create New Product Variant Button (shown only when no variants exist) -->
+<!-- Informational Message if Variants Exist -->
+<div v-if="selectedProductId && productvariants.length > 0" class="info-message-container">
+  <p class="info-message">If you want to create new product variants, you must delete all existing variants first. Once deleted, you can create all product variants again.</p>
+  <button class="btn btn-danger" @click="deleteAllVariants">Delete All Variants</button>
+</div>
+
+<!-- Create New Product Variant Button (shown only when no variants exist) -->
+<div v-if="selectedProductId && productvariants.length === 0" class="create-variant-button">
+  <p class="info-message">Make sure you create all product variants you need because if you want to do it again, you will have to delete all variants and create them again.</p>
+  <button class="btn btn-success" @click="createNewProductVariant">Create All Product Variants</button>
+</div>
+
+
 
     <!-- Display product variants table only if a product is selected -->
     <div v-if="selectedProductId && productvariants.length" class="product-variants">
@@ -133,7 +144,7 @@ export default {
 
   methods: {
     ...mapActions('backendProducts', ['fetchProducts']),
-    ...mapActions('backendProductVariant', ['fetchProductVariants', 'updateProductVariant', 'deleteProductVariant']),
+    ...mapActions('backendProductVariant', ['fetchProductVariants', 'updateProductVariant', 'deleteProductVariant','deleteAllProductVariants']),
 
     // Fetch variants when a product is selected
     fetchVariantsAndValues() {
@@ -141,6 +152,15 @@ export default {
         this.fetchProductVariants(this.selectedProductId);
       }
     },
+
+
+      deleteAllVariants() {
+    if (this.selectedProductId) {
+      if (confirm('Are you sure you want to delete all variants for this product?')) {
+        this.deleteAllProductVariants(this.selectedProductId);
+      }
+    }
+  },
 
     // Construct image path for variants
     getImagePath(image) {
@@ -387,4 +407,27 @@ h2 {
 .modal-buttons .btn {
   margin: 0 10px;
 }
+/* Style for informational message */
+/* Style for informational message */
+.info-message-container {
+  margin-top: 20px;
+}
+
+.info-message {
+  font-size: 14px;
+  color: #f44336;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.btn-danger {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-danger:hover {
+  opacity: 0.8;
+}
+
+
 </style>

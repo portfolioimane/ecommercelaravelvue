@@ -1,13 +1,8 @@
 <template>
   <div class="product-selector">
-  <div class="product-info-container">
-    <h1 class="product-name">{{ currentProduct.name }}</h1>
-    <p class="product-description">{{ currentProduct.description }}</p>
-  </div>
-
-    <!-- Create New Product Variant Button (shown only after product is selected) -->
-    <div v-if="selectedProductId" class="create-variant-button">
-      <button class="btn btn-success" @click="createNewProductVariant">Create New Product Variant</button>
+    <div class="product-info-container">
+      <h1 class="product-name">{{ currentProduct.name }}</h1>
+      <p class="product-description">{{ currentProduct.description }}</p>
     </div>
 
     <!-- Display product variants table only if a product is selected -->
@@ -60,8 +55,13 @@
         </div>
       </div>
     </div>
+
+    <!-- Back Button -->
+    <button class="btn btn-golden" @click="goBack">Go Back</button>
+
   </div>
 </template>
+
 
 <script>
 import { mapGetters, mapActions } from "vuex";
@@ -92,6 +92,10 @@ export default {
   methods: {
     ...mapActions('backendProducts', ['fetchProductById']),
     ...mapActions('backendProductVariant', ['fetchProductVariants', 'updateProductVariant', 'deleteProductVariant']),
+
+    goBack() {
+    this.$router.push({ name: 'ProductVariant' });
+  },
 
     // Fetch variants when a product is selected
     fetchVariantsAndValues() {

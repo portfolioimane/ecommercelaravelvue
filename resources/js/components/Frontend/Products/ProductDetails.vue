@@ -26,8 +26,8 @@
 
             <!-- Option Selector -->
             <div v-for="(options, optionType) in optionsMap" :key="optionType" class="mb-3">
-              <p class="font-weight-bold">{{ optionType.charAt(0).toUpperCase() + optionType.slice(1) }}</p>
-              <div class="d-flex flex-wrap">
+              <div class="d-flex flex-wrap align-items-center">
+                <p class="font-weight-bold mr-2">{{ optionType.charAt(0).toUpperCase() + optionType.slice(1) }}</p>
                 <div v-for="option in options" :key="option"
                      class="option-swatch" 
                      :style="getOptionStyle(optionType, option)" 
@@ -50,15 +50,15 @@
         </div>
       </div>
     </div>
-      <Review :productId="Number(productId)" />
-      </div>
+    <Review :productId="Number(productId)" />
+  </div>
 </template>
-
 
 <script>
 import Review from './Review.vue';
+
 export default {
-components: {
+  components: {
     Review
   },
   data() {
@@ -99,13 +99,11 @@ components: {
     }
   },
   methods: {
-    // Fetch the variants for the current product
     fetchVariants() {
       const productId = this.product.id;
       this.$store.dispatch('product/fetchProductVariants', productId)
         .then(() => {
           this.variants = this.$store.getters['product/allProductVariants'];
-          // Set the default selected options based on the first variant
           if (this.variants.length > 0) {
             const firstVariant = this.variants[0];
             this.selectedOptions = { ...firstVariant.combination_values };
@@ -114,18 +112,15 @@ components: {
         });
     },
 
-    // General method to select any option dynamically
     selectOption(optionType, value) {
       this.selectedOptions[optionType] = value;
       this.updateVariant();
     },
 
-    // Method to check if an option is selected
     isSelected(optionType, value) {
       return this.selectedOptions[optionType] === value;
     },
 
-    // Update the selected variant based on selected options
     updateVariant() {
       this.selectedVariant = this.variants.find(variant => {
         return Object.keys(this.selectedOptions).every(optionType => {
@@ -134,49 +129,39 @@ components: {
       });
     },
 
-    // Get the style based on the option type (circle for color, label for others)
     getOptionStyle(optionType, option) {
       return optionType === 'color' ? { backgroundColor: option } : {};
     },
 
-addToCart() {
-    // Ensure the quantity is valid
-    if (this.quantity < 1 || this.quantity > this.product.stock) {
-      alert('Please select a valid quantity');
-      return;
-    }
-
-    // Check if the user is authenticated
-    const isAuthenticated = this.$store.getters['auth/isAuthenticated'];
-
-    // If the user is not authenticated (guest)
-    let sessionId = null;
-
-    if (!isAuthenticated) {
-      // Check if session_id exists in sessionStorage for guest users
-      sessionId = sessionStorage.getItem('session_id');
-
-      // If session_id does not exist, generate and store it
-      if (!sessionId) {
-        sessionId = this.generateSessionId();
-        sessionStorage.setItem('session_id', sessionId);
+    addToCart() {
+      if (this.quantity < 1 || this.quantity > this.product.stock) {
+        alert('Please select a valid quantity');
+        return;
       }
-    }
 
-    // Now dispatch the action to add product to cart, passing the session_id (null for authenticated users)
-    this.$store.dispatch('cart/addProductToCart', {
-      product: this.product,
-      quantity: this.quantity,
-      variant_id: this.selectedVariant?.id || null, // Send the selected variant ID
-    })
-      .then(() => {
-        // Optionally redirect to cart page or show success message
-        this.$router.push('/cart');
+      const isAuthenticated = this.$store.getters['auth/isAuthenticated'];
+      let sessionId = null;
+
+      if (!isAuthenticated) {
+        sessionId = sessionStorage.getItem('session_id');
+        if (!sessionId) {
+          sessionId = this.generateSessionId();
+          sessionStorage.setItem('session_id', sessionId);
+        }
+      }
+
+      this.$store.dispatch('cart/addProductToCart', {
+        product: this.product,
+        quantity: this.quantity,
+        variant_id: this.selectedVariant?.id || null,
       })
-      .catch(error => {
-        console.error('Error adding product to cart:', error);
-      });
-  },
+        .then(() => {
+          this.$router.push('/cart');
+        })
+        .catch(error => {
+          console.error('Error adding product to cart:', error);
+        });
+    },
 
     generateSessionId() {
       return 'sess_' + Math.random().toString(36).substr(2, 9);
@@ -184,7 +169,6 @@ addToCart() {
   }
 };
 </script>
-
 
 <style scoped>
 .card-img-top {

@@ -16,6 +16,10 @@ const mutations = {
   },
   REMOVE_PRODUCTVARIANT(state, productvariantId) {
     state.productvariants = state.productvariants.filter(productvariant => productvariant.id !== productvariantId);
+  },
+  setProductVariants(state, productvariants) {
+    // Clear the product variants array and set a new one
+    state.productvariants = productvariants;
   }
 };
 
@@ -25,7 +29,7 @@ const actions = {
       const response = await axios.get(`/admin/product/${productId}/productvariants`);
       commit('SET_PRODUCTVARIANTS', response.data);
       console.log('productvariant', response.data);
-          } catch (error) {
+    } catch (error) {
       console.error('Error fetching product variants:', error);
     }
   },
@@ -44,7 +48,20 @@ const actions = {
     } catch (error) {
       console.error('Error deleting product variant:', error);
     }
-  }
+  },
+  async deleteAllProductVariants({ commit }, productId) {
+    try {
+      // Call your API or backend to delete all variants for the given product
+      await axios.delete(`/admin/products/${productId}/variants`);
+      
+      // Clear all product variants from the Vuex state
+      commit('setProductVariants', []); // Clear variants in the store
+      alert('All variants have been deleted.');
+    } catch (error) {
+      console.error('Error deleting variants:', error);
+      alert('There was an error deleting the variants.');
+    }
+  },
 };
 
 const getters = {

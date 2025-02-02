@@ -2,7 +2,8 @@
 namespace App\Http\Controllers\Api\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\VariantCombination;  // It's still VariantCombination as per database, but we'll use productvariant in API
+use App\Models\VariantCombination;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log; // Import the Log facade
 use Illuminate\Support\Facades\Storage;
@@ -75,5 +76,31 @@ public function update(Request $request, $id)
         Log::debug("Deleted product variant with ID: {$id}"); // Log that deletion was successful
 
         return response()->json(['message' => 'Product variant deleted successfully']);
+    }
+
+    public function deleteAllVariants($productId)
+    {
+        // Find the product by ID
+        $product = Product::find($productId);
+
+        if (!$product) {
+            return response()->json(['message' => 'Product not found.'], 404);
+        }
+
+
+
+        try {
+            // Delete all product variants associated with the product
+            $product->variants()->delete();
+
+      
+
+            return response()->json(['message' => 'All variants have been deleted.'], 200);
+        } catch (\Exception $e) {
+            // If an error occurs, rollback the transaction
+         
+            
+            return response()->json(['message' => 'An error occurred while deleting variants.', 'error' => $e->getMessage()], 500);
+        }
     }
 }

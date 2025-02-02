@@ -1,7 +1,10 @@
 <template>
   <div class="product-variant">
     <h1>Create Product Variant Combinations</h1>
- 
+    <div class="info-message">
+  <p><strong>Note:</strong> If you want to add multiple variants (e.g., color and size), first select a color and its value, then select a size and its value. This way, you can create variant combinations instead of adding each variant separately.</p>
+</div>
+
   <div class="product-info-container">
     <h1 class="product-name">{{ currentProduct.name }}</h1>
     <p class="product-description">{{ currentProduct.description }}</p>

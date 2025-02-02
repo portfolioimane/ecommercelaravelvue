@@ -163,6 +163,10 @@ Route::get('product/{productId}/productvariants', [ProductVariantController::cla
 Route::put('productvariantupdate/{id}', [ProductVariantController::class, 'update']);
 Route::delete('productvariant/{id}', [ProductVariantController::class, 'destroy']);
 
+// routes/api.php
+
+Route::delete('/products/{productId}/variants', [ProductVariantController::class, 'deleteAllVariants']);
+
 
     Route::post('/variant-combinations/update', [VariantCombinationController::class, 'updateAllCombinations']);
     // In routes/api.php
