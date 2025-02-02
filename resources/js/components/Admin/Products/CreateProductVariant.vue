@@ -522,4 +522,25 @@ h1 {
   line-height: 1.5; /* Adds spacing between lines for readability */
   max-width: 800px; /* Ensures the text doesn't stretch too far across wide screens */
 }
+.info-message {
+  background-color: #fff4e5; /* Light orange background for a subtle warning */
+  border-left: 5px solid #ff9800; /* Orange left border for emphasis */
+  padding: 12px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  color: #444; /* Darker text for readability */
+  margin-top: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.info-message p {
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.info-message strong {
+  color: #d35400; /* Slightly darker shade for emphasis */
+}
+
 </style>

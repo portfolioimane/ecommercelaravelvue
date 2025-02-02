@@ -56,7 +56,6 @@ const actions = {
       
       // Clear all product variants from the Vuex state
       commit('setProductVariants', []); // Clear variants in the store
-      alert('All variants have been deleted.');
     } catch (error) {
       console.error('Error deleting variants:', error);
       alert('There was an error deleting the variants.');
