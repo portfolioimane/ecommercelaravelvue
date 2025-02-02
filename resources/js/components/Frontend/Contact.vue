@@ -54,7 +54,7 @@
         <!-- Success Message -->
         <div v-if="formSubmitted" class="success-message">
           <h2>Thank You!</h2>
-          <p>{{ successMessage }}</p>
+          <p>We have received your message, and we'll get back to you soon!</p>
         </div>
       </div>
     </div>
@@ -106,8 +106,16 @@ export default {
       this.sendContactMessage(this.formData).then(() => {
         this.formSubmitted = true; // Show success message after form submission
         this.formData = { name: "", email: "", message: "" }; // Clear form fields
+
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+          this.formSubmitted = false;
+        }, 10000);
       });
     },
+  },
+   mounted() {
+    this.$store.dispatch("generalCustomize/fetchGeneralCustomizes");
   },
 };
 </script>
@@ -139,7 +147,6 @@ export default {
   display: flex;
   justify-content: space-between;
   gap: 2rem;
-  padding: 3rem;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);

@@ -74,7 +74,7 @@ components: {
     const id = this.$route.params.id;
     this.$store.dispatch('product/fetchProductById', id)
       .then(() => {
-        this.product = this.$store.getters['product/allProducts'][0];
+        this.product = this.$store.getters['product/productDetails'];
         this.fetchVariants();
       });
   },

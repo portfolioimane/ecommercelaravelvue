@@ -110,7 +110,10 @@ export default {
     },
   },
   created() {
-    this.fetchReviews();
+    // Only fetch reviews if the user is authenticated
+    if (this.isAuthenticated) {
+      this.fetchReviews();
+    }
   },
   methods: {
     fetchReviews() {
@@ -175,6 +178,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 .review-section {

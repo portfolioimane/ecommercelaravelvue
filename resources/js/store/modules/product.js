@@ -10,6 +10,7 @@ const state = {
   searchQuery: '',
   selectedCategory: '',
   priceRange: { min: 0, max: 10000 }, // Default price range
+  productDetails: null,  // New state for product details
 };
 
 const mutations = {
@@ -20,6 +21,10 @@ const mutations = {
   setCategories(state, categories) {
     state.categories = categories;
   },
+    setProductDetails(state, product) {
+  state.productDetails = product; // Directly set productDetails
+},
+
   setProductVariants(state, variants) {
     state.productVariants = variants;
   },
@@ -82,6 +87,24 @@ const actions = {
       console.error('Error fetching wishlist:', error);
     }
   },
+    async fetchProductById({ commit }, productId) {
+    try {
+      const response = await axios.get(`/store/products/${productId}`);
+      commit('setProductDetails', response.data);
+      console.log('productdetails',response.data);
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+    }
+  },
+    async fetchProductVariants({ commit }, productId) {  // New action to fetch variants
+    try {
+      const response = await axios.get(`/store/products/${productId}/variants`);
+      commit('setProductVariants', response.data);
+      console.log('product variants', response.data);
+      } catch (error) {
+      console.error('Error fetching product variants:', error);
+    }
+  },
 };
 
 const getters = {
@@ -89,6 +112,9 @@ const getters = {
   featuredProducts: (state) => state.featuredProducts, 
   allCategories: state => state.categories,
   wishlist: state => state.wishlist,
+  productDetails: state => state.productDetails,
+  allProductVariants: (state) => state.productVariants,  // New getter for variants
+
 };
 
 export default {

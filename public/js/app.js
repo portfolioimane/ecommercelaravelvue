@@ -26261,9 +26261,17 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           email: "",
           message: ""
         }; // Clear form fields
+
+        // Hide success message after 5 seconds
+        setTimeout(function () {
+          _this.formSubmitted = false;
+        }, 10000);
       });
     }
-  })
+  }),
+  mounted: function mounted() {
+    this.$store.dispatch("generalCustomize/fetchGeneralCustomizes");
+  }
 });
 
 /***/ }),
@@ -27154,7 +27162,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     var _this = this;
     var id = this.$route.params.id;
     this.$store.dispatch('product/fetchProductById', id).then(function () {
-      _this.product = _this.$store.getters['product/allProducts'][0];
+      _this.product = _this.$store.getters['product/productDetails'];
       _this.fetchVariants();
     });
   },
@@ -27418,7 +27426,10 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    this.fetchReviews();
+    // Only fetch reviews if the user is authenticated
+    if (this.isAuthenticated) {
+      this.fetchReviews();
+    }
   },
   methods: {
     fetchReviews: function fetchReviews() {
@@ -30668,7 +30679,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.formData.message]])]), _cache[13] || (_cache[13] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "submit",
     "class": "submit-btn"
-  }, "Send Message", -1 /* HOISTED */))], 32 /* NEED_HYDRATION */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Success Message "), $data.formSubmitted ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, [_cache[14] || (_cache[14] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Thank You!", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.successMessage), 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Error Message "), $options.errorMessage ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, [_cache[15] || (_cache[15] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Error!", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.errorMessage), 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
+  }, "Send Message", -1 /* HOISTED */))], 32 /* NEED_HYDRATION */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Success Message "), $data.formSubmitted ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_11, _cache[14] || (_cache[14] = [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Thank You!", -1 /* HOISTED */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, "We have received your message, and we'll get back to you soon!", -1 /* HOISTED */)]))) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Error Message "), $options.errorMessage ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, [_cache[15] || (_cache[15] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", null, "Error!", -1 /* HOISTED */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($options.errorMessage), 1 /* TEXT */)])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
 }
 
 /***/ }),
@@ -39371,7 +39382,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.contact-section[data-v-916ca424] {\n  background-color: white;\n  padding: 3rem;\n}\n.contact-header[data-v-916ca424] {\n  text-align: center;\n  margin-bottom: 2rem;\n}\n.contact-header h1[data-v-916ca424] {\n  font-size: 2.5rem;\n  font-weight: bold;\n  color: #333;\n  margin-bottom: 0.5rem;\n}\n.contact-header p[data-v-916ca424] {\n  font-size: 1.1rem;\n  color: #555;\n}\n.contact-container[data-v-916ca424] {\n  display: flex;\n  justify-content: space-between;\n  gap: 2rem;\n  padding: 3rem;\n  background-color: white;\n  border-radius: 10px;\n  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);\n}\n.info-column[data-v-916ca424],\n.form-column[data-v-916ca424] {\n  flex: 1;\n  padding: 2rem;\n}\n.info-item[data-v-916ca424] {\n  display: flex;\n  align-items: center;\n  margin-bottom: 2rem;\n}\n.info-item i[data-v-916ca424] {\n  font-size: 2rem;\n  color: #D4AF37;\n  margin-right: 1rem;\n}\nh3[data-v-916ca424] {\n  font-size: 1.1rem;\n  font-weight: bold;\n  color: #333;\n  margin-bottom: 0.5rem;\n}\np[data-v-916ca424] {\n  font-size: 1rem;\n  color: #555;\n}\n.form-column h2[data-v-916ca424] {\n  font-size: 2.2rem;\n  font-weight: 700;\n  color: #333;\n  margin-bottom: 1rem;\n}\n.form-description[data-v-916ca424] {\n  font-size: 1.1rem;\n  color: #555;\n  margin-bottom: 1.5rem;\n}\n.form-column form[data-v-916ca424] {\n  display: flex;\n  flex-direction: column;\n}\n.form-group[data-v-916ca424] {\n  margin-bottom: 1.5rem;\n}\nlabel[data-v-916ca424] {\n  font-weight: bold;\n  font-size: 1.1rem;\n  color: #333;\n}\ninput[data-v-916ca424],\ntextarea[data-v-916ca424] {\n  width: 100%;\n  padding: 1rem;\n  font-size: 1rem;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  transition: border-color 0.3s;\n}\ninput[data-v-916ca424]:focus,\ntextarea[data-v-916ca424]:focus {\n  border-color: #D4AF37;\n  outline: none;\n}\ntextarea[data-v-916ca424] {\n  resize: vertical;\n  min-height: 120px;\n}\nbutton[data-v-916ca424] {\n  padding: 1rem;\n  background-color: #D4AF37;\n  color: white;\n  border: none;\n  border-radius: 5px;\n  font-size: 1.1rem;\n  cursor: pointer;\n  transition: background-color 0.3s ease;\n}\nbutton[data-v-916ca424]:hover {\n  background-color: #b58e2b;\n}\n.success-message[data-v-916ca424] {\n  margin-top: 2rem;\n  background-color: #d4efdb;\n  padding: 1rem;\n  border-radius: 5px;\n  color: #2a7d4d;\n}\n.error-message[data-v-916ca424] {\n  margin-top: 2rem;\n  background-color: #f8d7da;\n  padding: 1rem;\n  border-radius: 5px;\n  color: #721c24;\n}\n@media (max-width: 768px) {\n.contact-container[data-v-916ca424] {\n    flex-direction: column;\n    padding: 1rem;\n}\n.info-column[data-v-916ca424],\n  .form-column[data-v-916ca424] {\n    flex: 1 100%;\n    margin-bottom: 2rem;\n}\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.contact-section[data-v-916ca424] {\n  background-color: white;\n  padding: 3rem;\n}\n.contact-header[data-v-916ca424] {\n  text-align: center;\n  margin-bottom: 2rem;\n}\n.contact-header h1[data-v-916ca424] {\n  font-size: 2.5rem;\n  font-weight: bold;\n  color: #333;\n  margin-bottom: 0.5rem;\n}\n.contact-header p[data-v-916ca424] {\n  font-size: 1.1rem;\n  color: #555;\n}\n.contact-container[data-v-916ca424] {\n  display: flex;\n  justify-content: space-between;\n  gap: 2rem;\n  background-color: white;\n  border-radius: 10px;\n  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);\n}\n.info-column[data-v-916ca424],\n.form-column[data-v-916ca424] {\n  flex: 1;\n  padding: 2rem;\n}\n.info-item[data-v-916ca424] {\n  display: flex;\n  align-items: center;\n  margin-bottom: 2rem;\n}\n.info-item i[data-v-916ca424] {\n  font-size: 2rem;\n  color: #D4AF37;\n  margin-right: 1rem;\n}\nh3[data-v-916ca424] {\n  font-size: 1.1rem;\n  font-weight: bold;\n  color: #333;\n  margin-bottom: 0.5rem;\n}\np[data-v-916ca424] {\n  font-size: 1rem;\n  color: #555;\n}\n.form-column h2[data-v-916ca424] {\n  font-size: 2.2rem;\n  font-weight: 700;\n  color: #333;\n  margin-bottom: 1rem;\n}\n.form-description[data-v-916ca424] {\n  font-size: 1.1rem;\n  color: #555;\n  margin-bottom: 1.5rem;\n}\n.form-column form[data-v-916ca424] {\n  display: flex;\n  flex-direction: column;\n}\n.form-group[data-v-916ca424] {\n  margin-bottom: 1.5rem;\n}\nlabel[data-v-916ca424] {\n  font-weight: bold;\n  font-size: 1.1rem;\n  color: #333;\n}\ninput[data-v-916ca424],\ntextarea[data-v-916ca424] {\n  width: 100%;\n  padding: 1rem;\n  font-size: 1rem;\n  border: 1px solid #ccc;\n  border-radius: 5px;\n  transition: border-color 0.3s;\n}\ninput[data-v-916ca424]:focus,\ntextarea[data-v-916ca424]:focus {\n  border-color: #D4AF37;\n  outline: none;\n}\ntextarea[data-v-916ca424] {\n  resize: vertical;\n  min-height: 120px;\n}\nbutton[data-v-916ca424] {\n  padding: 1rem;\n  background-color: #D4AF37;\n  color: white;\n  border: none;\n  border-radius: 5px;\n  font-size: 1.1rem;\n  cursor: pointer;\n  transition: background-color 0.3s ease;\n}\nbutton[data-v-916ca424]:hover {\n  background-color: #b58e2b;\n}\n.success-message[data-v-916ca424] {\n  margin-top: 2rem;\n  background-color: #d4efdb;\n  padding: 1rem;\n  border-radius: 5px;\n  color: #2a7d4d;\n}\n.error-message[data-v-916ca424] {\n  margin-top: 2rem;\n  background-color: #f8d7da;\n  padding: 1rem;\n  border-radius: 5px;\n  color: #721c24;\n}\n@media (max-width: 768px) {\n.contact-container[data-v-916ca424] {\n    flex-direction: column;\n    padding: 1rem;\n}\n.info-column[data-v-916ca424],\n  .form-column[data-v-916ca424] {\n    flex: 1 100%;\n    margin-bottom: 2rem;\n}\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -55621,7 +55632,9 @@ var state = {
   priceRange: {
     min: 0,
     max: 10000
-  } // Default price range
+  },
+  // Default price range
+  productDetails: null // New state for product details
 };
 var mutations = {
   setProducts: function setProducts(state, products) {
@@ -55630,6 +55643,9 @@ var mutations = {
   },
   setCategories: function setCategories(state, categories) {
     state.categories = categories;
+  },
+  setProductDetails: function setProductDetails(state, product) {
+    state.productDetails = product; // Directly set productDetails
   },
   setProductVariants: function setProductVariants(state, variants) {
     state.productVariants = variants;
@@ -55765,6 +55781,60 @@ var actions = {
         }
       }, _callee4, null, [[1, 8]]);
     }))();
+  },
+  fetchProductById: function fetchProductById(_ref5, productId) {
+    return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+      var commit, response;
+      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+        while (1) switch (_context5.prev = _context5.next) {
+          case 0:
+            commit = _ref5.commit;
+            _context5.prev = 1;
+            _context5.next = 4;
+            return _utils_axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].get("/store/products/".concat(productId));
+          case 4:
+            response = _context5.sent;
+            commit('setProductDetails', response.data);
+            console.log('productdetails', response.data);
+            _context5.next = 12;
+            break;
+          case 9:
+            _context5.prev = 9;
+            _context5.t0 = _context5["catch"](1);
+            console.error('Error fetching product details:', _context5.t0);
+          case 12:
+          case "end":
+            return _context5.stop();
+        }
+      }, _callee5, null, [[1, 9]]);
+    }))();
+  },
+  fetchProductVariants: function fetchProductVariants(_ref6, productId) {
+    return _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
+      var commit, response;
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) switch (_context6.prev = _context6.next) {
+          case 0:
+            commit = _ref6.commit;
+            _context6.prev = 1;
+            _context6.next = 4;
+            return _utils_axios_js__WEBPACK_IMPORTED_MODULE_0__["default"].get("/store/products/".concat(productId, "/variants"));
+          case 4:
+            response = _context6.sent;
+            commit('setProductVariants', response.data);
+            console.log('product variants', response.data);
+            _context6.next = 12;
+            break;
+          case 9:
+            _context6.prev = 9;
+            _context6.t0 = _context6["catch"](1);
+            console.error('Error fetching product variants:', _context6.t0);
+          case 12:
+          case "end":
+            return _context6.stop();
+        }
+      }, _callee6, null, [[1, 9]]);
+    }))();
   }
 };
 var getters = {
@@ -55779,7 +55849,13 @@ var getters = {
   },
   wishlist: function wishlist(state) {
     return state.wishlist;
-  }
+  },
+  productDetails: function productDetails(state) {
+    return state.productDetails;
+  },
+  allProductVariants: function allProductVariants(state) {
+    return state.productVariants;
+  } // New getter for variants
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   namespaced: true,
