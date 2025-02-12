@@ -12,10 +12,14 @@
             <h3 class="card-title text-dark font-weight-bold">{{ product.name }}</h3>
             <p class="card-text text-muted" style="font-size: 1rem;">{{ product.description }}</p>
             
-            <div class="mb-3">
-              <p class="font-weight-bold pricegolden">Price: ${{ selectedVariant?.price || product.price }}</p>
-            </div>
+<div class="mb-3 d-flex align-items-center">
+  <p class="font-weight-bold pricegolden mb-0 me-3">Price: ${{ selectedVariant?.price || product.price }}</p>
+  <span class="free-shipping text-success font-weight-bold mb-0">Free Shipping!</span>
+</div>
 
+
+                 
+          
             <div class="mb-3">
               <p class="font-weight-bold">Category: {{ product.category.name }}</p>
             </div>
@@ -24,20 +28,26 @@
               <p class="font-weight-bold">Stock: {{ product.stock }}</p>
             </div>
 
-            <!-- Option Selector -->
-            <div v-for="(options, optionType) in optionsMap" :key="optionType" class="mb-3">
-              <div class="d-flex flex-wrap align-items-center">
-                <p class="font-weight-bold mr-2">{{ optionType.charAt(0).toUpperCase() + optionType.slice(1) }}</p>
-                <div v-for="option in options" :key="option"
-                     class="option-swatch" 
-                     :style="getOptionStyle(optionType, option)" 
-                     :class="{ 'selected': isSelected(optionType, option) }"
-                     @click="selectOption(optionType, option)">
-                  <span v-if="optionType === 'color'" class="circle" :style="{ backgroundColor: option }"></span>
-                  <span v-else>{{ option }}</span>
-                </div>
-              </div>
-            </div>
+    <!-- Option Selector -->
+<div v-for="(options, optionType) in optionsMap" :key="optionType" class="variant-container">
+  <div class="variant-row">
+    <p class="option-label">{{ optionType.charAt(0).toUpperCase() + optionType.slice(1) }}</p>
+
+    <div class="variant-wrapper">
+      <div v-for="option in options" :key="option"
+           :class="['variant-option', { 'selected': isSelected(optionType, option) }]"
+           @click="selectOption(optionType, option)">
+
+        <!-- Circle for Colors -->
+        <span v-if="optionType === 'color'" class="color-circle" :style="{ backgroundColor: option }"></span>
+
+        <!-- Rectangle Labels for Other Options -->
+        <span v-else class="variant-label">{{ option }}</span>
+
+      </div>
+    </div>
+  </div>
+</div>
 
             <!-- Quantity Input -->
             <div class="mb-3">
@@ -45,7 +55,7 @@
               <input type="number" id="quantity" v-model="quantity" class="form-control" min="1" :max="product.stock" />
             </div>
 
-            <button @click="addToCart" class="btn btn-golden btn-lg btn-block rounded-pill mt-4">Add to Cart</button>
+            <button @click="addToCart" class="btn btn-golden mt-4">Add to Cart</button>
           </div>
         </div>
       </div>
@@ -71,6 +81,7 @@ export default {
     };
   },
   created() {
+
     const id = this.$route.params.id;
     this.$store.dispatch('product/fetchProductById', id)
       .then(() => {
@@ -166,7 +177,14 @@ export default {
     generateSessionId() {
       return 'sess_' + Math.random().toString(36).substr(2, 9);
     }
-  }
+  },
+mounted() {
+  this.$nextTick(() => {
+    window.scrollTo(0, 0);
+  });
+}
+
+
 };
 </script>
 
@@ -225,30 +243,74 @@ export default {
   font-weight: bold;
 }
 
-.option-swatch {
-  padding: 0.5rem 1rem;
-  margin: 0.25rem;
+/* Container to align label and options in the same row */
+.variant-row {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* Space between label and variants */
+  margin-bottom: 12px;
+}
+
+/* Option Type Label (Now in the Same Line) */
+.option-label {
+  font-weight: 600;
+  text-transform: capitalize;
+  font-size: 16px;
+  margin: 0; /* Remove extra margin */
+  min-width: 80px; /* Ensures alignment for longer text */
+}
+
+/* Wrapper to align options properly */
+.variant-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Common Styling for All Options */
+.variant-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease-in-out;
+  border: 2px solid transparent;
 }
 
-.option-swatch.selected {
-  background-color: #ff8c00;
-  color: white;
-  border-color: #ff8c00;
-}
-
-.option-swatch:hover {
-  background-color: #ddd;
-}
-
-.circle {
-  width: 20px;
-  height: 20px;
+/* Color Swatches */
+.color-circle {
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   display: inline-block;
-  margin-right: 8px;
+  border: 2px solid #ddd;
+  transition: transform 0.2s ease-in-out;
 }
+
+/* Style for Non-Color Variants (e.g., Size, Material) */
+.variant-label {
+  padding: 8px 14px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  background-color: #f8f9fa;
+}
+
+/* Hover Effects */
+.variant-option:hover .color-circle,
+.variant-option:hover .variant-label {
+  border-color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+/* Selected Variant Styling */
+.variant-option.selected .color-circle,
+.variant-option.selected .variant-label {
+  border-color: var(--primary-color);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
 </style>

@@ -6,8 +6,9 @@
     <main>
       <router-view />
     </main>
+    <Footer />
 
-        <Footer />
+
   </div>
 </template>
 
@@ -25,7 +26,6 @@ export default {
 </script>
 
 <style scoped>
-main {
-  
-}
+
+
 </style>

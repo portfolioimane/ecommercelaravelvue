@@ -40,7 +40,7 @@
             />
             <label class="form-check-label" for="cod">Cash on Delivery</label>
           </div>
-          <div class="form-check">
+          <div class="form-check" v-if="isStripeEnabled">
             <input type="radio" id="stripe" v-model="form.payment_method" value="stripe" class="form-check-input" />
             <label class="form-check-label" for="stripe">
               <i class="fas fa-credit-card"></i> Stripe (Credit Card)
@@ -49,7 +49,7 @@
           <div v-if="form.payment_method === 'stripe'" class="mb-3">
             <div id="cardElement" class="form-control"></div>
           </div>
-          <div class="form-check">
+          <div class="form-check" v-if="isPaypalEnabled">
             <input
               type="radio"
               id="paypal"
@@ -72,7 +72,7 @@
           <button
             v-if="form.payment_method !== 'paypal'"
             type="submit"
-            class="btn btn-golden btn-block rounded-pill mt-3 w-100"
+            class="btn btn-golden mt-3 w-100"
             :disabled="!isFormValid || loading"
           >
             <span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -150,6 +150,8 @@ export default {
   },
   computed: {
     ...mapGetters("keys", ["getStripePublicKey", "getPaypalPublicKey"]), // Namespaced getter
+    ...mapGetters("keys", ["isStripeEnabled", "isPaypalEnabled"]), // Namespaced getter
+
     cartItems() {
       return this.$store.getters['cart/cartItems'];
     },
@@ -377,6 +379,9 @@ watch: {
         this.loadPayPalScript();
     }
     this.fetchCart();
+        this.fetchStripePublicKey();
+        this.fetchPaypalPublicKey();
+
     this.$store.dispatch('auth/checkAuth').then(() => {
       this.fillUserData();
     });

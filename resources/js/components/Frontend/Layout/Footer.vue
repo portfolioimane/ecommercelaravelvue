@@ -58,6 +58,16 @@ export default {
     },
     ...mapGetters("generalCustomize", ["getGeneralCustomize"]),
   },
+  mounted() {
+    // Fetch general customize data when the component is mounted
+    this.fetchGeneralCustomizeData();
+  },
+  methods: {
+    fetchGeneralCustomizeData() {
+      // Trigger the action to fetch general customize data
+      this.$store.dispatch("generalCustomize/fetchGeneralCustomizes");
+    },
+  },
 };
 </script>
 
@@ -137,4 +147,9 @@ export default {
     align-items: center;
   }
 }
+.footer-logo {
+  width: 100px !important;
+  height: 100px !important;
+}
+
 </style>

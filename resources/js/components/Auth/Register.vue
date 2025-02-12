@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-5">
+  <div class="container registercomponent mt-5">
     <h1 class="text-center">Register</h1>
     <form @submit.prevent="handleRegister">
       <div class="mb-3">
@@ -18,7 +18,7 @@
         <label for="password_confirmation" class="form-label">Confirm Password:</label>
         <input type="password" id="password_confirmation" v-model="password_confirmation" class="form-control" required />
       </div>
-      <button type="submit" class="btn btn-golden btn-block rounded-pill mt-3">Register</button>
+      <button type="submit" class="btn btn-golden  mt-3">Register</button>
     </form>
     <div v-if="error" class="mt-3 alert alert-danger">{{ error }}</div>
   </div>
@@ -65,6 +65,9 @@ export default {
 <style scoped>
 .container {
   max-width: 500px; /* Limit the width of the form */
+}
+.registercomponent{
+  margin-bottom:50px;
 }
 
 </style>

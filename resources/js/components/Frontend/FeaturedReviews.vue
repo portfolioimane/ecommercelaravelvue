@@ -1,6 +1,6 @@
 <template>
   <div class="featured-reviews-section">
-    <h2 class="section-title">Featured Reviews</h2>
+    <h2 class="section-title">Testimonials</h2>
 
     <!-- Display the featured reviews -->
     <div class="reviews-container">

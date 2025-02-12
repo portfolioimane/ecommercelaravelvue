@@ -62,6 +62,41 @@
       <p>No variants available for this product.</p>
     </div>
 
+    <!-- Update Product Variant Modal -->
+    <div v-if="showUpdateModal" class="modal-overlay" @click="closeUpdateModal">
+      <div class="modal-content" @click.stop>
+        <h3>Update Product Variant</h3>
+
+        <!-- Price Input -->
+        <div class="form-group">
+          <label for="price">Price:</label>
+          <input type="number" id="price" v-model="updatedPrice" class="form-control" />
+        </div>
+
+        <!-- Image Upload -->
+        <div class="form-group">
+          <label for="image">Image:</label>
+          <input 
+            type="file" 
+            id="image" 
+            @change="handleImageUpload" 
+            class="form-control" 
+            accept="image/*" 
+          />
+          <div v-if="previewImage" class="image-preview">
+            <img :src="previewImage" alt="Selected Image" class="img-thumbnail" />
+          </div>
+        </div>
+
+        <!-- Modal Buttons -->
+        <div class="modal-buttons">
+          <button class="btn btn-success" @click="editProductVariantNow">Save Changes</button>
+          <button class="btn btn-secondary" @click="closeUpdateModal">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+
     <!-- Modal for Delete Confirmation & Warnings -->
     <div v-if="showModal" class="modal-overlay" @click="closeModal">
       <div class="modal-content" @click.stop>
@@ -87,7 +122,9 @@ export default {
       showModal: false,
       modalMessage: "",
       modalType: "",
-      productVariantToDelete: null
+      productVariantToDelete: null,
+      showUpdateModal: false,
+      productVariantToUpdate: null,
     };
   },
 
@@ -154,7 +191,55 @@ export default {
         this.deleteAllProductVariants(this.selectedProductId);
         this.closeModal();
       }
+    },
+
+      editProductVariant(productvariant) {
+      this.productVariantToUpdate = productvariant;
+      this.updatedPrice = productvariant.price;
+      this.updatedImage = productvariant.image;
+      this.previewImage = this.getImagePath(productvariant.image); // Set preview image
+      this.showUpdateModal = true;
+    },
+
+    // Close the update modal
+    closeUpdateModal() {
+      this.showUpdateModal = false;
+      this.productVariantToUpdate = null;
+      this.updatedPrice = null;
+      this.updatedImage = null;
+      this.previewImage = null; // Reset preview image
+    },
+        handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.previewImage = e.target.result; // Set image preview
+          this.updatedImage = file; // Store the file for upload
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+     async editProductVariantNow() {
+      if (this.productVariantToUpdate) {
+        const variantId = this.productVariantToUpdate.id;
+
+        const formData = new FormData();
+        formData.append("_method", "PUT");
+        formData.append("price", this.updatedPrice);
+        if (this.updatedImage) {
+          formData.append("image", this.updatedImage);
+      }
+
+        await this.updateProductVariant({
+          id: variantId,
+          formData,
+        });
+
+        this.closeUpdateModal();
+      }
     }
+
   },
 
   mounted() {

@@ -101,7 +101,7 @@
   <h4 class="text-end">
     Total: <span class="text-golden">${{ totalCartValue }}</span>
   </h4>
-  <button @click="proceedToCheckout" class="btn btn-golden btn-block rounded-pill mt-3">Proceed to Checkout</button>
+  <button @click="proceedToCheckout" class="btn btn-golden mt-3">Proceed to Checkout</button>
 </div>
 </div>
 

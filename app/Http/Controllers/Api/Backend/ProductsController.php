@@ -68,7 +68,6 @@ public function store(Request $request)
         'price' => 'sometimes|required|numeric',
         'stock' => 'sometimes|required|integer',
         'category_id' => 'sometimes|required|exists:categories,id',
-        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
     if ($validator->fails()) {

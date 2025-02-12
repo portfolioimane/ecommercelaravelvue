@@ -65,7 +65,7 @@
                   <p class="font-weight-bold text-golden" style="font-size: 1rem;">${{ product.price }}</p>
                   <p class="font-weight-bold text-success" style="font-size: 0.9rem;">Stock: {{ product.stock }}</p>
                 </div>
-                <button @click="viewDetails(product.id)" class="btn btn-golden btn-block rounded-pill mt-3">View Details</button>
+                <button @click="viewDetails(product.id)" class="btn btn-golden mt-3">View Details</button>
               </div>
 
               <!-- Wishlist Icon Button -->

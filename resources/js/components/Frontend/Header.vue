@@ -1,6 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
-    <a class="navbar-brand font-weight-bold" href="#">Ecommerce</a>
+        <img :src="logo" alt="Company Logo" class="header-logo" />
     <div class="collapse navbar-collapse">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
@@ -24,7 +24,7 @@
         </li>
 
         <!-- Wishlist Icon with Item Count -->
-        <li class="nav-item position-relative">
+        <li class="nav-item position-relative" v-if="isAuthenticated">
           <router-link to="/customerdashboard/wishlist" class="nav-link wishlist-icon d-flex align-items-center">
             <span class="material-icons wishlist-icon">favorite</span>
             <span v-if="!loading" class="badge bg-badge position-absolute top-0 start-100 translate-middle rounded-circle p-1">
@@ -71,7 +71,11 @@ export default {
   computed: {
     ...mapGetters('auth', ['isAuthenticated', 'user']),
     ...mapGetters('cart', ['cartItemCount']),
-    ...mapGetters('wishlist', ['wishlistItemCount'])
+    ...mapGetters('wishlist', ['wishlistItemCount']),
+    ...mapGetters("generalCustomize", ["getGeneralCustomize"]),
+       logo() {
+      return this.getGeneralCustomize("logo");
+    },
   },
 
   data() {
@@ -98,6 +102,7 @@ export default {
 
   mounted() {
     this.$store.dispatch('auth/checkAuth');  // Check if the user is authenticated using the cookie
+        this.fetchGeneralCustomizeData();
 
     // Only fetch cart and wishlist if authenticated
     this.fetchCart();
@@ -106,7 +111,13 @@ export default {
     }
   },
 
+
+
   methods: {
+     fetchGeneralCustomizeData() {
+      // Trigger the action to fetch general customize data
+      this.$store.dispatch("generalCustomize/fetchGeneralCustomizes");
+    },
     async fetchCart() {
       try {
         await this.$store.dispatch('cart/fetchCart');
@@ -229,4 +240,9 @@ export default {
     font-size: 0.9rem;
   }
 }
+.header-logo {
+  width: 80px !important;
+  height: 80px !important;
+}
+
 </style>
