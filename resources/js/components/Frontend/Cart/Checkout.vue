@@ -43,7 +43,7 @@
           <div class="form-check" v-if="isStripeEnabled">
             <input type="radio" id="stripe" v-model="form.payment_method" value="stripe" class="form-check-input" />
             <label class="form-check-label" for="stripe">
-              <i class="fas fa-credit-card"></i> Stripe (Credit Card)
+              <i class="fas fa-credit-card"></i> Credit Card
             </label>
           </div>
           <div v-if="form.payment_method === 'stripe'" class="mb-3">

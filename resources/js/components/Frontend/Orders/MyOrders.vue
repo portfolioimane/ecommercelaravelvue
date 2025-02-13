@@ -29,13 +29,22 @@
             <td>{{ order.total }} MAD</td>
             <td>{{ order.phone }}</td>
             <td>{{ order.email }}</td>
-            <td>{{ order.address }}</td> <!-- Added the address field here -->
+            <td>{{ order.address }}</td>
             <td>{{ order.status }}</td>
             <td>{{ order.payment_method }}</td>
-            <td><button @click="viewOrderDetails(order.id)">View Details</button></td>
+            <td>
+              <button @click="viewOrderDetails(order.id)">View Details</button>
+            </td>
           </tr>
         </tbody>
       </table>
+
+      <!-- Pagination Controls -->
+      <div class="pagination">
+        <button @click="prevPage" :disabled="currentPage === 1">Previous</button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button @click="nextPage" :disabled="currentPage >= totalPages">Next</button>
+      </div>
     </div>
   </div>
 </template>
@@ -47,34 +56,68 @@ export default {
   data() {
     return {
       isLoading: true,
+      currentPage: 1,
+      totalPages: 1,
     };
   },
   computed: {
-    ...mapGetters("orders", ["allOrders"]),
+    ...mapGetters("orders", ["allOrders", "orderCount"]),
     orders() {
       return this.allOrders;
     },
   },
   methods: {
-    ...mapActions("orders", ["fetchMyOrders"]),
+    ...mapActions("orders", ["fetchPaginatedOrders"]),
+    
+    async fetchOrders() {
+      this.isLoading = true;
+      try {
+        await this.fetchPaginatedOrders({ page: this.currentPage, perPage: 5 });
+        this.totalPages = Math.ceil(this.$store.getters["orders/orderCount"] / 5);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+      this.isLoading = false;
+    },
+
     async viewOrderDetails(id) {
       try {
         const order = await this.$store.dispatch("orders/fetchOrderById", id);
         console.log("Order details:", order);
-        // Navigate to order details page (if needed)
         this.$router.push({ name: "OrderDetails", params: { id } });
       } catch (error) {
         console.error("Error fetching order details:", error);
       }
     },
+
     formatDate(date) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-      return new Date(date).toLocaleDateString('en-US', options);
-    }
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      };
+      return new Date(date).toLocaleDateString("en-US", options);
+    },
+
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
+        this.fetchOrders();
+      }
+    },
+
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+        this.fetchOrders();
+      }
+    },
   },
   async mounted() {
-    await this.fetchMyOrders();
-    this.isLoading = false;
+    await this.fetchOrders();
   },
 };
 </script>
@@ -108,6 +151,27 @@ export default {
 
 .orders-table button:hover {
   background-color: #B78B2C;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
 .loading-state {

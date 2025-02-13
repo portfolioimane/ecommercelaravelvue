@@ -24,18 +24,20 @@ class OrderController extends Controller
         $this->paypal->setApiCredentials(config('paypal'));
         $this->paypal->setAccessToken($this->paypal->getAccessToken());
     }
-    public function myorders(Request $request)
+public function myorders(Request $request)
 {
-    // Retrieve all orders for the authenticated user along with their order items and associated products
-    $orders = Order::where('user_id', $request->user()->id)  // Filter by the authenticated user's ID
-        ->with([
-        'orderItems.product',          // Load the related product for each cart item
-        'orderItems.variant'           // Load the associated variant for each cart item
-         ])  // Include related order items and their products
-        ->get();  // Retrieve all matching orders
+    $perPage = $request->input('per_page', 5);
+    $ordersQuery = Order::where('user_id', $request->user()->id)
+        ->with(['orderItems.product', 'orderItems.variant']);
+    
+    $orders = $ordersQuery->paginate($perPage);
 
-    return response()->json($orders, 200);  // Return the orders as a JSON response
+    return response()->json([
+        'orders' => $orders->items(),
+        'total' => $orders->total(),
+    ], 200);
 }
+
 
 
     public function index(Request $request)

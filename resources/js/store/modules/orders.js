@@ -3,12 +3,14 @@ import axios from '../../utils/axios.js';
 // State - Manages orders
 const state = {
   orders: [],
+    totalOrders: 0,
 };
 
 // Mutations - Handle synchronous changes to the state
 const mutations = {
-  setOrders(state, orders) {
+  setOrders(state, { orders, total }) {
     state.orders = orders;
+    state.totalOrders = total;
   },
   addOrder(state, order) {
     state.orders.push(order); // Add a new order to the orders array
@@ -25,14 +27,15 @@ const actions = {
       console.error('Error fetching orders:', error);
     }
   },
-  async fetchMyOrders({ commit }) {
+ async fetchPaginatedOrders({ commit }, { page = 1, perPage = 5 }) {
     try {
-      const response = await axios.get('/myorders');
-      commit('setOrders', response.data);
+      const response = await axios.get(`/myorders?page=${page}&per_page=${perPage}`);
+      commit("setOrders", { orders: response.data.orders, total: response.data.total });
     } catch (error) {
-      console.error('Error fetching orders:', error);
+      console.error("Error fetching orders:", error);
     }
   },
+
 
   // Action to submit a new order
   async submitOrder({ commit }, orderData) {
@@ -84,7 +87,7 @@ const actions = {
 // Getters - Derived state based on the store's state
 const getters = {
   allOrders: (state) => state.orders,
-  orderCount: (state) => state.orders.length,
+    orderCount: (state) => state.totalOrders,
 };
 
 export default {
