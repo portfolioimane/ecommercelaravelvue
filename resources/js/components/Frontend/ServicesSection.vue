@@ -20,7 +20,7 @@ export default {
       services: [
         {
           title: "Good Quality",
-          icon: "fas fa-tools", // FontAwesome icon
+          icon: "fas fa-tshirt", // FontAwesome icon
           description: "We provide the best quality products with strict quality control.",
         },
         {

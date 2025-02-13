@@ -27790,7 +27790,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       services: [{
         title: "Good Quality",
-        icon: "fas fa-tools",
+        icon: "fas fa-tshirt",
         // FontAwesome icon
         description: "We provide the best quality products with strict quality control."
       }, {
